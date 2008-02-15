@@ -1,4 +1,5 @@
-# $Id: .profile,v 1.38 2008/02/15 14:11:48 abowen Exp $
+# @file My profile
+# @author Alister Lewis-Bowen (alister@different.com)
 
 export PS1='\u@\h:\w\> ';
 export PATH=.:/Users/abowen/bin:/Users/abowen/Applications:/Developer/Tools:/Developer/Applications:/sw/bin/:/sw/sbin:/Applications/MAMP/Library/bin:/usr/local/bin:$PATH;
@@ -18,7 +19,7 @@ alias php_log="tail -f ~/Sites/logs/php_error.log";
 alias synergy="~/Applications/synergy/synergyc newitt";
 alias hosts='sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/abowen/Resources/Configurations/hosts';
 
-alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
+#alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
 alias notes='co -l ~/.NOTES ; vim ~/.NOTES ; ci ~/.NOTES; co ~/.NOTES';
 alias viewnotes='more ~//.NOTES';
 

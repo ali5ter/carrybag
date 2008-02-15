@@ -1,28 +1,68 @@
 #/bin/sh
-# $Id: drupal_contrib_init,v 1.2 2008/02/15 15:22:31 abowen Exp $
+# @file
+# Check out a set of Drupal contrib projects direct from CVS in the current dir
+# Usage: drupal_contrib_init [core_version]
+# where core_version is 4, 5, 6 or HEAD (default)
+#       version is an integer, defaulting to 1
+# @author Alister Lewis-Bowen (alister@different.com)
 
-BASE=/Users/abowen/Development/drupal/contrib;
-BRANCH=${1:-HEAD};
-VERSION=$2;
+BRANCH=${1:-HEAD}; # default to HEAD
 
-case $BRANCH in
-	5)
-		TARGET_DIR='DRUPAL-5'
-		;;
-	6)
-		TARGET_DIR='DRUPAL-6'
-		;;
-	*)
-		TARGET_DIR='HEAD'
-		;;
-esac;
-cd $BASE/$TARGET_DIR;
-
-for module in actions ajaxim asset backup_migrate biblio buddylist cck coder contemplate custom_breadcrumbs date devel event forms image imagecache imagefield imce jstools link location logintoboggan mapi mediafield menu_per_role menutrails node_breadcrumb node_media nodeaccess nodehierarchy og override_node_options panels pathauto pictures pngfix profileplus services similarterms simplemenu simpletest suggestedterms survey tinymce token typogrify update_status video views views_bonus workflow workflow_ng; do
-	if [ $BRANCH = "HEAD" ]; then
-		VERSION='';
-	fi;
-	/Users/abowen/bin/drupal_contrib_co $module $BRANCH $VERSION;
+for module in actions \
+	ajaxim \
+	asset \
+	backup_migrate \
+	biblio \
+	buddylist \
+	cck \
+	coder \
+	contemplate \
+	custom_breadcrumbs \
+	date \
+	devel \
+	event \
+	forms \
+	image \
+	imagecache \
+	imagefield \
+	imce \
+	jstools \
+	link \
+	location \
+	logintoboggan \
+	mapi \
+	mediafield \
+	menu_per_role \
+	menutrails \
+	node_breadcrumb \
+	node_media \
+	nodeaccess \
+	nodehierarchy \
+	og \
+	override_node_options \
+	panels \
+	pathauto \
+	pictures \
+	pngfix \
+	profileplus \
+	services \
+	similarterms \
+	simplemenu \
+	simpletest \
+	suggestedterms \
+	survey \
+	tinymce \
+	token \
+	typogrify \
+	update_status \
+	video views \
+	views_bonus \
+	workflow \
+	workflow_ng; do
+	
+	drupal_contrib_co.sh $module $BRANCH;
 done;
+
+exit 0;
 
 
