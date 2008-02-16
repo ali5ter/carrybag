@@ -1,27 +1,30 @@
 # @file My profile
 # @author Alister Lewis-Bowen (alister@different.com)
 
+USER=`id -p | grep -i uid | awk {'print $2'}`;
+
 export PS1='\u@\h:\w\> ';
-export PATH=.:/Users/abowen/bin:/Users/abowen/Applications:/Developer/Tools:/Developer/Applications:/sw/bin/:/sw/sbin:/Applications/MAMP/Library/bin:/usr/local/bin:$PATH;
+export PATH=.:/Users/$USER/bin:/Users/$USER/Applications:/Developer/Tools:/Developer/Applications:/sw/bin/:/sw/sbin:/Applications/MAMP/Library/bin:/usr/local/bin:$PATH;
+
+set -o vi;
 
 export EDITOR='/usr/bin/vi';
 #export `dircolors`;
 test -r /sw/bin/init.sh && . /sw/bin/init.sh;
 
-#alias ls='ls -FG'; # colors not good on opaque bg
+#alias ls='ls -FG';	# colors not good on opaque bg
 alias ls='ls -F';
-alias vi='vi';
+alias vi='vi';		# or vircs
 alias rm='rm -i';
 
-alias sniff="sudo tcpdump -n -l -x -i lo0 -s 1500 -w /tmp/sniff.log | tcpdfilter -d";
-alias update_drupal5="~/bin/drupal_contrib_update 5; cd ~/Development/drupal-5/; cvs update;"
 alias php_log="tail -f ~/Sites/logs/php_error.log";
-alias synergy="~/Applications/synergy/synergyc newitt";
-alias hosts='sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/abowen/Resources/Configurations/hosts';
+alias synergys="~/Applications/synergy/synergys";
+alias synergyc="~/Applications/synergy/synergyc newitt";
+alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
 
 #alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
 alias notes='co -l ~/.NOTES ; vim ~/.NOTES ; ci ~/.NOTES; co ~/.NOTES';
-alias viewnotes='more ~//.NOTES';
+alias viewnotes='more ~/.NOTES';
 
 alias pair="ssh alister@erraj.pair.com";
 alias dreamhost="ssh ali5ter@snocap.dreamhost.com";
@@ -33,6 +36,6 @@ alias dev="ssh abowen@itgdev.iic.harvard.edu $1";
 alias iic="ssh web@star.iic.harvard.edu";
 alias im="ssh harviic@imageandmeaning.org";
 alias scf="ssh abowen@scfdev.iic.harvard.edu";
-set -o vi;
+
 
 

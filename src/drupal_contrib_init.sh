@@ -22,6 +22,7 @@ for module in actions \
 	devel \
 	event \
 	forms \
+	google_analytics \
 	image \
 	imagecache \
 	imagefield \
