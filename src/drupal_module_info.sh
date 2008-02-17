@@ -1,12 +1,12 @@
 #/bin/sh
 # @file
-# Parse the HEAD contrib info files to figure what's what
+# Parse the HEAD module info files to figure what's what
 # WORK IN PROGRESS
-# Usage: drupal_contrib_info
+# Usage: drupal_module_info
 # @author Alister Lewis-Bowen (alister@different.com)
 # @todo Figure out the info file format so this works!
 
-BASE=/Users/abowen/Development/drupal/contrib;
+BASE=/Users/abowen/Development/drupal/modules;
 _PWD=`pwd`;
 TARGET_DIR=HEAD;
 

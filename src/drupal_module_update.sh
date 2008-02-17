@@ -1,7 +1,7 @@
 #!/bin/bash
 # @file
-# CVS Update any Drupal contrib projects in current directory
-# Usage: drupal_contrib_update
+# CVS Update any Drupal module projects in current directory
+# Usage: drupal_module_update
 # @author Alister Lewis-Bowen (alister@different.com)
 
 DIRS=`find -E . -maxdepth 2 -iregex ".*module" | cut -d"/" -f 2 | sort | uniq`;

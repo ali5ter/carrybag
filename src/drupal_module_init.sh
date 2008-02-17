@@ -1,6 +1,6 @@
 #/bin/sh
 # @file
-# Check out a set of Drupal contrib projects direct from CVS in the current dir
+# Check out a set of Drupal module projects direct from CVS in the current dir
 # Usage: drupal_contrib_init [core_version]
 # where core_version is 4, 5, 6 or HEAD (default)
 #       version is an integer, defaulting to 1
@@ -13,7 +13,7 @@ MODULE_LIST=`dirname $0`/../etc/drupal_contrib_module.list
 
 for module in `cat $MODULE_LIST`; do
 	
-	drupal_contrib_co.sh $module $BRANCH;
+	drupal_module_co.sh $module $BRANCH;
 done;
 
 exit 0;

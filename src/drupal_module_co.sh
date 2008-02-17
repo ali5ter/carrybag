@@ -1,7 +1,7 @@
 #!/bin/bash
 # @file
 # Check out a version of a Drupal contrib project direct from CVS
-# Usage: drupal_contrib_co project_name [core_version] [version]
+# Usage: drupal_module_co project_name [core_version] [version]
 # where core_version is 4, 5, 6 or HEAD (default)
 #       version is an integer, defaulting to 1
 # @author Alister Lewis-Bowen (alister@different.com)
@@ -13,7 +13,7 @@ VERSION=${3:-1};	# default to version 1
 TAG=HEAD;
 
 if [ -z $PROJECT ]; then
-	echo "Usage: drupal_contrib_co project_name [4|5|6|HEAD] [version_number]";
+	echo "Usage: drupal_module_co project_name [4|5|6|HEAD] [version_number]";
 	exit 1;
 fi
 

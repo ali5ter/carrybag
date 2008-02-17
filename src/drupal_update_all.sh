@@ -1,20 +1,14 @@
 #!/bin/bash
 # @file
-# Check out a version of Drupal core direct from CVS:
-# $BASE/drupal/
-#              core/
-#                      DRUPAL-5, etc.
-#              contrib/
-#                      modules/
-#                              DRUPAL-5, etc.
-# Usage: drupal_build_src_tree [target_dir]
+# CVS Update the drupal build tree
+# Usage: drupal_update_all [target_dir]
 # @author Alister Lewis-Bowen (alister@different.com)
 
 _PWD=`PWD`;
 
 BASE=${1:-`pwd`};
 
-for version in 4 5 6 HEAD; do
+for version in 5 6 HEAD; do
 	
 	case $version in
 		4)
@@ -31,23 +25,23 @@ for version in 4 5 6 HEAD; do
 			;;
 	esac;
 	
-	for section in core modules; do
+		for section in core modules; do
 		
 		case $section in
 			core)
 				mkdir -p $BASE/drupal/$section/$branch;
 				cd $BASE/drupal/core;
-				drupal_co.sh $version;
+				cvs update -d -P;
 				;;
 			modules)
 				mkdir -p $BASE/drupal/contrib/$section/$branch;
 				cd $BASE/drupal/contrib/$section/$branch;
-				drupal_module_init.sh $version;
+				drupal_contrib_update.sh;
 				;;
 			themes)
 				mkdir -p $BASE/drupal/contrib/$section/$branch;
 				cd $BASE/drupal/contrib/$section/$branch;
-				drupal_theme_init.sh $version;
+				drupal_theme_update.sh;
 				;;
 		esac;
 	done;
