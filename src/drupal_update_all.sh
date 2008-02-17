@@ -29,17 +29,14 @@ for version in 5 6 HEAD; do
 		
 		case $section in
 			core)
-				mkdir -p $BASE/drupal/$section/$branch;
-				cd $BASE/drupal/core;
+				cd $BASE/drupal/core/$branch;
 				cvs update -d -P;
 				;;
 			modules)
-				mkdir -p $BASE/drupal/contrib/$section/$branch;
 				cd $BASE/drupal/contrib/$section/$branch;
-				drupal_contrib_update.sh;
+				drupal_module_update.sh;
 				;;
 			themes)
-				mkdir -p $BASE/drupal/contrib/$section/$branch;
 				cd $BASE/drupal/contrib/$section/$branch;
 				drupal_theme_update.sh;
 				;;
