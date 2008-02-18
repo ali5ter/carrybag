@@ -1,32 +1,48 @@
-#/bin/sh
+#!/bin/bash
 # @file
-# Parse the HEAD module info files to figure what's what
-# WORK IN PROGRESS
+# Parse the HEAD module info files (http://drupal.org/node/101009)
+# to figure what's what. ANSI colors are creating using 'color' 
+# (http://freshmeat.net/projects/color/).
 # Usage: drupal_module_info
 # @author Alister Lewis-Bowen (alister@different.com)
-# @todo Figure out the info file format so this works!
 
-BASE=/Users/abowen/Development/drupal/modules;
+export PATH=$PATH:`dirname $0`/../lib; 
+
+USER=`id -p | grep -i uid | awk {'print $2'}`;
 _PWD=`pwd`;
-TARGET_DIR=HEAD;
 
+BASE=/Users/$USER/Development/drupal/contrib/modules;
+TARGET_DIR=HEAD;
 cd $BASE/$TARGET_DIR;
 
-echo "      Project module name            Project package  Core  Version";
-echo "-------------------------  -------------------------  ----  ---------------";
+heading='           Project module name       Project package  Core';
+#        ------------------------------  --------------------  ----
+echo "$(color ul)$heading$(color off)";
 
-#for project in `find ./ -name *.info | cut -d'/' -f3 | sort | uniq`; do
-for project in `find ./ -name *.info | sort `; do
+for project in `find . -name "*.info" | sort `; do
 	
-	name=`find $project | xargs egrep -i 'project.*=' | cut -d' ' -f3 | cut -d'"' -f2 | uniq`;
+	name=`find $project | xargs egrep -i 'name.*=' | cut -d'=' -f2 | cut -d'"' -f2 `;
+	name=${name:---};
 	
 	package=`find $project | xargs egrep -i 'package.*=' | cut -d'=' -f2 | cut -d'"' -f2`;
+	package=${package:---};
 	
+	# Introduced in D6...
 	core=`find $project | xargs egrep -i 'core.*=' | cut -d' ' -f3 | cut -d'"' -f2 `;
+	core=${core:-5.x};
 	
-	version=`find $project | xargs egrep -i 'version.*=' | cut -d' ' -f3 | cut -d'"' -f2 | uniq`;
+	# not used now when checking out from CVS...
+	#version=`find $project | xargs egrep -i 'version.*=' | cut -d' ' -f3 | cut -d'"' -f2 | uniq`;
 	
-	printf "%25s  %25s  %4s  %15s  %s\n" $name ${package:---} ${core:---} ${version:---} $project;
+	if [ $core = '5.x' ]; then
+		color='green';
+	else
+		color='yellow';
+	fi;
+	
+	printf "$(color $color)%30s  %20s  %4s$(color off)" "$name" "$package" "$core";
+	#printf "  %s" $project; # for debug purposes
+	printf "\n";
 done;
 
 cd $_PWD;
