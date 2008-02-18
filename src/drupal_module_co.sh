@@ -1,36 +1,48 @@
 #!/bin/bash
 # @file
 # Check out a version of a Drupal contrib project direct from CVS
-# Usage: drupal_module_co project_name [core_version] [version]
-# where core_version is 4, 5, 6 or HEAD (default)
-#       version is an integer, defaulting to 1
 # @author Alister Lewis-Bowen (alister@different.com)
 
+export PATH=$PATH:`dirname $0`/../lib; 
+
 PROJECT=$1;
-BRANCH=${2:-HEAD};	# default to HEAD branch
-VERSION=${3:-1};	# default to version 1
+BRANCH=$2;
+VERSION=${3:-1};
 
 TAG=HEAD;
 
-if [ -z $PROJECT ]; then
-	echo "Usage: drupal_module_co project_name [4|5|6|HEAD] [version_number]";
+function help {
+	echo;
+	echo "Usage: $(color bd)drupal_module_co.sh project$(color off) [$(color bd)branch$(color off)] [$(color bd)version$(color off)]";
+	echo "where $(color bd)project$(color off) is the name of the module project,";
+	echo "      $(color bd)branch$(color off) is 4, 5, 6, or HEAD (default), ";
+	echo "      $(color bd)version$(color off) is an integer (defaults to 1)";
+	echo;
 	exit 1;
-fi
+}
 
-if [ $BRANCH = '4' ]; then TAG=DRUPAL-4-7;
-elif [ $BRANCH = '5' ]; then TAG=DRUPAL-5;
-elif [ $BRANCH = '6' ]; then TAG=DRUPAL-6;
-elif [ $BRANCH != 'HEAD' ]; then echo "BRANCH must be 4, 5, 6 or HEAD";
-fi
+if [[ -z $PROJECT || "$PROJECT" = '-h' || "$PROJECT" = '--help' ]]; then help; fi;
 
-# New tag system in branch 6 (sort of in 5 but came out foo)
-if [ $BRANCH = '6' ]; then
-	TAG="$TAG--$VERSION";
-fi
+case $BRANCH in
+	4)
+		TAG=DRUPAL-4-7;
+		;;
+	5)
+		TAG=DRUPAL-5;
+		;;
+	6)
+		TAG=DRUPAL-6;
+		;;
+	*)
+		TAG=HEAD
+		;;
+esac;
 
-echo "Fetching '$PROJECT' from Drupal Contrib CVS ($TAG)...";
-cvs -d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib checkout -d $PROJECT -r $TAG contributions/modules/$PROJECT;
+if [ "$BRANCH" = '6' ]; then TAG="$TAG--$VERSION"; fi # New tag system in branch 6 (sort of in 5 but came out foo)
+	
+echo -n "$(color bd)Fetching $(color white blue)$(color bd)$PROJECT$(color off) $(color bd)module from Drupal Contrib CVS ($(color yellow)$TAG$(color off)$(color bd))...$(color off)";
+cvs -d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib checkout -d $PROJECT -r $TAG contributions/modules/$PROJECT >/tmp/`basename $0`.log 2>&1;
 
-echo 'Done';
+echo " $(color green)Done$(color off)";
 
 exit 0;

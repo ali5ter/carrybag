@@ -8,10 +8,8 @@
 
 export PATH=$PATH:`dirname $0`/../lib; 
 
-USER=`id -p | grep -i uid | awk {'print $2'}`;
 _PWD=`pwd`;
-
-BASE=/Users/$USER/Development/drupal/contrib/modules;
+BASE=~/Development/drupal/contrib/modules;
 TARGET_DIR=HEAD;
 cd $BASE/$TARGET_DIR;
 

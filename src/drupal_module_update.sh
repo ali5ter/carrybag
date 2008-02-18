@@ -1,20 +1,23 @@
 #!/bin/bash
 # @file
 # CVS Update any Drupal module projects in current directory
-# Usage: drupal_module_update
 # @author Alister Lewis-Bowen (alister@different.com)
 
-DIRS=`find -E . -maxdepth 2 -iregex ".*module" | cut -d"/" -f 2 | sort | uniq`;
-_PWD=`pwd`;
+export PATH=$PATH:`dirname $0`/../lib; 
 
-for dir in $DIRS; do
-	cd $_PWD/$dir; 
-	cvs update -d -P;
-done
+_PWD=`pwd`;
+	
+echo -n "$(color bd)Updating $(color white blue)$(color bd)modules$(color off) $(color bd)from Drupal Contrib CVS...$(color off)";
+
+for project in `find -E . -maxdepth 2 -iregex ".*module" | cut -d"/" -f 2 | sort | uniq`; do
+	cd $_PWD/$project;
+	echo -n ".";
+	cvs update -d -P >/tmp/`basename $0`.log 2>&1;
+done;
+
+echo " $(color green)Done$(color off)";
 
 cd $_PWD;
-
-echo "Done";
 
 exit 0;
 

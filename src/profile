@@ -37,5 +37,9 @@ alias iic="ssh web@star.iic.harvard.edu";
 alias im="ssh harviic@imageandmeaning.org";
 alias scf="ssh abowen@scfdev.iic.harvard.edu";
 
+if [ -e ~/.script_aliases ]; then
+	. ~/.script_aliases;
+fi;
+
 
 
