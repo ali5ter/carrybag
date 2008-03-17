@@ -1,30 +1,46 @@
+# ----------------------------------------------------------------------------
+#
 # @file My profile
 # @author Alister Lewis-Bowen (alister@different.com)
+#
+# ----------------------------------------------------------------------------
+
+# Set environment vars
+# ----------------------------------------------------------------------------
 
 USER=`id -p | grep -i uid | awk {'print $2'}`;
-
 export PS1='\u@\h:\w\> ';
 export PATH=.:/Users/$USER/bin:/Users/$USER/Applications:/Developer/Tools:/Developer/Applications:/sw/bin/:/sw/sbin:/Applications/MAMP/Library/bin:/usr/local/bin:$PATH;
 
-set -o vi;
+# Editor options
+# ----------------------------------------------------------------------------
 
+set -o vi;
 export EDITOR='/usr/bin/vi';
 #export `dircolors`;
 test -r /sw/bin/init.sh && . /sw/bin/init.sh;
+
+# Alias shell commands
+# ----------------------------------------------------------------------------
 
 #alias ls='ls -FG';	# colors not good on opaque bg
 alias ls='ls -F';
 alias vi='vi';		# or vircs
 alias rm='rm -i';
 
+# Alias extra commands
+# ----------------------------------------------------------------------------
+
 alias php_log="tail -f ~/Sites/logs/php_error.log";
-alias synergys="~/Applications/synergy/synergys";
+alias synergys="~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf";
 alias synergyc="~/Applications/synergy/synergyc newitt";
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
-
 #alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
 alias notes='co -l ~/.NOTES ; vim ~/.NOTES ; ci ~/.NOTES; co ~/.NOTES';
 alias viewnotes='more ~/.NOTES';
+
+# Alias host logins
+# ----------------------------------------------------------------------------
 
 alias pair="ssh alister@erraj.pair.com";
 alias dreamhost="ssh ali5ter@snocap.dreamhost.com";
@@ -36,6 +52,9 @@ alias dev="ssh abowen@itgdev.iic.harvard.edu $1";
 alias iic="ssh web@star.iic.harvard.edu";
 alias im="ssh harviic@imageandmeaning.org";
 alias scf="ssh abowen@scfdev.iic.harvard.edu";
+
+# The .script_aliases script is used to alias any of my .sh to name only
+# ----------------------------------------------------------------------------
 
 if [ -e ~/.script_aliases ]; then
 	. ~/.script_aliases;
