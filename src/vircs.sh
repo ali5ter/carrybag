@@ -7,6 +7,10 @@ CO=co;
 CI=ci;
 EDITOR=vi;
 
+if [ ! -e RCS ]; then 
+	mkdir RCS;
+fi
+
 $CO -l $1;
 $EDITOR $1;
 $CI $1;
