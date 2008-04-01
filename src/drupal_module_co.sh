@@ -40,7 +40,7 @@ esac;
 
 if [ ! -z $3 ]; then TAG="$TAG--$VERSION"; fi
 
-if [ "$BRANCH" = '6' ]; then TAG="$TAG--$VERSION"; fi # New tag system in branch 6 (sort of in 5 but came out foo)
+if [[ "$BRANCH" = '6' && -z $VERSION ]]; then TAG="$TAG--$VERSION"; fi # New tag system in branch 6 (sort of in 5 but came out foo)
 	
 echo -n "$(color bd)Fetching $(color white blue)$(color bd)$PROJECT$(color off) $(color bd)module from Drupal Contrib CVS ($(color yellow)$TAG$(color off)$(color bd))...$(color off)";
 cvs -d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib checkout -d $PROJECT -r $TAG contributions/modules/$PROJECT >/tmp/`basename $0`.log 2>&1;
