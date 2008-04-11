@@ -1,9 +1,8 @@
 #!/bin/bash
 # @file
 # CVS Update any Drupal theme projects in current directory
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 _PWD=`pwd`;
 

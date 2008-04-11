@@ -1,6 +1,7 @@
 # ----------------------------------------------------------------------------
 #
 # @file My profile
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
 #
 # ----------------------------------------------------------------------------
@@ -9,6 +10,7 @@
 # ----------------------------------------------------------------------------
 
 export PS1='\u@\h:\w\> ';                          # user@host: path>
+export PS1="\n\e[1;37m[\e[0;32m\u\e[0;35m@\e[0;32m\h\e[1;37m]\e[1;37m[\e[0;31m\w\e[1;37m]\n$\e[0;37m ";
 export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
 if [ `uname` == 'darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
@@ -39,6 +41,8 @@ alias rm='rm -i';     # confirm any delete
 if [ -e ~/bin/vircs.sh ]; then
 	alias vi='vircs.sh'; # revision control with any edit
 fi
+
+export bd="\e[1;37m"; 
 
 # Alias extra commands
 # ----------------------------------------------------------------------------

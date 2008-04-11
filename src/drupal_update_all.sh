@@ -1,9 +1,8 @@
 #!/bin/bash
 # @file
 # CVS Update the drupal build tree
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 BASE=${1:-`pwd`};
 

@@ -2,9 +2,8 @@
 # @file
 # Check out a version of Drupal core direct from CVS in a dir named 
 # using the CVS tag
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 BRANCH=$1;
 

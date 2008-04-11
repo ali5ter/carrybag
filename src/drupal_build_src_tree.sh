@@ -7,9 +7,8 @@
 #              contrib/
 #                      modules/
 #                              DRUPAL-5, etc.
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 BASE=${1:-`pwd`};
 

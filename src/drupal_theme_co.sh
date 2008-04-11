@@ -1,9 +1,8 @@
 #!/bin/bash
 # @file
 # Check out a version of a Drupal theme project direct from CVS
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 PROJECT=$1;
 BRANCH=$2;

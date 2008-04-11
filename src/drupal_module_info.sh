@@ -4,9 +4,8 @@
 # to figure what's what. ANSI colors are creating using 'color' 
 # (http://freshmeat.net/projects/color/).
 # Usage: drupal_module_info
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 _PWD=`pwd`;
 BASE=~/Development/drupal/contrib/modules;

@@ -5,6 +5,7 @@
 # where core_version is 4, 5, 6 or HEAD (default)
 #       version is an integer, defaulting to 1
 # Modules are listed by project name, one per line, in drupal_contrib_module.list
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
 
 BRANCH=$1;

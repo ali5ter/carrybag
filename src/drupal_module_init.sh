@@ -2,9 +2,8 @@
 # @file
 # Check out a set of Drupal module projects direct from CVS in the current dir
 # Modules are listed by project name, one per line, in drupal_contrib_module.list
+# @see color
 # @author Alister Lewis-Bowen (alister@different.com)
-
-export PATH=$PATH:`dirname $0`/../lib; 
 
 BRANCH=$1;
 
