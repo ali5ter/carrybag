@@ -1,14 +1,12 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
-# @file color.sh
+# @file color
 # Return ANSI color escape sequences.
 # Ref: http://www.faqs.org/docs/abs/HTML/colorizing.html,
 # http://isthe.com/chongo/tech/comp/ansi_escapes.html
 # Usage syntax based on original work by Moshe Jacobson <moshe@runslinux.net>
 # @author Alister Lewis-Bowen [alister@different.com]
 # ----------------------------------------------------------------------------
-
-color=`dirname $0`/color.sh;
 
 function help {
 	echo;
