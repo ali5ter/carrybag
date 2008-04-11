@@ -8,7 +8,7 @@
 # @author Alister Lewis-Bowen [alister@different.com]
 # ----------------------------------------------------------------------------
 
-color=`dirname $0`;
+color=`dirname $0`/color.sh;
 
 function help {
 	echo;
