@@ -9,9 +9,11 @@
 # Set environment vars
 # ----------------------------------------------------------------------------
 
+export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
+
 export PS1='\u@\h:\w\> ';                          # user@host: path>
 export PS1="\n\e[1;37m[\e[0;32m\u\e[0;35m@\e[0;32m\h\e[1;37m]\e[1;37m[\e[0;31m\w\e[1;37m]\n$\e[0;37m ";
-export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
+
 if [ `uname` == 'darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
 fi

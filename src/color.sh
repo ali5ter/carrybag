@@ -8,6 +8,8 @@
 # @author Alister Lewis-Bowen [alister@different.com]
 # ----------------------------------------------------------------------------
 
+alias color='color.sh';
+
 function help {
 	echo;
 	echo "$(color bd)Conveniently named ANSI escape sequences for your shell scripts.$(color off)";
