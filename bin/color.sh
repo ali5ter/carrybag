@@ -1,6 +1,6 @@
 #!/bin/bash
 # ----------------------------------------------------------------------------
-# @file color
+# @file color.sh
 # Return ANSI color escape sequences.
 # Ref: http://www.faqs.org/docs/abs/HTML/colorizing.html,
 # http://isthe.com/chongo/tech/comp/ansi_escapes.html
@@ -8,7 +8,7 @@
 # @author Alister Lewis-Bowen [alister@different.com]
 # ----------------------------------------------------------------------------
 
-alias color='color.sh';
+alias color=`dirname $0`;
 
 function help {
 	echo;
