@@ -8,7 +8,7 @@
 # @author Alister Lewis-Bowen [alister@different.com]
 # ----------------------------------------------------------------------------
 
-alias color=`dirname $0`;
+color=`dirname $0`;
 
 function help {
 	echo;
