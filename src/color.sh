@@ -10,7 +10,7 @@
 
 function help {
 	echo;
-	echo "$(color bd)Convenient ANSI codes for your shell scripts.$(color off)";
+	echo "$(color bd)Conveniently named ANSI escape sequences for your shell scripts.$(color off)";
 	echo;
 	echo 'Usage:';
 	echo "$(color bd)build$(color off) [b]$(color ul)fgcolor$(color off) [$(color ul)bgcolor$(color off)]";
@@ -30,9 +30,12 @@ function help {
 	echo;
 	echo "Preceed the fgcolor with $(color bd)b$(color off) to use a bold color."
 	echo "$(color bd)color bd$(color off) and $(color bd)color bold$(color off) turn on $(color bd)bold$(color off).";
+	echo "$(color bd)color ft$(color off) and $(color bd)color faint$(color off) turn on $(color ft)faint$(color off).";
+	echo "$(color bd)color st$(color off) and $(color bd)color standout$(color off) turn on $(color ft)standout$(color off).";
 	echo "$(color bd)color ul$(color off) and $(color bd)color underline$(color off) turn on $(color ul)underline$(color off).";
 	echo "$(color bd)color bk$(color off) and $(color bd)color blink$(color off) turn on $(color bk)blink$(color off).";
 	echo "$(color bd)color rv$(color off) and $(color bd)color reversevideo$(color off) turn on $(color rv)reversevideo$(color off).";
+	echo "$(color bd)color in$(color off) and $(color bd)color invisible$(color off) turn on $(color in)invisible$(color off).";
 	echo "$(color bd)color off$(color off) resets to default colors and text treatments.";
 	echo "$(color bd)color list$(color off) displays all possible color combinations.";
 	echo;
@@ -40,6 +43,10 @@ function help {
 	echo '  echo "$(color bred yellow) Color $(color off)"';
 	echo 'results in:';
 	echo "  $(color bred yellow) Color $(color off)";
+	echo;
+	echo;
+	echo -n "Note that results may vary with these standard ANSI escape sequences because of the different configurations of terminal emulators. ";
+	echo "Colors seem to work reliably. Bold and underline work less so. Blink and reverse video I've seen working but the rest I have not.";
 	echo;
 	exit 1;
 }
