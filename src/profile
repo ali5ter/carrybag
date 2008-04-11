@@ -35,7 +35,7 @@ test -r /sw/bin/init.sh && . /sw/bin/init.sh; # OSX only
 # Alias shell commands
 # ----------------------------------------------------------------------------
 
-#alias ls='ls -FG';	  # COMMENTED OUT: colours not good on opaque bg
+alias ls='ls -FG --color=auto';	  # COMMENTED OUT: colours not good on opaque bg
 alias ls='ls -F';     # non-color listing
 alias rm='rm -i';     # confirm any delete
 if [ -e ~/bin/vircs.sh ]; then
