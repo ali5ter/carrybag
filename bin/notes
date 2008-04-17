@@ -19,12 +19,12 @@ function help {
 	echo "$(color bd)Simple notebook$(color)";
 	echo;
 	echo 'Usage:';
-	echo "$(color bd)notes$(color) [ -e | -h | -l ]";
+	echo "$(color bd)notes$(color) [ -e | --edit | -h | --help | -l | --list ]";
 	echo;
 	echo 'where:';
-	echo '$(color bd)e$(color) edits the notebook';
-	echo '$(color bd)h$(color) provides this help text';
-	echo '$(color bd)l$(color) or $(color bd)notes$(color) displays the notebook;
+	echo '$(color bd)notes -e$(color) or $(color bd)notes --edit$(color) edits the notebook';
+	echo '$(color bd)notes -h$(color) or $(color bd)notes --help$(color) provides this help text';
+	echo '$(color bd)notes -l$(color) or $(color bd)notes --list$(color) or $(color bd)notes$(color) displays the notebook;
 	echo;
 	exit 1;
 }
@@ -45,13 +45,13 @@ fi;
 # ----------------------------------------------------------------------------
 	
 case "$1" in
-	'e')
+	'-e | --edit')
 		co -l $NOTEBOOK;
 		$EDITOR $NOTEBOOK;
 		ci -l $NOTEBOOK;
 		co $NOTEBOOK;
 		;;
-	'h')	help;;
+	'-h | --help')	help;;
 	*)		cat $NOTEBOOK;;
 esac
 
