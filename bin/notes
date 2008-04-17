@@ -45,13 +45,13 @@ fi;
 # ----------------------------------------------------------------------------
 	
 case "$1" in
-	'-e | --edit')
+	-e | --edit )
 		co -l $NOTEBOOK;
 		$EDITOR $NOTEBOOK;
 		ci -l $NOTEBOOK;
 		co $NOTEBOOK;
 		;;
-	'-h | --help')	help;;
+	-h | --help )	help;;
 	*)		cat $NOTEBOOK;;
 esac
 
