@@ -1,0 +1,58 @@
+#!/bin/bash
+# ----------------------------------------------------------------------------
+# @file notes
+# Simple notebook
+# @see rcs
+# @see color
+# @author Alister Lewis-Bowen [alister@different.com]
+# ----------------------------------------------------------------------------
+
+EDITOR=${EDITOR:-'vi'};
+NOTEBOOK=~/.NOTES;
+RCS=`dirname $NOTEBOOK`/RCS;
+
+# Function: Help
+# ----------------------------------------------------------------------------
+
+function help {
+	echo;
+	echo "$(color bd)Simple notebook$(color)";
+	echo;
+	echo 'Usage:';
+	echo "$(color bd)notes$(color) [ -e | -h | -l ]";
+	echo;
+	echo 'where:';
+	echo '$(color bd)e$(color) edits the notebook';
+	echo '$(color bd)h$(color) provides this help text';
+	echo '$(color bd)l$(color) or $(color bd)notes$(color) displays the notebook;
+	echo;
+	exit 1;
+}
+
+# Create notebook file under RCS control
+# ----------------------------------------------------------------------------
+
+if [ !-e $NOTEBOOK ]; then 
+	touch $NOTEBOOK;
+	echo "$Id$" > $NOTEBOOK;
+	chmod 644 $NOTEBOOK;
+	if [ !-d $RCS ]; then mkdir -p $RCS; fi;
+	ci $NOTEBOOK;
+	co $NOTEBOOK;
+fi;
+
+# Parse command line options
+# ----------------------------------------------------------------------------
+	
+case "$1" in
+	'e')
+		co -l $NOTEBOOK;
+		$EDITOR $NOTEBOOK;
+		ci -l $NOTEBOOK;
+		co $NOTEBOOK;
+		;;
+	'h')	help;;
+	*)		cat $NOTEBOOK;;
+esac
+
+exit 0;
