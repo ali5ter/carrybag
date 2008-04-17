@@ -54,7 +54,8 @@ alias synergys="~/Applications/synergy/synergys -c ~/Applications/synergy/synerg
 alias synergyc="~/Applications/synergy/synergyc $1";
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
 #alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
-alias notes='co -l ~/.NOTES ; vim ~/.NOTES ; ci ~/.NOTES; co ~/.NOTES';
+alias 'notes -e'='co -l ~/.NOTES ; vim ~/.NOTES ; ci ~/.NOTES; co ~/.NOTES';
+alias 'notes'='cat ~/.NOTES';
 alias viewnotes='more ~/.NOTES';
 
 # Alias host logins
