@@ -24,7 +24,7 @@ function help {
 	echo 'where:';
 	echo '$(color bd)notes -e$(color) or $(color bd)notes --edit$(color) edits the notebook';
 	echo '$(color bd)notes -h$(color) or $(color bd)notes --help$(color) provides this help text';
-	echo '$(color bd)notes -l$(color) or $(color bd)notes --list$(color) or $(color bd)notes$(color) displays the notebook;
+	echo '$(color bd)notes -l$(color) or $(color bd)notes --list$(color) or $(color bd)notes$(color) displays the notebook';
 	echo;
 	exit 1;
 }
