@@ -41,12 +41,13 @@ function help {
 	echo "$(color bd)Simple notebook$(color)";
 	echo;
 	echo 'Usage:';
-	echo "$(color bd)notes$(color) [ -e | --edit | -h | --help | -l | --list ]";
+	echo "$(color bd)notes$(color) [ add | edit | help | list ]";
 	echo;
 	echo 'where:';
-	echo '$(color bd)notes -e$(color) or $(color bd)notes --edit$(color) edits the notebook';
-	echo '$(color bd)notes -h$(color) or $(color bd)notes --help$(color) provides this help text';
-	echo '$(color bd)notes -l$(color) or $(color bd)notes --list$(color) or $(color bd)notes$(color) displays the notebook';
+	echo "$(color bd)notes add$(color) adds an entry section to the notebook";
+	echo "$(color bd)notes edit$(color) edits the notebook";
+	echo "$(color bd)notes help$(color) provides this help text";
+	echo "$(color bd)notes list$(color) or just $(color bd)notes$(color) displays the notebook";
 	echo;
 	exit 1;
 }
@@ -54,27 +55,51 @@ function help {
 # Create notebook file under RCS control
 # ----------------------------------------------------------------------------
 
-if [ !-e $NOTEBOOK ]; then 
+if [ ! -e $NOTEBOOK ]; then 
+	echo -e "\n$(color bd green)Unable to find $NOTEBOOK. No problem. I'll create one for you...$(color nm green)";
 	touch $NOTEBOOK;
-	echo "$Id$" > $NOTEBOOK;
+	echo > $NOTEBOOK;
+	echo "|=========|=========|=========|=========|=========|=========|=========" >> $NOTEBOOK;
+	echo "0         1         2         3         4         5         7         " >> $NOTEBOOK;
+	echo "======================================================================" >> $NOTEBOOK;
+	echo '$Id$' >> $NOTEBOOK;
 	chmod 644 $NOTEBOOK;
-	if [ !-d $RCS ]; then mkdir -p $RCS; fi;
+	if [ ! -d $RCS ]; then mkdir -p $RCS; fi;
 	ci $NOTEBOOK;
 	co $NOTEBOOK;
+	echo -n "$(color bd)Your new notebook is ready. ";
+	echo -n "Now use $(color white)notes a$(color green) to add a new section. ";
+	echo "Use $(color white)notes e$(color green) to modify your notebook content...$(color)";
+	exit 0;
 fi;
 
 # Parse command line options
 # ----------------------------------------------------------------------------
 	
 case "$1" in
-	-e | --edit )
+	add | a )
+		co -l $NOTEBOOK;
+		cp $NOTEBOOK /tmp/notebook;
+		echo " --------- --------- --------- --------- --------- --------- ---------" > $NOTEBOOK;
+		echo -e "NEW SECTION TITLE:\n\n" >> $NOTEBOOK;
+		cat /tmp/notebook >> $NOTEBOOK;
+		rm /tmp/notebook;
+		$EDITOR $NOTEBOOK;
+		ci $NOTEBOOK;
+		co $NOTEBOOK;
+		;;		
+	edit | e )
 		co -l $NOTEBOOK;
 		$EDITOR $NOTEBOOK;
-		ci -l $NOTEBOOK;
+		ci $NOTEBOOK;
 		co $NOTEBOOK;
 		;;
-	-h | --help )	help;;
-	*)		cat $NOTEBOOK;;
-esac
+	help | h )	
+		help;
+		;;
+	*)		
+		cat $NOTEBOOK;
+		;;
+esac;
 
 exit 0;
