@@ -23,6 +23,7 @@ if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
 fi
 if [ -e ~/bin/shunit ]; then                       # ShUnit path
 	export SHUNIT_HOME=~/bin/shunit;
+	export PATH=$PATH:$SHUNIT_HOME;
 fi
 
 # Editor options
