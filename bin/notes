@@ -94,7 +94,7 @@ case "$1" in
 		ci $NOTEBOOK;
 		co $NOTEBOOK;
 		;;
-	help | h )	
+	help | h | -h | --help )	
 		help;
 		;;
 	*)		
