@@ -1,21 +1,30 @@
 #!/bin/bash
+# ----------------------------------------------------------------------------
 # @file
 # Check out a version of Drupal core direct from CVS in a dir named 
 # using the CVS tag
 # @see color
 # @author Alister Lewis-Bowen (alister@different.com)
+# ----------------------------------------------------------------------------
 
-BRANCH=$1;
+REPO='-d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib';
+LOG=/tmp/`basename $0`.log;
+
+# Function: Help
+# ----------------------------------------------------------------------------
 
 function help {
 	echo;
-	echo "Usage: $(color bd)drupal_co.sh$(color off) [$(color bd)version$(color off)]";
-	echo "where $(color bd)version$(color off) is 4, 5, 6, or HEAD (default)";
+	echo "Usage: $(color bd)drupal_co.sh$(color) [$(color ul)version$(color)]";
+	echo "where $(color ul)version$(color) is 4, 5, 6, or HEAD (default)";
 	echo;
 	exit 1;
 }
 
-case $BRANCH in
+# Parse input arguments
+# ----------------------------------------------------------------------------
+
+case $1 in
 	'-h' | '--help')
 		help;
 		;;
@@ -33,8 +42,11 @@ case $BRANCH in
 		;;
 esac;
 
-echo -n "$(color bd)Fetching $(color white blue)$(color bd)core$(color off) $(color bd)from Drupal CVS ($(color yellow)$TAG$(color off)$(color bd))...$(color off)";
-cvs -d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal checkout -d $TAG -r $TAG drupal >/tmp/`basename $0`.log 2>&1;
-echo " $(color green)Done$(color off)";
+# Parse input arguments
+# ----------------------------------------------------------------------------
+
+echo -n "Fetching $(color white blue) core $(color) from Drupal CVS ($(color yellow)$TAG$(color)...";
+cvs $REPO -Q co -d $TAG -r $TAG drupal 2>$LOG;
+echo " $(color green)Done$(color)";
 
 exit 0;

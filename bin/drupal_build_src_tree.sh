@@ -1,26 +1,34 @@
 #!/bin/bash
+# ----------------------------------------------------------------------------
 # @file
 # Check out a version of Drupal core direct from CVS:
-# $BASE/drupal/
-#              core/
-#                      DRUPAL-5, etc.
-#              contrib/
-#                      modules/
-#                              DRUPAL-5, etc.
+# $BASE/
+#       core/
+#               DRUPAL-5, etc.
+#       contrib/
+#               modules/
+#                       DRUPAL-5, etc.
 # @see color
 # @author Alister Lewis-Bowen (alister@different.com)
+# ----------------------------------------------------------------------------
 
 BASE=${1:-`pwd`};
-
 _PWD=`PWD`;
+LOG=/tmp/`basename $0`.log;
+
+# Function: Help
+# ----------------------------------------------------------------------------
 
 function help {
 	echo;
-	echo "Usage: $(color bd)drupal_build_src_tree.sh$(color off) [$(color bd)target_dir$(color off)]";
-	echo "where $(color bd)target_dir$(color off) is the dir into which the tree is build (default is current dir)";
+	echo "Usage: $(color bd)drupal_build_src_tree.sh$(color) [$(color ul)target_dir$(color)]";
+	echo "where $(color ul)target_dir$(color) is the dir into which the tree is build (default is current dir)";
 	echo;
 	exit 1;
 }
+
+# Build out the tree
+# ----------------------------------------------------------------------------
 
 if [[ "$BASE" = '-h' || "$BASE" = '--help' ]]; then help; fi;
 
@@ -40,7 +48,7 @@ for version in 4 5 6 HEAD; do
 			branch=HEAD;
 			;;
 	esac;
-	
+
 	for section in core modules themes; do
 		
 		case $section in
