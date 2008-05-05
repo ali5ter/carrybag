@@ -26,15 +26,12 @@ if [[ "$BASE" = '-h' || "$BASE" = '--help' ]]; then help; fi;
 # Update the existing tree
 # ----------------------------------------------------------------------------
 
-echo -n "$(color bd)Updating $(color white blue)$(color bd)modules$(color off) $(color bd)from Drupal Contrib CVS...$(color off)";
-
 for project in `find -E . -maxdepth 2 -iregex ".*module" | cut -d"/" -f 2 | sort | uniq`; do
 	cd $BASE/$project;
 	echo -en "Updating module:\t$(color white blue) $project $(color)\t";
 	cvs -Q up -d -P 2>$LOG;
+	echo " $(color green)Done$(color)";
 done;
-
-echo " $(color green)Done$(color)";
 
 cd $_PWD;
 
