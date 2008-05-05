@@ -7,7 +7,7 @@
 # @author Alister Lewis-Bowen (alister@different.com)
 # ----------------------------------------------------------------------------
 
-REPO='-d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib';
+REPO='-d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal';
 LOG=/tmp/`basename $0`.log;
 
 # Function: Help
