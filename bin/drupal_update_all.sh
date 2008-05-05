@@ -21,10 +21,10 @@ function help {
 	exit 1;
 }
 
+if [[ "$BASE" = '-h' || "$BASE" = '--help' ]]; then help; fi;
+
 # Update the existing tree
 # ----------------------------------------------------------------------------
-
-if [[ "$BASE" = '-h' || "$BASE" = '--help' ]]; then help; fi;_PWD=`PWD`;
 
 for version in 5 6 HEAD; do
 	
