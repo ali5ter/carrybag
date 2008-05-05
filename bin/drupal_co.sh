@@ -16,7 +16,7 @@ LOG=/tmp/`basename $0`.log;
 function help {
 	echo;
 	echo "Usage: $(color bd)drupal_co.sh$(color) [$(color ul)version$(color)]";
-	echo "where $(color ul)version$(color) is 4, 5, 6, or HEAD (default)";
+	echo "where $(color ul)version$(color) is 5, 6, or HEAD (default)";
 	echo;
 	exit 1;
 }

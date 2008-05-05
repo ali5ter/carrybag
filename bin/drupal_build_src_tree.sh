@@ -32,7 +32,7 @@ function help {
 
 if [[ "$BASE" = '-h' || "$BASE" = '--help' ]]; then help; fi;
 
-for version in 4 5 6 HEAD; do
+for version in 5 6 HEAD; do
 	
 	case $version in
 		4)
