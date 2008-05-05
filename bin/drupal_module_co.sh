@@ -59,7 +59,7 @@ fi;
 # Check out project module from the DRUPAL contrib CVS 
 # ----------------------------------------------------------------------------
 
-echo -n "Fetching $(color white blue) $PROJECT $(color) module from Drupal Contrib CVS";
+echo -n "Fetching $(color white blue) $PROJECT $(color) module\t";
 
 if [ "$VERSION" ]; then
 	
