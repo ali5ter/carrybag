@@ -45,7 +45,7 @@ esac;
 # Parse input arguments
 # ----------------------------------------------------------------------------
 
-echo -n "Fetching $(color white blue) core $(color) from Drupal CVS ($(color yellow)$TAG$(color))...";
+echo -en "Drupal core:\t ($(color yellow)$TAG$(color)) ";
 cvs $REPO -Q co -d $TAG -r $TAG drupal 2>$LOG;
 echo " $(color green)Done$(color)";
 
