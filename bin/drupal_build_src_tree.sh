@@ -49,7 +49,7 @@ for version in 5 6 HEAD; do
 			;;
 	esac;
 
-	for section in core modules themes; do
+	for section in core modules; do
 		
 		case $section in
 			core)

@@ -47,19 +47,15 @@ case $BRANCH in
 		;;
 esac;
 
-
-# Check if the project dir exists
-# ----------------------------------------------------------------------------
-
-if [ -d $PROJECT ]; then
-	echo "$(color yellow)This project has already been checked out.$(color)";
-	exit 1;
-fi;
-
 # Check out project module from the DRUPAL contrib CVS 
 # ----------------------------------------------------------------------------
 
 echo -en "Drupal module:\t$(color white blue) $PROJECT $(color)\t";
+
+if [ -d $PROJECT ]; then
+	echo " $(color yellow)Already checked out.$(color)";
+	exit 1;
+fi;
 
 if [ "$VERSION" ]; then
 	
