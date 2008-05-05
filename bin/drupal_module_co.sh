@@ -59,7 +59,7 @@ fi;
 # Check out project module from the DRUPAL contrib CVS 
 # ----------------------------------------------------------------------------
 
-echo -n "Fetching $(color white blue) $PROJECT $(color) module from Drupal Contrib CVS ";
+echo -n "Fetching $(color white blue) $PROJECT $(color) module from Drupal Contrib CVS";
 
 if [ "$VERSION" ]; then
 	
@@ -89,7 +89,7 @@ else
 	else CHECKOUT=$CHECKOUT_VERSION_TAG;
 	fi;
 	
-	until [[ -d $PROJECT || "$EXIT" == 'YES' ]]; do
+	until [[ -d $PROJECT || "$PROJECT_NOT_FOUND" != ''  || "$EXIT" == 'YES' ]]; do
 	
 		case "$CHECKOUT" in
 		
