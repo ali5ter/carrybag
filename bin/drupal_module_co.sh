@@ -59,7 +59,7 @@ fi;
 # Check out project module from the DRUPAL contrib CVS 
 # ----------------------------------------------------------------------------
 
-echo -en "Fetching $(color white blue) $PROJECT $(color) module\t";
+echo -en "Drupal module:\t$(color white blue) $PROJECT $(color)\t";
 
 if [ "$VERSION" ]; then
 	
