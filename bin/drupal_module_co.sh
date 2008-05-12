@@ -54,6 +54,27 @@ function help {
 	exit 1;
 }
 
+# Function: Display the module info file
+# ----------------------------------------------------------------------------
+
+function show_module_info() {
+	if [-e $PROJECT/$PROJECT.info ]; then 
+  	echo; 
+  	cat $PROJECT/$PROJECT.info; 
+  	echo; 
+	fi;
+}
+
+# Function: Override settings
+# ----------------------------------------------------------------------------
+
+function override() {
+	if [ -e $OVERRIDE_FILE ]; then
+		BRANCH=`cat $OVERRIDE_FILE | egrep $PROJECT | awk {'print $2'}`;
+		VERSION=`cat $OVERRIDE_FILE | egrep $PROJECT | awk {'print $3'}`;
+	fi;
+}
+
 # Parse input arguments
 # ----------------------------------------------------------------------------
 
@@ -89,13 +110,7 @@ done;
 
 if [ -z "$PROJECT" ]; then help; fi;
 
-# Look for override settings
-# ----------------------------------------------------------------------------
-echo "$OVERRIDE_FILE";
-if [ -e $OVERRIDE_FILE ]; then
-	BRANCH=`cat $OVERRIDE_FILE | egrep $PROJECT | awk {'print $2'}`;
-	VERSION=`cat $OVERRIDE_FILE | egrep $PROJECT | awk {'print $3'}`;
-fi;
+override;
 
 # Set the CVS TAG
 # ----------------------------------------------------------------------------
@@ -123,6 +138,11 @@ if [ -e $LOG ]; then rm -f $LOG; fi;
 
 if [ "$DELETE" ]; then 
   rm -fR ./$PROJECT 2>>$LOG;
+fi;
+
+if [ -d $PROJECT && -n "$INFO" ]; then 
+	show_module_info;
+	exit 0; 
 fi;
 
 if [ -d $PROJECT ]; then 
@@ -214,10 +234,6 @@ fi;
 
 echo " $(color green)Done$(color)";
 
-if [[ -n "$INFO" && -e $PROJECT/$PROJECT.info ]]; then 
-  echo; 
-  cat $PROJECT/$PROJECT.info; 
-  echo; 
-fi;
+if [ "$INFO" ]; then show_module_info; fi;
 
 exit 0;
