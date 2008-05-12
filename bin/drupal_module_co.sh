@@ -6,23 +6,50 @@
 # @author Alister Lewis-Bowen (alister@different.com)
 # ----------------------------------------------------------------------------
 
-PROJECT=$1;
-BRANCH=$2;
-VERSION=$3;
 REPO='-d:pserver:anonymous:anonymous@cvs.drupal.org:/cvs/drupal-contrib';
 REPODIR=contributions/modules/;
 TAG=HEAD;
 LOG=/tmp/`basename $0`.log;
+OVERRIDE_FILE=.`basename $0 .sh`.override;
 
 # Function: Help
 # ----------------------------------------------------------------------------
 
 function help {
 	echo;
-	echo "Usage: $(color bd)drupal_module_co.sh project$(color) [$(color ul)branch$(color)] [$(color ul)version$(color)]";
-	echo "where $(color ul)project$(color) is the name of the module project,";
-	echo "      $(color ul)branch$(color) is 4, 5, 6, or HEAD (default), ";
+	echo "Usage: $(color bd)drupal_module_co.sh$(color) [$(color ul)options$(color)] $(color ul)project$(color) [$(color ul)branch$(color)] [$(color ul)version$(color)]";
+	echo "where $(color ul)options$(color) are -h, --help for this help text or";
+	echo "      -f, --force to force the checkout even if the module already exists";
+	echo "      -i, --info to display the module info file after checkout.";
+	echo "      $(color ul)project$(color) is the name of the module project,";
+	echo "      $(color ul)branch$(color) is 5, 6, or HEAD (default), ";
 	echo "      $(color ul)version$(color) is an integer (defaults to the latest version)";
+	echo;
+	echo "Examples:";
+	echo " drupal_module_co devel 5";
+	echo "will checkout the devel module using the DRUPAL-5 branch and the latest"; 
+	echo "version found in the CVS repository. If ./devel already exists, no";
+	echo "checkout will occur.";
+	echo " drupal_module_co -f workflow 5 2-2";
+	echo "will checkout the workflow module using DRUPAL-5--2-2. With the force";
+  echo "option, any existing ./workflow directory will be deleted before the ";
+	echo "checkout begins.";
+	echo;
+	echo "You can override branch and version numbers for specific modules by";
+	echo "using a .$0.override file that lists these. An example might be..";
+	echo;
+	echo "# Workflow/action dependency...";
+	echo "actions 5 2-4";
+	echo "workflow 5 2-2";
+	echo;
+	echo "where the first line is comment, the second line forces the checkout of";
+	echo "the actions module for branch 5 version 2-4 (DRUPAL-5--2-4) and the last";
+	echo "line defines the checkout of the workflows module for branch 5 version";
+	echo "2-2 (DRUPAL-5--2-2)";
+	echo;
+	echo "Using this override file means that any command acting on the action or";
+	echo "workflow module will only ever use the branch and version information";
+	echo "from the override file."
 	echo;
 	exit 1;
 }
@@ -30,12 +57,50 @@ function help {
 # Parse input arguments
 # ----------------------------------------------------------------------------
 
-if [[ -z $PROJECT || "$PROJECT" = '-h' || "$PROJECT" = '--help' ]]; then help; fi;
+while (( "$#" )); do
+
+	case "$1" in
+		-f | --force )
+			DELETE=1;
+			;;
+		-h | --help )
+			help;
+			;;
+		-i | --info )
+			INFO=1;
+			;;
+		*)
+			if [ -z "$PROJECT" ]; then
+				PROJECT=$1;
+			else
+				if [ -z "$BRANCH" ]; then
+					BRANCH=$1;
+				else
+					if [ -z "$VERSION" ]; then
+						VERSION=$1;
+					fi;
+				fi;
+			fi;
+	esac
+	
+	shift;
+	
+done;
+
+if [ -z "$PROJECT" ]; then help; fi;
+
+# Look for override settings
+# ----------------------------------------------------------------------------
+echo "$OVERRIDE_FILE";
+if [ -e $OVERRIDE_FILE ]; then
+	BRANCH=`cat $OVERRIDE_FILE | egrep $PROJECT | awk {'print $2'}`;
+	VERSION=`cat $OVERRIDE_FILE | egrep $PROJECT | awk {'print $3'}`;
+fi;
+
+# Set the CVS TAG
+# ----------------------------------------------------------------------------
 
 case $BRANCH in
-	4)
-		TAG=DRUPAL-4-7;
-		;;
 	5)
 		TAG=DRUPAL-5;
 		;;
@@ -43,16 +108,24 @@ case $BRANCH in
 		TAG=DRUPAL-6;
 		;;
 	*)
-		TAG=HEAD
+		TAG=HEAD;
 		;;
 esac;
+
+if [ "$VERSION" ]; then TAG=$TAG--$VERSION; fi;
 
 # Check out project module from the DRUPAL contrib CVS 
 # ----------------------------------------------------------------------------
 
 echo -en "Drupal module:\t$(color white blue) $PROJECT $(color)\t";
 
-if [ -d $PROJECT ]; then
+if [ -e $LOG ]; then rm -f $LOG; fi;
+
+if [ "$DELETE" ]; then 
+  rm -fR ./$PROJECT 2>>$LOG;
+fi;
+
+if [ -d $PROJECT ]; then 
 	echo " $(color yellow)Already checked out.$(color)";
 	exit 1;
 fi;
@@ -61,7 +134,6 @@ if [ "$VERSION" ]; then
 	
 	# Check out a specific version...
 	
-	TAG="$TAG--$VERSION";
 	echo -n " ($(color yellow)$TAG$(color))...";
 	cvs $REPO -Q co -d $PROJECT -r $TAG $REPODIR$PROJECT
 	if [ ! -d $PROJECT ]; then
@@ -123,7 +195,7 @@ else
 				;;
 		esac;
 		
-		cvs $REPO -Q co -d $PROJECT -r $_TAG $REPODIR$PROJECT 2>$LOG;
+		cvs $REPO -Q co -d $PROJECT -r $_TAG $REPODIR$PROJECT 2>>$LOG;
 		
 		PROJECT_NOT_FOUND=`cat $LOG | grep 'could not read RCS file'`;
 		TAG_NOT_FOUND=`cat $LOG | grep 'no such tag'`;
@@ -141,5 +213,11 @@ else
 fi;
 
 echo " $(color green)Done$(color)";
+
+if [[ -n "$INFO" && -e $PROJECT/$PROJECT.info ]]; then 
+  echo; 
+  cat $PROJECT/$PROJECT.info; 
+  echo; 
+fi;
 
 exit 0;
