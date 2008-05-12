@@ -58,7 +58,7 @@ function help {
 # ----------------------------------------------------------------------------
 
 function show_module_info() {
-	if [-e $PROJECT/$PROJECT.info ]; then 
+	if [ -e $PROJECT/$PROJECT.info ]; then 
   	echo; 
   	cat $PROJECT/$PROJECT.info; 
   	echo; 
