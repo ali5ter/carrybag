@@ -140,7 +140,7 @@ if [ "$DELETE" ]; then
   rm -fR ./$PROJECT 2>>$LOG;
 fi;
 
-if [ -d $PROJECT && -n "$INFO" ]; then 
+if [[ -d $PROJECT && -n "$INFO" ]]; then 
 	show_module_info;
 	exit 0; 
 fi;
