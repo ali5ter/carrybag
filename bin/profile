@@ -25,6 +25,9 @@ if [ -e ~/bin/shunit ]; then                       # ShUnit path
 	export SHUNIT_HOME=~/bin/shunit;
 	export PATH=$PATH:$SHUNIT_HOME;
 fi
+if [ -e ~/Resources/Drupal/src ]; then             # Drupal src tree
+	export DRUPAL_SRC_TREE=~/Resources/Drupal/src;
+fi
 
 # Editor options
 # ----------------------------------------------------------------------------
@@ -46,8 +49,6 @@ if [ -e ~/bin/vircs.sh ]; then
 	alias vi='vircs.sh'; # revision control with any edit
 fi
 
-export bd="\e[1;37m"; 
-
 # Alias extra commands
 # ----------------------------------------------------------------------------
 
@@ -60,16 +61,16 @@ alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sud
 # Alias host logins
 # ----------------------------------------------------------------------------
 
-alias pair="ssh alister@erraj.pair.com";
-alias dreamhost="ssh ali5ter@snocap.dreamhost.com";
-alias home="ssh alister@home.different.com -p 2112";
-alias hugo="ssh alister@hugo";
-alias trott="ssh alister@trott";
+alias pair="ssh alister@erraj.pair.com $1";
+alias dreamhost="ssh ali5ter@snocap.dreamhost.com $1";
+alias home="ssh alister@home.different.com -p 2112 $1";
+alias hugo="ssh alister@hugo $1";
+alias trott="ssh alister@trott $1";
 
-alias dev="ssh abowen@itgdev.iic.harvard.edu $1";
-alias iic="ssh web@star.iic.harvard.edu";
-alias im="ssh harviic@imageandmeaning.org";
-alias scf="ssh abowen@scfdev.iic.harvard.edu";
+alias dev="ssh abowen@itgdev.iic.harvard.edu $1"; # because i am
+alias iic="ssh web@star.iic.harvard.edu $1";      # for cloth sk
+alias im="ssh harviic@imageandmeaning.org $1";    # IIC
+alias scf="ssh abowen@scfdev.iic.harvard.edu $1"; # science
 
 # The .script_aliases script is used to alias any of my .sh to name only
 # ----------------------------------------------------------------------------
