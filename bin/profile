@@ -25,9 +25,6 @@ if [ -e ~/bin/shunit ]; then                       # ShUnit path
 	export SHUNIT_HOME=~/bin/shunit;
 	export PATH=$PATH:$SHUNIT_HOME;
 fi
-if [ -e ~/Resources/Drupal/src ]; then             # Drupal src tree
-	export DRUPAL_SRC_TREE=~/Resources/Drupal/src;
-fi
 
 # Editor options
 # ----------------------------------------------------------------------------
