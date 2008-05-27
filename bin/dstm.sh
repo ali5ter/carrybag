@@ -227,11 +227,13 @@ function profileModules() {
 	fi;
 }
 
-# Function: Built the local Drupal source tree
+# Function: Build the local Drupal source tree
 # ----------------------------------------------------------------------------
 
 function build() {
 	VERY_VERBOSE=1;
+	profileBranches;
+	profileModules;
 	get core;
 	get module;
 	get theme;
@@ -269,7 +271,9 @@ function get() {
 				else
 					if [ "$BRANCHES" ]; then
 						for ((i=0;i<${#BRANCHES[@]};i++)); do
-							cvsCoModule $_project ${BRANCHES[${i}]} $_version;
+							if [ `cat $PROFILE | egrep ^ExcludeModule | egrep $_project | egrep ${BRANCHES[${i}]} | wc -l | tr -d ' '` == '0' ]; then
+								cvsCoModule $_project ${BRANCHES[${i}]} $_version;
+							fi;
 						done;
 					else 
 						cvsCoModule $_project;
@@ -280,7 +284,9 @@ function get() {
 					for ((i=0;i<${#MODULES[@]};i++)); do
 						if [ "$BRANCHES" ]; then
 							for ((j=0;j<${#BRANCHES[@]};j++)); do
-								cvsCoModule ${MODULES[${i}]} ${BRANCHES[${j}]} $_version;
+								if [ `cat $PROFILE | egrep ^ExcludeModule | egrep ${MODULES[${i}]} | egrep ${BRANCHES[${j}]} | wc -l | tr -d ' '` == '0' ]; then
+									cvsCoModule ${MODULES[${i}]} ${BRANCHES[${j}]} $_version;
+								fi;
 							done;
 						else 
 							cvsCoModule ${MODULES[${i}]};
@@ -303,6 +309,42 @@ function update() {
 	local _project=${2:-$PROJECT};
 	local _branch=${3:-$BRANCH};
 	local _version=${3:-$VERSION};
+	
+	if [ "$_context" == '' ]; then
+		_context=all;
+	fi;
+	
+	case "$_context" in
+	
+		core | all )
+			if [ "$_branch" ]; then
+				cvsUpCore $_branch;
+			else
+				cd $TREE_CORE;
+				for _dir in `ls`; do
+					cvsUpCore $_dir; 
+				done;
+			fi;;
+			
+		module | all )
+			cd $TREE_MODULE;
+			if [ "$_project" ]; then
+				if [ "$_branch" ]; then
+					cvsUpModule $_project $_branch;
+				else
+					for _dir in `find . | egrep $_project\\.info | cut -d'/' -f2`; do
+						cvsUpModule $_project $_dir; 
+					done;
+				fi;
+			else
+				for _dir in `ls`; do
+					for _project in `ls`; do
+						cvsUpModule $_project $_dir;
+					done;
+				done;
+			fi;;
+			
+	esac;
 }
 
 # Function: Delete a context within the Drupal source tree
@@ -336,8 +378,7 @@ function cvsCoCore() {
 }
 
 # Function: Check out Drupal module project
-# Usage: cvsCoModule project [branch] [version]
-# @todo force and init
+# Usage: cvsCoModule [project] [branch] [version]
 # ----------------------------------------------------------------------------
 
 function cvsCoModule() {
@@ -475,6 +516,38 @@ function cvsCoModule() {
 	status done;
 }
 
+# Function: Update Drupal core
+# Usage: cvsUpCore [branch]
+# ----------------------------------------------------------------------------
+
+function cvsUpCore() {
+	local _tag;
+	local _dir;
+	
+	case "$1" in
+		HEAD | '' ) _tag=HEAD; _dir=HEAD;;
+		* )					_tag=DRUPAL-$1; _dir=$1;;
+	esac;
+	
+	if [ -d $TREE_CORE/$_dir ]; then
+		cd $TREE_CORE/$_dir;
+		status "Updating $_tag";
+		cvs -Q up -d -P 2>>$ERROR_LOG;
+		status done;
+	else
+		error "Oops! It seems core $_dir does not exist. Perhaps you should use the dstm get core $_dir command.";
+	fi;
+}
+
+# Function: Update Drupal module project
+# Usage: cvsUpModule [project] [branch]
+# ----------------------------------------------------------------------------
+
+function cvsUpModule() {
+	local _project=${1:-devel};
+	local _branch=${2:-HEAD};
+}
+
 # Function: Display the project info files
 # ----------------------------------------------------------------------------
 
@@ -486,23 +559,10 @@ function displayProjectInfo() {
 	fi;
 }
 
-# Function: Get any overriding branch and version values for a project
-# ----------------------------------------------------------------------------
-
-function getProjectOverride() {
-	if [ -e $MODULE_OVERRIDE ]; then
-		BRANCH=`cat $MODULE_OVERRIDE | egrep $PROJECT | awk {'print $2'}`;
-		VERSION=`cat $MODULE_OVERRIDE | egrep $PROJECT | awk {'print $3'}`;
-	fi;
-}
-
 # Parse input arguments
 # ----------------------------------------------------------------------------
 
 if [ -z "$1" ]; then help; fi;
-
-profileBranches;
-profileModules;
 
 while (( "$#" )); do
 
@@ -519,6 +579,7 @@ while (( "$#" )); do
 		clean )						clean;;
 		profile )					profile;;
 		build )						build;;
+		refresh )					refresh;;
 		
 		# Context for an action
 		core | C )				CONTEXT=core;;
