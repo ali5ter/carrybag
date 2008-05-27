@@ -46,7 +46,7 @@ CVS_CONTRIB_REPO=${DSTM_CVS_CONTRIB_REPO:-'-d:pserver:anonymous:anonymous@cvs.dr
 # Drupal contrib module directory in the CVS repository
 # ----------------------------------------------------------------------------
 
-CVS_CONTRIB_REPO_DIR=${DSTM_CVS_CONTRIB_REPO_DIR:-contributions/modules/};
+CVS_CONTRIB_REPO_DIR=${DSTM_CVS_CONTRIB_REPO_DIR:-contributions/modules};
 
 # Core location in the Drupal source tree
 # ----------------------------------------------------------------------------
@@ -117,10 +117,10 @@ function status() {
 			exit 1;
 			;;
 		done )
-			if [ -z "$QUIET" ]; then echo " $(color green)Done$(color)"; fi;
+			if [[ "$VERBOSE" || "$VERY_VERBOSE" ]]; then echo " $(color green)Done$(color)"; fi;
 			;;
 		* )
-			if [ -z "$QUIET" ]; then echo -en "$1...\t"; fi;
+			if [[ "$VERBOSE" || "$VERY_VERBOSE" ]]; then echo -en "$1...\t"; fi;
 			;;
 	esac;
 }
@@ -201,42 +201,40 @@ endOfExampleProfileContent
 	status done;
 }
 
+# Function: Create a list of branches from the profile
+# ----------------------------------------------------------------------------
+
+function profileBranches() {
+	if [[ -e $PROFILE && `cat $PROFILE | egrep ^IncludeBranch | wc -l | tr -d ' '` != '0' ]]; then
+		local _index=0;
+		for _branch in `cat $PROFILE | egrep ^IncludeBranch | awk {'print $2'}`; do
+			BRANCHES[$_index]=$_branch;
+			(( _index += 1 ));
+		done;
+	fi;
+}
+
+# Function: Create a list of include modules from the profile
+# ----------------------------------------------------------------------------
+
+function profileModules() {
+	if [[ -e $PROFILE && `cat $PROFILE | egrep ^IncludeModule | wc -l | tr -d ' '` != '0' ]]; then
+		local _index=0;
+	 	for _project in `cat $PROFILE | egrep ^IncludeModule | awk {'print $2'}`; do
+	 		MODULES[$_index]=$_project;
+			(( _index += 1 ));
+	 	done;
+	fi;
+}
+
 # Function: Built the local Drupal source tree
 # ----------------------------------------------------------------------------
 
 function build() {
-	create core;
-	create module;
-	create theme;
-}
-
-# Function: Create a context within the Drupal source tree
-# Usage: create [core|module|theme] [project] [branch] [version]
-# ----------------------------------------------------------------------------
-
-function create() {
-	local _context=${1:-$CONTEXT};
-	local _project=${2:-$PROJECT};
-	local _branch=${3:-$BRANCH};
-	local _version=${3:-$VERSION};
-	case "$_context" in
-		core )
-			if [ -n "$_branch" ]; then
-				cvsCoCore $_branch;
-			else
-				if [[ -e $PROFILE && `cat $PROFILE | egrep ^IncludeBranch | wc -l | tr -d ' '` != '0' ]]; then
-					for _branch in `cat $PROFILE | egrep ^IncludeBranch | awk {'print $2'}`; do
-						cvsCoCore $_branch;
-					done;
-				else
-					cvsCoCore;
-				fi;
-			fi;;
-		module )
-			;;
-		theme )
-			;;
-	esac;
+	VERY_VERBOSE=1;
+	get core;
+	get module;
+	get theme;
 }
 
 # Function: Retrieve/get a context within the Drupal source tree
@@ -247,7 +245,53 @@ function get() {
 	local _context=${1:-$CONTEXT};
 	local _project=${2:-$PROJECT};
 	local _branch=${3:-$BRANCH};
-	local _version=${3:-$VERSION};
+	local _version=${4:-$VERSION};
+	
+	case "$_context" in
+	
+		core )
+			if [ "$_branch" ]; then
+				cvsCoCore $_branch;
+			else
+				if [ "$BRANCHES" ]; then
+					for ((i=0;i<${#BRANCHES[@]};i++)); do
+						cvsCoCore ${BRANCHES[${i}]};
+					done;
+				else 
+					cvsCoCore;
+				fi;
+			fi;;
+			
+		module )
+			if [ "$_project" ]; then
+				if [ "$_branch" ]; then
+					cvsCoModule $_project $_branch $_version;
+				else
+					if [ "$BRANCHES" ]; then
+						for ((i=0;i<${#BRANCHES[@]};i++)); do
+							cvsCoModule $_project ${BRANCHES[${i}]} $_version;
+						done;
+					else 
+						cvsCoModule $_project;
+					fi;
+				fi;
+			else
+				if [ "$MODULES" ]; then
+					for ((i=0;i<${#MODULES[@]};i++)); do
+						if [ "$BRANCHES" ]; then
+							for ((j=0;j<${#BRANCHES[@]};j++)); do
+								cvsCoModule ${MODULES[${i}]} ${BRANCHES[${j}]} $_version;
+							done;
+						else 
+							cvsCoModule ${MODULES[${i}]};
+						fi;
+					done;
+				else 
+					cvsCoModule $_project;
+				fi;
+			fi;;
+			
+	esac;
 }
 
 # Function: Update a context within the Drupal source tree
@@ -277,15 +321,159 @@ function delete() {
 # ----------------------------------------------------------------------------
 
 function cvsCoCore() {
-	local _DIR=${1:-HEAD};
-	local _TAG=DRUPAL-$1;
-	if [ "$_DIR" == 'HEAD' ]; then _TAG=HEAD; fi;
-	status "Fetching $_TAG";
+	local _tag;
+	local _dir;
+	
+	case "$1" in
+		HEAD | '' ) _tag=HEAD; _dir=HEAD;;
+		* )					_tag=DRUPAL-$1; _dir=$1;;
+	esac;
+	
 	cd $TREE_CORE;
-	cvs $CVS_REPO -Q co -d $_DIR -r $_TAG drupal 2>>$ERROR_LOG;
+	status "Fetching $_tag";
+	cvs $CVS_REPO -Q co -d $_dir -r $_tag drupal 2>>$ERROR_LOG;
 	status done;
 }
 
+# Function: Check out Drupal module project
+# Usage: cvsCoModule project [branch] [version]
+# @todo force and init
+# ----------------------------------------------------------------------------
+
+function cvsCoModule() {
+	local _project=${1:-devel};
+	local _branch=${2:-HEAD};
+	local _version=$3;
+	
+	if [[ -e $PROFILE && `cat $PROFILE | egrep ^LockModuleVersion | egrep $_project | egrep $_branch | wc -l | tr -d ' '` != '0' ]]; then
+		_version=`cat $PROFILE | egrep ^LockModuleVersion | egrep $_project | egrep $_branch | awk {'print $4'}`;
+	fi;
+
+	if [ ! -d $TREE_MODULE/$_branch ]; then 
+		mkdir -p $TREE_MODULE/$_branch;
+	fi;
+	cd $TREE_MODULE/$_branch;
+	
+	local _tag;
+	case "$_branch" in
+		HEAD )	_tag=HEAD; _dir=HEAD;;
+		* )			_tag=DRUPAL-$_branch; _dir=$_project;;
+	esac;
+	
+	if [ "$_version" ]; then
+		# @todo _version =~ s/./-/g
+		_tag=$_tag--$_version;
+	fi;
+	
+	status "Fetching $_project module ($_tag)";
+
+	if [ "$FORCE" ]; then
+		rm -fR $_project;
+	fi;
+	
+	if [ -d $_project ]; then 
+		status "already exists locally";
+		status done;
+		return;
+	fi;
+
+	if [ "$_version" ]; then
+	
+		# Check out a specific version...
+	
+		status " ($_tag)";
+		cvs $CVS_CONTRIB_REPO -Q co -d $_project -r $_tag $CVS_CONTRIB_REPO_DIR/$_project
+		if [ ! -d $_project ]; then
+			status "unable to checkout this project module";
+			status done;
+			return;
+		fi;
+	
+	else
+	
+		# Find latest version...
+		
+		local _checkout_by_version=0
+		local _checkout_by_branch=1
+		local _checkout_head=2
+		local _project_not_found;
+		local _tag_not_found;
+		local _try_tag;
+		local _exit=NO;
+		local _log=.tmp_log;
+		
+		touch $_log;
+		
+		if [ "$_tag" == 'HEAD' ]; then _checkout=$_checkout_head;
+		else _checkout=$_checkout_by_version;
+		fi;
+		
+		until [[ -d $_project || "$_project_not_found" != ''  || "$_exit" == 'YES' ]]; do
+		
+			case "$_checkout" in
+			
+				"$_checkout_by_version" )
+					if [ -z "$_try_tag" ]; then
+						_version=8;	# not spotted any versions higher than 7
+						_try_tag=$_tag--$_version;
+					fi;
+					if (("$_version" > "1")); then
+						_version=$[$_version -1];
+						_try_tag=$_tag--$_version;
+					else 
+						_checkout=$_checkout_by_branch;
+					fi;
+					;;
+					
+				"$_checkout_by_branch" )
+					if [ "$_try_tag" == "$_tag" ]; then
+						_checkout=$_checkout_head;
+					else
+						_try_tag=$_tag;
+					fi;
+					;;
+					
+				"$_checkout_head" )
+				  if [ "$_try_tag" == 'HEAD' ]; then
+						_exit=YES;
+					else
+						_try_tag=HEAD;
+					fi;
+				  ;;
+				  
+				* )
+					_exit=YES;
+					;;
+			esac;
+			
+			cvs $CVS_CONTRIB_REPO -Q co -d $_project -r $_try_tag $CVS_CONTRIB_REPO_DIR/$_project 2>$_log;
+			
+			_project_not_found=`cat $_log | grep 'could not read RCS file'`;
+			_tag_not_found=`cat $_log | grep 'no such tag'`;
+			
+			if [ "$VERY_VERBOSE" ]; then
+				echo -n '.';
+			fi;
+			
+		done;
+	
+		cat $_log >> $ERROR_LOG;
+		rm $_log;
+		
+		if [ "$_project_not_found" != '' ]; then
+			status "unable to find this project module";
+			status done;
+			return;
+		fi;
+		
+		if [ "$VERY_VERBOSE" ]; then
+			echo -n "$_try_tag";
+		fi;
+		
+	fi;
+
+	status done;
+}
 
 # Function: Display the project info files
 # ----------------------------------------------------------------------------
@@ -313,12 +501,17 @@ function getProjectOverride() {
 
 if [ -z "$1" ]; then help; fi;
 
+profileBranches;
+profileModules;
+
 while (( "$#" )); do
 
 	case "$1" in
 		
 		# Options
-		-q | --quiet )	QUIET=1;;
+		-v | --verbose )	VERBOSE=1;;
+		-vv | --vverbose )	VERY_VERBOSE=1;;
+		-f | --force )		FORCE=1;;
 		
 		# General actions
 		help )						help;;
@@ -333,8 +526,7 @@ while (( "$#" )); do
 		theme | T)				CONTEXT=theme;;
 		
 		# Action based on context
-		create | cr )			ACTION=create;;
-		retrieve | get )	ACTION=retrieve;;
+		retrieve | get )	ACTION=get;;
 		update | up )			ACTION=update;;
 		delete | del )		ACTION=delete;;
 		
@@ -373,7 +565,12 @@ done;
 # Invoke and action
 # ----------------------------------------------------------------------------
 
-## DEBUG
-echo "CONTEXT($CONTEXT) ACTION($ACTION) PROJECT($PROJECT) BRANCH($BRANCH) VERSION($VERSION)";
+echo "VERBOSE($VERBOSE) VERY_VERBOSE($VERY_VERBOSE) FORCE($FORCE) ACTION($ACTION) CONTEXT($CONTEXT) PROJECT($PROJECT) BRANCH($BRANCH) VERSION($VERSION)";
+
+case "$ACTION" in
+	get )			get $CONTEXT $PROJECT $BRANCH $VERSION;;
+	update )	update $CONTEXT $PROJECT $BRANCH;;
+	delete )	delete $CONTEXT $PROJECT $BRANCH;;
+esac
 
 exit 0;
