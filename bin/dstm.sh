@@ -301,7 +301,8 @@ function get() {
 }
 
 # Function: Update a context within the Drupal source tree
-# Usage: update [core|module|theme] [project] [branch] [version]
+# Usage: update [core|all] [branch]
+# Usage: update [module|theme|all] [project|all] [branch] [version]
 # ----------------------------------------------------------------------------
 
 function update() {
@@ -310,40 +311,57 @@ function update() {
 	local _branch=${3:-$BRANCH};
 	local _version=${3:-$VERSION};
 	
-	if [ "$_context" == '' ]; then
-		_context=all;
-	fi;
-	
 	case "$_context" in
 	
-		core | all )
-			if [ "$_branch" ]; then
-				cvsUpCore $_branch;
-			else
-				cd $TREE_CORE;
-				for _dir in `ls`; do
-					cvsUpCore $_dir; 
-				done;
-			fi;;
+		'' | all )
+			update core;
+			update module;
+			;;
 			
-		module | all )
+		core )
+			cd $TREE_CORE;
+			case "$_branch" in
+				'' | all )
+					for _dir in `ls`; do
+						cvsUpCore $_dir; 
+					done;;
+				* )
+					cvsUpCore $_branch;;	
+			esac;;
+			
+		module )
 			cd $TREE_MODULE;
-			if [ "$_project" ]; then
-				if [ "$_branch" ]; then
-					cvsUpModule $_project $_branch;
-				else
-					for _dir in `find . | egrep $_project\\.info | cut -d'/' -f2`; do
-						cvsUpModule $_project $_dir; 
-					done;
-				fi;
-			else
-				for _dir in `ls`; do
-					for _project in `ls`; do
-						cvsUpModule $_project $_dir;
-					done;
-				done;
-			fi;;
-			
+			case "$_project" in
+				'' )
+					for _dir in `ls`; do
+						cd $TREE_MODULE/$_dir;
+						for _project in `ls`; do
+							cvsUpModule $_project $_dir;
+						done;
+					done;;
+				all )
+					if [[ -d $_branch && "$_branch" ]]; then
+						cd $_branch;
+						for _project in `ls`; do
+							cvsUpModule $_project $_branch;
+						done;
+					else
+						for _dir in `ls`; do
+							cd $TREE_MODULE/$_dir;
+							for _project in `ls`; do
+								cvsUpModule $_project $_dir;
+							done;
+						done;
+					fi;;	
+				* )
+					if [ "$_branch" ]; then
+						cvsUpModule $_project $_branch;
+					else
+						for _dir in `find . | egrep $_project\\.info | cut -d'/' -f2`; do
+							cvsUpModule $_project $_dir; 
+						done;
+					fi;; 
+			esac;;
 	esac;
 }
 
@@ -546,6 +564,15 @@ function cvsUpCore() {
 function cvsUpModule() {
 	local _project=${1:-devel};
 	local _branch=${2:-HEAD};
+	
+	if [ -d $TREE_MODULE/$_branch/$_project ]; then
+		cd $TREE_MODULE/$_branch/$_project;
+		status "Updating $_project module ($_branch)";
+		cvs -Q up -d -P 2>>$ERROR_LOG;
+		status done;
+	else
+		error "Oops! It seems module $_project $_branch does not exist. Perhaps you should use the dstm update module $_project $_branch command.";
+	fi;
 }
 
 # Function: Display the project info files
