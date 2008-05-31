@@ -231,7 +231,6 @@ function profileModules() {
 # ----------------------------------------------------------------------------
 
 function build() {
-	VERBOSE=1;
 	profileBranches;
 	profileModules;
 	get core;
@@ -451,14 +450,56 @@ function info() {
 			case "$_branch" in
 				'' | all )
 					for _dir in `ls`; do
+						echo -n 'Core ';
 						getCVStag core $_dir; echo;
 					done;;
 				* )
+					echo -n 'Core ';
 					getCVStag core $_branch; echo;
 			esac;;
 			
 		module )
-			;;
+			cd $TREE_MODULE;
+			case "$_project" in
+				'' | all )
+					if [[ -d $_branch && "$_branch" ]]; then
+						cd $_branch;
+						for _project in `ls`; do
+							echo -en "Module\t$_project\t($_branch/";
+							getCVStag module $_branch $_project;
+							echo -en ")\t";
+							getModuleDescription $_project $_branch;
+							echo;
+						done;
+					else
+						for _dir in `ls`; do
+							cd $TREE_MODULE/$_dir;
+							for _project in `ls`; do
+								echo -en "Module\t$_project\t($_dir/";
+								getCVStag module $_dir $_project;
+								echo -en ")\t";
+								getModuleDescription $_project $_dir;
+								echo;
+							done;
+						done;
+					fi;;	
+				* )
+					if [ "$_branch" ]; then
+						echo -en "Module\t$_project\t($_branch/";
+						getCVStag module $_branch $_project;
+						echo -en ")\t";
+						getModuleDescription $_project $_branch;
+						echo;
+					else
+						for _dir in `find . | egrep $_project\\.info | cut -d'/' -f2`; do
+							echo -en "Module\t$_project\t($_dir/";
+							getCVStag module $_dir $_project;
+							echo -en ")\t";
+							getModuleDescription $_project $_dir;
+							echo;
+						done;
+					fi;; 
+			esac;;
 	esac;
 }
 
@@ -663,20 +704,23 @@ function cvsUpModule() {
 }
 
 # Function: Display CVS Tag for a context within the Drupal source tree
-# Usage: getCVStag [context] [project] [branch]
+# Usage: getCVStag [context] [branch] [project]
 # ----------------------------------------------------------------------------
 
 function getCVStag() {
 	local _context=${1:-module};
-	local _project=${1:-devel};
+	local _project=${3:-devel};
 	local _branch=${2:-HEAD};
+	local _tag;
 
 	case "$_context" in
 		core )
-			echo -n `cat $TREE_CORE/$_branch/CVS/Tag`;;
+			_tag=`cat $TREE_CORE/$_branch/CVS/Tag`;;
 		module )
-			echo -n `cat $TREE_MODULE/$_branch/$_project/CVS/Tag`;;
-	esac
+			_tag=`cat $TREE_MODULE/$_branch/$_project/CVS/Tag`;;
+	esac;
+	
+	echo -n ${_tag:1};
 }
 
 # Function: Display module description within the Drupal source tree
@@ -686,8 +730,8 @@ function getCVStag() {
 function getModuleDescription() {
 	local _project=${1:-devel};
 	local _branch=${2:-HEAD};
-
-	echo -n `cat $TREE_MODULE/$_branch/$_project/$_project.info | egrep "^description" | cut -f2 -d '=' | tr -d ' '`;
+	local _desc=`cat $TREE_MODULE/$_branch/$_project/$_project.info | egrep "^description" | cut -f2 -d '='`;
+	echo -n ${_desc:1};
 }
 
 # Parse input arguments
