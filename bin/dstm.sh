@@ -117,10 +117,10 @@ function status() {
 			exit 1;
 			;;
 		done )
-			if [[ "$VERBOSE" || "$VERY_VERBOSE" ]]; then echo " $(color green)Done$(color)"; fi;
+			if [ -z "$QUIET" ]; then echo " $(color green)Done$(color)"; fi;
 			;;
 		* )
-			if [[ "$VERBOSE" || "$VERY_VERBOSE" ]]; then echo -en "$1...\t"; fi;
+			if [ -z "$QUIET" ]; then echo -en "$1...\t"; fi;
 			;;
 	esac;
 }
@@ -231,7 +231,7 @@ function profileModules() {
 # ----------------------------------------------------------------------------
 
 function build() {
-	VERY_VERBOSE=1;
+	VERBOSE=1;
 	profileBranches;
 	profileModules;
 	get core;
@@ -302,20 +302,20 @@ function get() {
 
 # Function: Update a context within the Drupal source tree
 # Usage: update [core|all] [branch]
-# Usage: update [module|theme|all] [project|all] [branch] [version]
+# Usage: update [module|theme|all] [project|all] [branch]
 # ----------------------------------------------------------------------------
 
 function update() {
 	local _context=${1:-$CONTEXT};
 	local _project=${2:-$PROJECT};
 	local _branch=${3:-$BRANCH};
-	local _version=${3:-$VERSION};
 	
 	case "$_context" in
 	
 		'' | all )
 			update core;
 			update module;
+			#update theme;
 			;;
 			
 		core )
@@ -332,14 +332,7 @@ function update() {
 		module )
 			cd $TREE_MODULE;
 			case "$_project" in
-				'' )
-					for _dir in `ls`; do
-						cd $TREE_MODULE/$_dir;
-						for _project in `ls`; do
-							cvsUpModule $_project $_dir;
-						done;
-					done;;
-				all )
+				'' | all )
 					if [[ -d $_branch && "$_branch" ]]; then
 						cd $_branch;
 						for _project in `ls`; do
@@ -366,14 +359,107 @@ function update() {
 }
 
 # Function: Delete a context within the Drupal source tree
-# Usage: delete [core|module|theme] [project] [branch] [version]
+# Usage: delete [core|module|theme] [project] [branch]
 # ----------------------------------------------------------------------------
 
 function delete() {
 	local _context=${1:-$CONTEXT};
 	local _project=${2:-$PROJECT};
 	local _branch=${3:-$BRANCH};
-	local _version=${3:-$VERSION};
+	
+	case "$_context" in
+	
+		'' | all )
+			delete core;
+			delete module;
+			#delete theme;
+			;;
+			
+		core )
+			cd $TREE_CORE;
+			case "$_branch" in
+				'' | all )
+					status "Deleting all core";
+					rm -fR ./* 2>>$ERROR_LOG;
+					status done;;
+				* )
+					if [ "$_branch" == 'HEAD' ]; then
+						status "Deleting core $_branch";
+					else
+						status "Deleting DRUPAL-$_branch";
+					fi;
+					rm -fR ./$_branch 2>>$ERROR_LOG;
+					status done;;
+			esac;;
+			
+		module )
+			cd $TREE_MODULE;
+			case "$_project" in
+				'' | all )
+					if [[ -d $_branch && "$_branch" ]]; then
+						status "Deleting all modules from $_branch";
+						rm -fR ./$_branch 2>>$ERROR_LOG;
+					else
+						status "Deleting all modules";
+						rm -fR ./ 2>>$ERROR_LOG;
+					fi;
+					status done;;
+				* )
+					if [ "$_branch" ]; then
+						if [ "$_branch" == 'HEAD' ]; then
+							status "Deleting module $_project ($_branch)";
+						else
+							status "Deleting module $_project (DRUPAL-$_branch)";
+						fi;
+						rm -fR ./$_branch/$_project 2>>$ERROR_LOG;
+						status done;
+					else
+						for _dir in `find . | egrep $_project\\.info | cut -d'/' -f2`; do
+							if [ "$_dir" == 'HEAD' ]; then
+								status "Deleting module $_project ($_dir)";
+							else
+								status "Deleting module $_project (DRUPAL-$_dir)";
+							fi;
+							rm -fR ./$_dir/$_project 2>>$ERROR_LOG;
+							status done;
+						done;
+					fi;;
+			esac;;
+	esac;
+}
+
+# Function: Information for a context within the Drupal source tree
+# Usage: info [core|all] [branch]
+# Usage: info [module|theme|all] [project|all] [branch]
+# ----------------------------------------------------------------------------
+
+function info() {
+	local _context=${1:-$CONTEXT};
+	local _project=${2:-$PROJECT};
+	local _branch=${3:-$BRANCH};
+	
+	case "$_context" in
+	
+		'' | all )
+			info core;
+			info module;
+			#info theme;
+			;;
+			
+		core )
+			cd $TREE_CORE;
+			case "$_branch" in
+				'' | all )
+					for _dir in `ls`; do
+						getCVStag core $_dir; echo;
+					done;;
+				* )
+					getCVStag core $_branch; echo;
+			esac;;
+			
+		module )
+			;;
+	esac;
 }
 
 # Function: Check out Drupal core
@@ -396,7 +482,8 @@ function cvsCoCore() {
 }
 
 # Function: Check out Drupal module project
-# Usage: cvsCoModule [project] [branch] [version]
+# Usage: delete [core|all] [branch]
+# Usage: delete [module|theme|all] [project|all] [branch] [version]
 # ----------------------------------------------------------------------------
 
 function cvsCoModule() {
@@ -510,7 +597,7 @@ function cvsCoModule() {
 			_project_not_found=`cat $_log | grep 'could not read RCS file'`;
 			_tag_not_found=`cat $_log | grep 'no such tag'`;
 			
-			if [ "$VERY_VERBOSE" ]; then
+			if [ "$VERBOSE" ]; then
 				echo -n '.';
 			fi;
 			
@@ -525,7 +612,7 @@ function cvsCoModule() {
 			return;
 		fi;
 		
-		if [ "$VERY_VERBOSE" ]; then
+		if [ "$VERBOSE" ]; then
 			echo -n "$_try_tag";
 		fi;
 		
@@ -553,7 +640,7 @@ function cvsUpCore() {
 		cvs -Q up -d -P 2>>$ERROR_LOG;
 		status done;
 	else
-		error "Oops! It seems core $_dir does not exist. Perhaps you should use the dstm get core $_dir command.";
+		status error "Oops! It seems core $_dir does not exist. Perhaps you should use the dstm get core $_dir command.";
 	fi;
 }
 
@@ -571,19 +658,36 @@ function cvsUpModule() {
 		cvs -Q up -d -P 2>>$ERROR_LOG;
 		status done;
 	else
-		error "Oops! It seems module $_project $_branch does not exist. Perhaps you should use the dstm update module $_project $_branch command.";
+		status error "Oops! It seems module $_project $_branch does not exist. Perhaps you should use the dstm update module $_project $_branch command.";
 	fi;
 }
 
-# Function: Display the project info files
+# Function: Display CVS Tag for a context within the Drupal source tree
+# Usage: getCVStag [context] [project] [branch]
 # ----------------------------------------------------------------------------
 
-function displayProjectInfo() {
-	if [ -e $BASE/contrib/module/$PROJECT/$PROJECT.info ]; then 
-  	echo; 
-  	cat $PROJECT/$PROJECT.info; 
-  	echo; 
-	fi;
+function getCVStag() {
+	local _context=${1:-module};
+	local _project=${1:-devel};
+	local _branch=${2:-HEAD};
+
+	case "$_context" in
+		core )
+			echo -n `cat $TREE_CORE/$_branch/CVS/Tag`;;
+		module )
+			echo -n `cat $TREE_MODULE/$_branch/$_project/CVS/Tag`;;
+	esac
+}
+
+# Function: Display module description within the Drupal source tree
+# Usage: getModuleDescription [project] [branch]
+# ----------------------------------------------------------------------------
+
+function getModuleDescription() {
+	local _project=${1:-devel};
+	local _branch=${2:-HEAD};
+
+	echo -n `cat $TREE_MODULE/$_branch/$_project/$_project.info | egrep "^description" | cut -f2 -d '=' | tr -d ' '`;
 }
 
 # Parse input arguments
@@ -596,8 +700,8 @@ while (( "$#" )); do
 	case "$1" in
 		
 		# Options
+		-q | --quiet )	QUIET=1;;
 		-v | --verbose )	VERBOSE=1;;
-		-vv | --vverbose )	VERY_VERBOSE=1;;
 		-f | --force )		FORCE=1;;
 		
 		# General actions
@@ -617,6 +721,7 @@ while (( "$#" )); do
 		retrieve | get )	ACTION=get;;
 		update | up )			ACTION=update;;
 		delete | del )		ACTION=delete;;
+		info | i )				ACTION=info;;
 		
 		# Parse project, branch and version based on context
 		*)
@@ -653,12 +758,11 @@ done;
 # Invoke and action
 # ----------------------------------------------------------------------------
 
-echo "VERBOSE($VERBOSE) VERY_VERBOSE($VERY_VERBOSE) FORCE($FORCE) ACTION($ACTION) CONTEXT($CONTEXT) PROJECT($PROJECT) BRANCH($BRANCH) VERSION($VERSION)";
-
 case "$ACTION" in
 	get )			get $CONTEXT $PROJECT $BRANCH $VERSION;;
 	update )	update $CONTEXT $PROJECT $BRANCH;;
 	delete )	delete $CONTEXT $PROJECT $BRANCH;;
+	info )		info $CONTEXT $PROJECT $BRANCH;;
 esac
 
 exit 0;
