@@ -236,6 +236,7 @@ cp ${SRCDIR}/${PHP5}/php.ini-dist ${INSTALLDIR}/etc/php5/${DOMAIN}/php.ini
 #copy PHP CGI and FCGI
 mkdir -p ${HOME}/www/${DOMAIN}/cgi-bin
 chmod 0755 ${HOME}/www/${DOMAIN}/cgi-bin
+cp ${INSTALLDIR}/etc/php5/${DOMAIN}/php.ini ${HOME}/www/${DOMAIN}/cgi-bin/php.ini
 cp ${INSTALLDIR}/bin/php ${HOME}/www/${DOMAIN}/cgi-bin/php.cgi
 cp ${INSTALLDIR}/bin/php ${HOME}/www/${DOMAIN}/cgi-bin/php5.fcgi
 rm -fr $SRCDIR $DISTDIR

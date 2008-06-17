@@ -24,7 +24,7 @@ cp ${INIFILE} ${INSTALLDIR}/etc/php5/${DOMAIN}/php.ini
 #copy PHP CGI
 mkdir -p ${HOME}/www/${DOMAIN}/cgi-bin
 chmod 0755 ${HOME}/www/${DOMAIN}/cgi-bin
-cp ${INSTALLDIR}/bin/php ${HOME}/www/${DOMAIN}/cgi-bin/php.cgi
-cp ${INSTALLDIR}/bin/php ${HOME}/www/${DOMAIN}/cgi-bin/php5.fcgi
+cp ${INSTALLDIR}/bin/php-cgi ${HOME}/www/${DOMAIN}/cgi-bin/php.cgi
+cp ${INSTALLDIR}/bin/php-cgi ${HOME}/www/${DOMAIN}/cgi-bin/php5.fcgi
 
 echo ---------- INSTALL COMPLETE! ----------
