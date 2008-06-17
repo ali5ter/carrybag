@@ -1,4 +1,7 @@
 #!/bin/sh
+# @file dh_install_php.sh
+# @see http://www.hiveminds.co.uk/node/3201
+# ----------------------------------------------------------------------------
 
 # Abort on any errors
 set -e
