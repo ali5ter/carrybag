@@ -26,7 +26,7 @@ DISTDIR=${HOME}/dist
 rm -fr $SRCDIR $DISTDIR
 
 # Update version information here.
-PHP5="php-5.2.0"
+PHP5="php-5.2.6"
 LIBICONV="libiconv-1.11"
 LIBMCRYPT="libmcrypt-2.5.7"
 LIBXML2="libxml2-2.6.27"
@@ -87,7 +87,7 @@ cd ${DISTDIR}
 
 # Get all the required packages
 #wget -c http://us3.php.net/distributions/${PHP5}.tar.gz
-wget -c http://us3.php.net/get/php-5.2.6.tar.gz/from/this/mirror
+wget -c http://us3.php.net/get/${PHP5}.tar.gz/from/this/mirror
 wget -c http://mirrors.usc.edu/pub/gnu/libiconv/${LIBICONV}.tar.gz
 wget -c http://easynews.dl.sourceforge.net/sourceforge/mcrypt/libmcrypt-2.5.7.tar.gz
 wget -c ftp://xmlsoft.org/libxml2/${LIBXML2}.tar.gz
