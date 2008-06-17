@@ -93,7 +93,8 @@ wget -c http://easynews.dl.sourceforge.net/sourceforge/mcrypt/libmcrypt-2.5.7.ta
 wget -c ftp://xmlsoft.org/libxml2/${LIBXML2}.tar.gz
 wget -c ftp://xmlsoft.org/libxml2/${LIBXSLT}.tar.gz
 wget -c http://superb-west.dl.sourceforge.net/sourceforge/mhash/${MHASH}.tar.gz
-wget -c http://www.zlib.net/${ZLIB}.tar.gz
+#wget -c http://www.zlib.net/${ZLIB}.tar.gz 
+wget -c http://internap.dl.sourceforge.net/sourceforge/libpng/${ZLIB}.tar.gz
 wget -c http://curl.haxx.se/download/${CURL}.tar.gz
 wget -c http://kent.dl.sourceforge.net/sourceforge/freetype/${FREETYPE}.tar.gz
 wget -c ftp://alpha.gnu.org/pub/gnu/libidn/${LIBIDN}.tar.gz
