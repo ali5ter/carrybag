@@ -237,4 +237,5 @@ chmod 0755 ${HOME}/${DOMAIN}/cgi-bin
 cp ${INSTALLDIR}/bin/php ${HOME}/${DOMAIN}/cgi-bin/php.cgi
 cp ${INSTALLDIR}/bin/php ${HOME}/${DOMAIN}/cgi-bin/php5.fcgi
 rm -fr $SRCDIR $DISTDIR
+
 echo ---------- INSTALL COMPLETE! ----------
