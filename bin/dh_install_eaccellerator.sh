@@ -94,6 +94,7 @@ make
 
 
 #copy config file
+mkdir -p ${INSTALLDIR}/lib/php/extensions/eaccelerator.so
 cp modules/eaccelerator.so  ${INSTALLDIR}/lib/php/extensions/eaccelerator.so
 mkdir -p ~/tmp/eaccelerator
 
