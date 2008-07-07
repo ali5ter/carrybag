@@ -70,6 +70,8 @@ alias hugo="ssh alister@hugo $1";
 alias trott="ssh alister@trott $1";
 
 alias dev1="ssh abowen@itgdev.iic.harvard.edu $1"; # because i am
+alias rdev="ssh root@iic-dev.seas.harvard.edu $1"; # WhatacrazyW0rld
+alias rprod="ssh root@iic-prod.seas.harvard.edu $1"; # WhatacrazyW0rld
 alias dev="ssh abowen@iic-dev.seas.harvard.edu $1"; # because i am
 alias prod="ssh abowen@iic-prod.seas.harvard.edu $1"; # because i am
 alias iic="ssh web@star.iic.harvard.edu $1";      # for cloth sk
