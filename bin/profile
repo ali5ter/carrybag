@@ -50,15 +50,22 @@ fi
 # ----------------------------------------------------------------------------
 
 alias phplog="tail -f /Applications/MAMP/logs/php_error.log";
+
 alias synergys="~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf";
 alias synergyc="~/Applications/synergy/synergyc $1";
+
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
+
 #alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
-alias cmamp='cd /Applications/MAMP/; find . -name *.pid | xargs rm';
+
+alias clean_mamp='cd /Applications/MAMP/; find . -name *.pid | xargs rm';
 
 if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
   alias clean_mamp="cd /Applications/MAMP; find . -name "*.pid" | xargs rm -f";
 fi
+
+alias clean_svn='find . | egrep svn | xargs rm -R';
+alias show_svn='find . | egrep svn';
 
 # Alias host logins
 # ----------------------------------------------------------------------------
