@@ -31,7 +31,7 @@ SSH_DIR=~/.ssh
 SSH_KEY=id_rsa.pub
 SSH_REMOTE_KEYS=authorized_keys
 REMOTE_HOST=$1
-REMOTE_USER=${2:=$USER}
+REMOTE_USER=${2:-$USER}
 
 if [ ! -e $SSH_DIR/$SSH_KEY ]; then
 	echo "I didn't find an existing SSH RSA key ($SSH_DIR/$SSH_KEY).";
@@ -39,11 +39,11 @@ if [ ! -e $SSH_DIR/$SSH_KEY ]; then
 	ssh-keygen
 fi;
 
-echo "I will transfer the SSH RSA key to $REMOTE_HOST.";
+echo -n "I will transfer the SSH RSA key to $REMOTE_HOST.";
 echo "Please provide the password for user, $REMOTE_USER...";
 scp $SSH_DIR/$SSH_KEY $REMOTE_USER@$REMOTE_HOST:
 
-echo "I will now install the SSH RSA key on $REMOTE_HOST.";
+echo -n "I will now install the SSH RSA key on $REMOTE_HOST.";
 echo "Please provide the password for user, $REMOTE_USER...";
 ssh $REMOTE_USER@$REMOTE_HOST 'cat $SSH_KEY >> $SSH_DIR/$SSH_REMOTE_KEYS; yes|rm $SSH_KEY';
 
