@@ -67,7 +67,7 @@ fi
 alias clean_svn='find . | egrep svn | xargs rm -R';
 alias show_svn='find . | egrep svn';
 
-alias setup_ssh_key="scp ~/.ssh/id_rsa.pub ${2:=$USER}@$1:; ssh ${2:=$USER}@$1 'cat >> .ssh/authorized_keys; yes| rm id_rsa.pub'";
+alias setkey="scp ~/.ssh/id_rsa.pub ${2:=$USER}@$1:; ssh ${2:=$USER}@$1 'cat >> .ssh/authorized_keys; yes| rm id_rsa.pub'";
 
 # Alias host logins
 # ----------------------------------------------------------------------------
