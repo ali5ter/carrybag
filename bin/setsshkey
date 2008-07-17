@@ -39,13 +39,13 @@ if [ ! -e $SSH_DIR/$SSH_KEY ]; then
 	ssh-keygen
 fi;
 
-echo -n "I will transfer the SSH RSA key to $REMOTE_HOST.";
+echo -n "I will transfer the SSH RSA key to $REMOTE_HOST. ";
 echo "Please provide the password for user, $REMOTE_USER...";
-echo $SSH_DIR/$SSH_KEY $REMOTE_USER@$REMOTE_HOST:
+#scp $SSH_DIR/$SSH_KEY $REMOTE_USER@$REMOTE_HOST:
 
-echo -n "I will now install the SSH RSA key on $REMOTE_HOST.";
+echo -n "I will now install the SSH RSA key on $REMOTE_HOST. ";
 echo "Please provide the password for user, $REMOTE_USER...";
-echo $REMOTE_USER@$REMOTE_HOST 'cat $SSH_KEY >> $SSH_DIR/$SSH_REMOTE_KEYS; yes|rm $SSH_KEY';
+echo $REMOTE_USER@$REMOTE_HOST \'cat $SSH_KEY >> $SSH_DIR/$SSH_REMOTE_KEYS; yes|rm $SSH_KEY\';
 
 echo "Your SSH RSA key has been successfully installed on $REMOTE_HOST";
 exit 0;
