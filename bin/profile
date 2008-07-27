@@ -12,7 +12,7 @@ export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
 export PS1="\n$(color bd white)[$(color green)\u$(color magenta)@$(color green)\
 \h$(color magenta):$(color red)\w$(color bd white)]\n> $(color)";
 
-if [ `uname` == 'darwin' ]; then                   # OSX Tiger XCode paths
+if [ `uname` == 'Darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
 fi
 if [ -e fink ]; then                               # OSX Fink paths
