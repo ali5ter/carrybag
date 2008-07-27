@@ -25,6 +25,10 @@ if [ -e ~/bin/shunit ]; then                       # ShUnit path
 	export SHUNIT_HOME=~/bin/shunit;
 	export PATH=$PATH:$SHUNIT_HOME;
 fi
+if [ -e /opt/local ]; then                              # MacPort path
+	export PATH=/opt/local/bin:/opt/local/sbin:$PATH;
+	export MANPATH=/opt/local/share/man:$MANPATH
+fi
 
 # Editor options
 # ----------------------------------------------------------------------------
