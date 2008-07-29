@@ -76,7 +76,7 @@ alias show_svn='find . | egrep svn';
 
 alias pair="ssh alister@erraj.pair.com $1";
 alias dreamhost="ssh ali5ter@snocap.dreamhost.com $1";
-alias home="ssh alister@home.different.com -p 2112 $1";
+alias home="ssh alister@home.different.com -p 443 $1";
 alias hugo="ssh alister@hugo $1";
 alias trott="ssh alister@trott $1";
 alias newitt="ssh alister@newitt $1";
