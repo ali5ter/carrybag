@@ -25,10 +25,12 @@ if [ -e ~/bin/shunit ]; then                       # ShUnit path
 	export SHUNIT_HOME=~/bin/shunit;
 	export PATH=$PATH:$SHUNIT_HOME;
 fi
-if [ -e /opt/local ]; then                              # MacPort path
+if [ -e /opt/local ]; then                         # MacPort path
 	export PATH=/opt/local/bin:/opt/local/sbin:$PATH;
 	export MANPATH=/opt/local/share/man:$MANPATH
 fi
+
+export P4CONFIG=.p4config
 
 # Editor options
 # ----------------------------------------------------------------------------
@@ -53,7 +55,17 @@ fi
 # Alias extra commands
 # ----------------------------------------------------------------------------
 
-alias phplog="tail -f /Applications/MAMP/logs/php_error.log";
+if [ -e /Applications/MAMP ]; then
+	alias phplog="tail -f /Applications/MAMP/logs/php_error.log";
+fi
+
+alias wwwerror="sudo tail -f /var/log/httpd/error_log";
+
+if [ -e /var/log/system.log ]; then
+	alias syslog="sudo tail -f /var/log/system.log";
+else
+	alias syslog="sudo tail -f /var/log/messages";
+fi
 
 alias synergys="~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf";
 alias synergyc="~/Applications/synergy/synergyc $1";
@@ -76,21 +88,23 @@ alias show_svn='find . | egrep svn';
 
 alias pair="ssh alister@erraj.pair.com $1";
 alias dreamhost="ssh ali5ter@snocap.dreamhost.com $1";
-alias home="ssh alister@home.different.com -p 443 $1";
+alias home="ssh alister@home.different.com -p 2112 $1";
 alias hugo="ssh alister@hugo $1";
 alias trott="ssh alister@trott $1";
 alias newitt="ssh alister@newitt $1";
 alias horton="ssh alister@horton $1";
 alias cropley="ssh alister@cropley $1";
 
-alias dev1="ssh abowen@itgdev.iic.harvard.edu $1"; # because i am
-alias rdev="ssh root@iic-dev.seas.harvard.edu $1"; # WhatacrazyW0rld
-alias rprod="ssh root@iic-prod.seas.harvard.edu $1"; # WhatacrazyW0rld
-alias dev="ssh abowen@iic-dev.seas.harvard.edu $1"; # because i am
-alias prod="ssh abowen@iic-prod.seas.harvard.edu $1"; # because i am
-alias iic="ssh web@star.iic.harvard.edu $1";      # for cloth sk
-alias im="ssh harviic@imageandmeaning.org $1";    # IIC
-alias scf="ssh abowen@scfdev.iic.harvard.edu $1"; # science
+#alias dev1="ssh abowen@itgdev.iic.harvard.edu $1"; # because i am
+#alias rdev="ssh root@iic-dev.seas.harvard.edu $1"; # WhatacrazyW0rld
+#alias rprod="ssh root@iic-prod.seas.harvard.edu $1"; # WhatacrazyW0rld
+#alias dev="ssh abowen@iic-dev.seas.harvard.edu $1"; # because i am
+#alias prod="ssh abowen@iic-prod.seas.harvard.edu $1"; # because i am
+#alias iic="ssh web@star.iic.harvard.edu $1";      # for cloth sk
+#alias im="ssh harviic@imageandmeaning.org $1";    # IIC
+#alias scf="ssh abowen@scfdev.iic.harvard.edu $1"; # science
+alias dev="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
+alias dev="ssh alister@vmc-vcloud-dev-olympus.eng.vmware.com $1"; # because i am
 
 # The .script_aliases script is used to alias any of my .sh to name only
 # ----------------------------------------------------------------------------
