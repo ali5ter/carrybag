@@ -68,7 +68,7 @@ else
 fi
 
 if [ -e ~/Applications/synergy ]; then
-	alias synergys="~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf -n newitt -f";
+	alias synergys="ps aux | grep synergys | grep -v grep | awk '{print $2}' | xargs kill -9; ~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf -n newitt -f";
 	alias synergyc="~/Applications/synergy/synergyc --name vmware -f newitt";
 fi
 
@@ -104,7 +104,7 @@ alias cropley="ssh alister@cropley $1";
 #alias im="ssh harviic@imageandmeaning.org $1";    # IIC
 #alias scf="ssh abowen@scfdev.iic.harvard.edu $1"; # science
 
-alias dev="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
+alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
 alias dev="ssh alister@vmc-vcloud-dev-olympus.eng.vmware.com $1"; # because i am
 
 # The .script_aliases script is used to alias any of my .sh to name only
