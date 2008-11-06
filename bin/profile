@@ -105,7 +105,7 @@ alias cropley="ssh alister@cropley $1";
 #alias scf="ssh abowen@scfdev.iic.harvard.edu $1"; # science
 
 alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
-alias dev="ssh alister@vmc-vcloud-dev-olympus.eng.vmware.com $1"; # because i am
+alias dev="ssh alister@vcloud-dev.eng.vmware.com $1"; # because i am
 
 # The .script_aliases script is used to alias any of my .sh to name only
 # ----------------------------------------------------------------------------
