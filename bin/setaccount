@@ -29,11 +29,11 @@
 
 REMOTE_HOST=$1
 REMOTE_USER=${2:-$USER}
-CREATE_USER=${2:-$USER}
+CREATE_USER=${3:-$USER}
 
 echo -n "I will make an account, $CREATE_USER, on $REMOTE_HOST. ";
 echo "Please provide the password for user, $REMOTE_USER...";\
-command='(adduser "'"$CREATE_USER"'"; passwd "'"CREATE_USER"'"; gpasswd -a "'"CREATE_USER"'" wheel;)';
+command='(adduser "'"$CREATE_USER"'"; passwd "'"$CREATE_USER"'"; gpasswd -a "'"$CREATE_USER"'" wheel;)';
 ssh $REMOTE_USER@$REMOTE_HOST $command;
 
 echo "Your new account for $CREATE_USER has been set up on $REMOTE_HOST";
