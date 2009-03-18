@@ -29,8 +29,14 @@ if [ -e /opt/local ]; then                         # MacPort path
 	export PATH=/opt/local/bin:/opt/local/sbin:$PATH;
 	export MANPATH=/opt/local/share/man:$MANPATH
 fi
-
-export P4CONFIG=.p4config
+if [ -e ~/bin/p4 ]; then                           # OSX p4
+	export P4CONFIG=.p4config;
+fi
+if [ -e ~/bin/apache-maven ]; then                 # OSX Maven
+	export M2_HOME=~/bin/apache-maven;
+	export MAVEN_OPTS=-Xmx1024M;
+	alias mvn='~/bin/apache-maven/bin/mvn';
+fi
 
 # Editor options
 # ----------------------------------------------------------------------------
@@ -51,6 +57,9 @@ alias rm='rm -i';     # confirm any delete
 if [ -e ~/bin/vircs.sh ]; then
 	alias vi='vircs.sh'; # revision control with any edit
 fi
+if [ -e /usr/bin/mvim ]; then
+ 	alias vi='/usr/bin/mvim'; # OSX vim
+fi
 
 # Alias extra commands
 # ----------------------------------------------------------------------------
@@ -58,28 +67,21 @@ fi
 if [ -e /Applications/MAMP ]; then
 	alias phplog="tail -f /Applications/MAMP/logs/php_error.log";
 fi
-
 alias wwwerror="sudo tail -f /var/log/httpd/error_log";
-
 if [ -e /var/log/system.log ]; then
 	alias syslog="sudo tail -f /var/log/system.log";
 else
 	alias syslog="sudo tail -f /var/log/messages";
 fi
-
 if [ -e ~/Applications/synergy ]; then
 	alias synergys="ps aux | grep synergys | grep -v grep | awk '{print $2}' | xargs kill -9; ~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf -n newitt -f";
 	alias synergyc="~/Applications/synergy/synergyc --name vmware -f newitt";
 fi
-
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
-
 #alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
-
 if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
   alias clean_mamp="cd /Applications/MAMP; find . -name "*.pid" | xargs rm -f";
 fi
-
 alias clean_svn='find . | egrep svn | xargs rm -R';
 alias show_svn='find . | egrep svn';
 
@@ -107,6 +109,7 @@ alias cropley="ssh alister@cropley $1";
 
 alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
 alias dev="ssh alister@vcloud-dev.eng.vmware.com $1"; # because i am
+alias sof="ssh alister@sof-vcloud-dev.eng.vmware.com $1"; # because i am
 
 # The .script_aliases script is used to alias any of my .sh to name only
 # ----------------------------------------------------------------------------
