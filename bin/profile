@@ -119,5 +119,13 @@ if [ -e ~/.script_aliases ]; then
 	. ~/.script_aliases;
 fi;
 
+# Get local aliases
+# ----------------------------------------------------------------------------
+
+if [ -f ~/.profile_local ]; then
+	. ~/.profile_local
+fi
+
+
 
 
