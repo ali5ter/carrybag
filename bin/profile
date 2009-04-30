@@ -42,7 +42,7 @@ fi
 # ----------------------------------------------------------------------------
 
 set -o vi;                   # set vi history 
-export EDITOR='/usr/bin/vi'; # default to vi editor
+#export EDITOR='/usr/bin/vi'; # default to vi editor
 if [ -e dircolors ]; then 
 	export `dircolors`;      # set up shell colors
 fi
@@ -119,7 +119,7 @@ if [ -e ~/.script_aliases ]; then
 	. ~/.script_aliases;
 fi;
 
-# Get local aliases
+# Get local aliases and functions
 # ----------------------------------------------------------------------------
 
 if [ -f ~/.profile_local ]; then
