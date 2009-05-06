@@ -60,6 +60,9 @@ fi
 if [ -e /usr/bin/mvim ]; then
  	alias vi='/usr/bin/mvim'; # OSX vim
 fi
+if [ -e ~/bin/drush ]; then
+	alias drush='~/bin/drush/drush.php';
+fi
 
 # Alias extra commands
 # ----------------------------------------------------------------------------
