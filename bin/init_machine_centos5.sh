@@ -113,24 +113,28 @@ yum install php-gd php-mcrypt php-mbstring php-eaccelerator php-mysql mysql-serv
 #	Add a bit of cracker security
 #	(Optional, since your VPS system may have brute force SHH protection)
 #
+rcsRegister /etc/sysconfig/rkhunter
+rcsEdit /etc/sysconfig/rkhunter
+# update MAILTO=root@localhost
+rkhunter --update
+
 /sbin/chkconfig --levels 235 fail2ban on
 /etc/init.d/fail2ban start
 
 chkconfig denyhosts on
 service debyhosts start
 
-cd /etc; ci aide.conf ; co -l aide.conf
+rcsRegister /etc/aide.conf
+co -l aide.conf
 rm aide.conf; wget http://www.bofh-hunter.com/downloads/aide.conf
 ci aide.conf; co aide.conf
 /usr/sbin/aide --init
 cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
 /usr/sbin/aide --check
-cd /etc/cron.weekly
-mkdir RCS; touch aide.cron; chmod 755 aide.cron
-vi aide.cron 
+rcsRegister /etc/cron.weekly/aide.cron
+rcsEdit /etc/cron.weekly/aide.cron
 ##!/bin/bash
-#/usr/sbin/aide --check | /bin/mail -s "(green) Weekly Aide Data" feedback@different.com
-ci aide.cron; co aide.cron
+#(/usr/sbin/aide --check | /bin/mail -s "($HOSTNAME) Weekly Aide Data" feedback@different.com)
 
 #
 #	Configure Apache
