@@ -107,7 +107,7 @@ yum update;
 #
 #	Install packages we need
 #
-yum install php-gd php-mcrypt php-mbstring php-eaccelerator php-mysql mysql-server phpmyadmin rkhunter denyhosts fail2ban subversion cvs
+yum install php-gd php-mcrypt php-mbstring php-eaccelerator php-mysql mysql-server phpmyadmin rkhunter denyhosts fail2ban subversion cvs aide
 
 #
 #	Add a bit of cracker security
@@ -115,12 +115,26 @@ yum install php-gd php-mcrypt php-mbstring php-eaccelerator php-mysql mysql-serv
 #
 /sbin/chkconfig --levels 235 fail2ban on
 /etc/init.d/fail2ban start
+
 chkconfig denyhosts on
 service debyhosts start
 
+cd /etc; ci aide.conf ; co -l aide.conf
+rm aide.conf; wget http://www.bofh-hunter.com/downloads/aide.conf
+ci aide.conf; co aide.conf
+/usr/sbin/aide --init
+cp /var/lib/aide/aide.db.new.gz /var/lib/aide/aide.db.gz
+/usr/sbin/aide --check
+cd /etc/cron.weekly
+mkdir RCS; touch aide.cron; chmod 755 aide.cron
+vi aide.cron 
+##!/bin/bash
+#/usr/sbin/aide --check | /bin/mail -s "(green) Weekly Aide Data" feedback@different.com
+ci aide.cron; co aide.cron
+
 #
 #	Configure Apache
-# 	define ServerAdmin, ServerName and uncomment NameVirtualHost
+# 	define ServerAdmin ServerToken to Prod, ServerName, turn off ServerSig and uncomment NameVirtualHost
 #	
 rcsRegister /etc/httpd/conf/httpd.conf;
 rcsEdit /etc/httpd/conf/httpd.conf;
