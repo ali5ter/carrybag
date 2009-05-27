@@ -34,7 +34,7 @@ if [ -e ~/bin/p4 ]; then                           # OSX p4
 fi
 if [ -e ~/bin/apache-maven ]; then                 # OSX Maven
 	export M2_HOME=~/bin/apache-maven;
-	export MAVEN_OPTS=-Xmx1024M;
+	export MAVEN_OPTS='-Xmx1024M -XX:MaxPermSize=128m';
 	alias mvn='~/bin/apache-maven/bin/mvn';
 fi
 
