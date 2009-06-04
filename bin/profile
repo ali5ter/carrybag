@@ -10,7 +10,7 @@
 export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
 
 export PS1="\n$(color bd white)[$(color green)\u$(color magenta)@$(color green)\
-\h$(color magenta):$(color red)\w$(color bd white)]\n> $(color)";
+\h$(color magenta):$(color red)\W$(color bd white)] $(color)";
 
 if [ `uname` == 'Darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
@@ -61,7 +61,7 @@ if [ -e /usr/bin/mvim ]; then
  	alias vi='/usr/bin/mvim'; # OSX vim
 fi
 if [ -e ~/bin/drush ]; then
-	alias drush='~/bin/drush/drush.php';
+	alias drush='php ~/bin/drush/drush.php';
 fi
 
 # Alias extra commands
