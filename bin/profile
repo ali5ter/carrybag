@@ -10,7 +10,7 @@
 export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
 
 export PS1="\n$(color bd white)[$(color green)\u$(color magenta)@$(color green)\
-\h$(color magenta):$(color red)\W$(color bd white)]\$$(color)";
+\h$(color magenta) $(color red)\W$(color bd white)]\$ $(color)";
 
 if [ `uname` == 'Darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
@@ -51,8 +51,11 @@ test -r /sw/bin/init.sh && . /sw/bin/init.sh; # OSX only
 # Alias shell commands
 # ----------------------------------------------------------------------------
 
-#alias ls='ls -FG --color=auto';	  # COMMENTED OUT: colours not good on opaque bg
-alias ls='ls -F';     # non-color listing
+if [ `uname` != 'Darwin' ]; then # colours not good on opaque bg of OSX Tiger/Leopard Terminal
+	alias ls='ls -FG --color=auto';
+else
+	alias ls='ls -F';   # non-color listing
+fi
 alias rm='rm -i';     # confirm any delete
 if [ -e ~/bin/vircs.sh ]; then
 	alias vi='vircs.sh'; # revision control with any edit
