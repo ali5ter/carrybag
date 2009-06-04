@@ -90,6 +90,7 @@ if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
 fi
 alias clean_svn='find . | egrep svn | xargs rm -R';
 alias show_svn='find . | egrep svn';
+alias alllogs="find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f";
 
 # Alias host logins
 # ----------------------------------------------------------------------------
