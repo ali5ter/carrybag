@@ -145,6 +145,8 @@ alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
 alias dev="ssh alister@vcloud-dev.eng.vmware.com $1"; # because i am
 alias sof="ssh alister@sof-vcloud-dev.eng.vmware.com $1"; # because i am
 
+alias casw="ssh alister@server1.casw.org $1";
+
 # The .script_aliases script is used to alias any of my .sh to name only
 # ----------------------------------------------------------------------------
 
