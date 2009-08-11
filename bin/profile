@@ -11,7 +11,7 @@ export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
 
 export PS1="$(color bd white)[$(color green)\u$(color magenta)@$(color green)\
 \h$(color magenta) $(color red)\W$(color bd white)]$ $(color)";
-export PS1="[\u@\h \W]$ ";
+export PS1="[\u@\h \W] $";
 
 if [ `uname` == 'Darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
@@ -144,6 +144,7 @@ alias cropley="ssh alister@cropley $1";
 alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
 alias dev="ssh alister@vcloud-dev.eng.vmware.com $1"; # because i am
 alias sof="ssh alister@sof-vcloud-dev.eng.vmware.com $1"; # because i am
+alias vm1="ssh alister@10.150.5.239 $1"; # because i am
 
 alias casw="ssh alister@server1.casw.org $1";
 
