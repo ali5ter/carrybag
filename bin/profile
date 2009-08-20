@@ -116,6 +116,8 @@ fi
 alias clean_svn='find . | egrep svn | xargs rm -R';
 alias show_svn='find . | egrep svn';
 
+alias un='tar -zxf $1';
+
 # Alias host logins
 # ----------------------------------------------------------------------------
 
@@ -144,7 +146,8 @@ alias cropley="ssh alister@cropley $1";
 alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
 alias dev="ssh alister@vcloud-dev.eng.vmware.com $1"; # because i am
 alias sof="ssh alister@sof-vcloud-dev.eng.vmware.com $1"; # because i am
-alias vm1="ssh alister@10.150.5.239 $1"; # because i am
+alias vm2="ssh alister@10.150.5.239 $1"; # because i am
+alias vm1="ssh alister@10.150.11.127 $1"; # because i am
 
 alias casw="ssh alister@server1.casw.org $1";
 
