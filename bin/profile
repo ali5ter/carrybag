@@ -118,6 +118,9 @@ alias show_svn='find . | egrep svn';
 
 alias un='tar -zxf $1';
 
+alias rb='/bldmnt/trees/bin/post-review';
+alias sb='/build/apps/bin/gobuild sandbox queue --branch=main --buildtype=beta vcloud'
+
 # Alias host logins
 # ----------------------------------------------------------------------------
 
