@@ -120,6 +120,7 @@ alias un='tar -zxf $1';
 
 alias rb='/bldmnt/trees/bin/post-review';
 alias sb='/build/apps/bin/gobuild sandbox queue --branch=main --buildtype=beta vcloud'
+alias cs='p4 changes -u bowena -m1 @bowena-mbp-vcloud-dev'
 
 # Alias host logins
 # ----------------------------------------------------------------------------
