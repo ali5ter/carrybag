@@ -24,7 +24,7 @@ fi
 if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
   export PATH=/Applications/MAMP/Library/bin:$PATH;
 fi
-
+    
 if [ -e ~/bin/shunit ]; then                       # ShUnit path
 	export SHUNIT_HOME=~/bin/shunit;
 	export PATH=$PATH:$SHUNIT_HOME;
@@ -33,6 +33,10 @@ fi
 if [ -e /opt/local ]; then                         # MacPort path
 	export PATH=/opt/local/bin:/opt/local/sbin:$PATH;
 	export MANPATH=/opt/local/share/man:$MANPATH
+fi
+
+if [ -f /opt/local/etc/bash_completion ]; then     # MacPort bash completion
+    . /opt/local/etc/bash_completion
 fi
 
 if [ -e ~/bin/p4 ]; then                           # OSX p4
