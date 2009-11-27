@@ -35,6 +35,8 @@ if [ -e /opt/local ]; then                         # MacPort path
 	export MANPATH=/opt/local/share/man:$MANPATH
 fi
 
+export USER_BASH_COMPLETION_DIR=~/.bash_completion.d
+
 if [ -f /opt/local/etc/bash_completion ]; then     # MacPort bash completion
     . /opt/local/etc/bash_completion
 fi
