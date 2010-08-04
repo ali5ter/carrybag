@@ -29,62 +29,101 @@
 # ----------------------------------------------------------------------------
 
 _PWD=$PWD;
-REMOTE_PATH=$1;
-REMOTE_USER=$2;
-REMOTE_HOST=$3
+URI=$1;
 LOG=/tmp/cpioto.log;
+
+# Function: Help
+# ----------------------------------------------------------------------------
 
 function help {
         echo;
         echo "$(color bd)Wrapper for cpio to transfer a remote dir structure to this machine via ssh.$(color)";
         echo;
         echo 'Usage:';
-        echo "$(color bd)color$(color) [ $(color ul)effect$(color) ] [ [lt]$(color ul)fgcolor$(color) ] [ $(color ul)bgcolor$(color) ]";
-        echo "$(color bd)color$(color) list";
-        echo "$(color bd)color$(color) [ -h | --help ]";
-        echo;
-        echo 'where:';
-        echo -n "$(color ul)fgcolor$(color) and $(color ul)bgcolor$(color) are one of ";
-        for ((i=0;i<${NUM_COLORS};i++)); do
-                echo -n "$(color ${COLORS[${i}]})${COLORS[${i}]}$(color) ";
-        done;
-        echo;
-        echo -n "$(color ul)effect$(color) can be any of ";
-        for ((i=0;i<${NUM_EFFECTS};i++)); do
-                echo -n "$(color ${EFFECTS[${i}]})${EFFECTS[${i}]}$(color) ";
-        done;
-        echo;
-        echo "Preceed the $(color ul)fgcolor$(color) with $(color bd)lt$(color) to use a light color."
-        echo "$(color bd)color off$(color) or $(color bd)color$(color) resets to default colors and text effect.";
-        echo "$(color bd)color list$(color) displays all possible color combinations.";
+        echo "$(color bd)cpiofrom$(color) user@hostname/path";
+        echo "$(color bd)cpiofrom$(color) [ -h | --help ]";
         echo;
         echo 'Examples:';
-        echo '  echo "$(color ul)Underlined text$(color off)"';
-        echo 'results in:';
-        echo "  $(color ul)Underlined text$(color off)";
-        echo;
-        echo '  echo "Make $(color rv)this$(color nm) reverse video text$(color off)"';
-        echo 'results in:';
-        echo "  Make $(color rv)this$(color nm) reverse video text$(color off)";
-        echo;
-        echo '  echo "$(color white blue) White text on a blue background $(color)"';
-        echo 'results in:';
-        echo "  $(color white blue) White text on a blue background $(color)";
-        echo;
-        echo '  echo "$(color ltyellow green) lt prefix on the yellow text text $(color off)"';
-        echo 'results in:';
-        echo "  $(color ltyellow green) lt prefix on the yellow text text $(color off)";
-        echo;
-        echo '  echo "$(color bold blink red yellow) Blinking bold red text on a yellow background $(color)"';
-        echo 'results in:';
-        echo "  $(color bold blink red yellow) Blinking bold red text on a yellow background $(color)";
-        echo;
-        echo;
-        echo -n "Note that results may vary with these standard ANSI escape sequences because of the different configurations of terminal emulators. ";
+        echo '  cpiofrom alister@green.different.com:projects/site/htdocs';
+        echo 'pulls the entire htdocs directory down to the current directory';
         echo;
         exit 1;
 }
 
-ssh $REMOTE_USER@$REMOTE_HOST "find $REMOTE_PATH -depth -print | cpio -oaV" | cpio -imVd
+# Function: URI Parser
+# Source: http://valeriu.palos.ro/537/uri-parsing-using-bash-built-in-features/
+# ----------------------------------------------------------------------------
+
+function uri_parser() {
+    # uri capture
+    uri="$@"
+
+    # safe escaping
+    uri="${uri//\`/%60}"
+    uri="${uri//\"/%22}"
+
+    # top level parsing
+    pattern='^(([a-z]{3,5})://)?((([^:\/]+)(:([^@\/]*))?@)?([^:\/?]+)(:([0-9]+))?)(\/[^?]*)?(\?[^#]*)?(#.*)?$'
+    [[ "$uri" =~ $pattern ]] || return 1;
+
+    # component extraction
+    uri=${BASH_REMATCH[0]}
+    uri_schema=${BASH_REMATCH[2]}
+    uri_address=${BASH_REMATCH[3]}
+    uri_user=${BASH_REMATCH[5]}
+    uri_password=${BASH_REMATCH[7]}
+    uri_host=${BASH_REMATCH[8]}
+    uri_port=${BASH_REMATCH[10]}
+    uri_path=${BASH_REMATCH[11]}
+    uri_query=${BASH_REMATCH[12]}
+    uri_fragment=${BASH_REMATCH[13]}
+
+    # path parsing
+    count=0
+    path="$uri_path"
+    pattern='^/+([^/]+)'
+    while [[ $path =~ $pattern ]]; do
+        eval "uri_parts[$count]=\"${BASH_REMATCH[1]}\""
+        path="${path:${#BASH_REMATCH[0]}}"
+        let count++
+    done
+
+    # query parsing
+    count=0
+    query="$uri_query"
+    pattern='^[?&]+([^= ]+)(=([^&]*))?'
+    while [[ $query =~ $pattern ]]; do
+        eval "uri_args[$count]=\"${BASH_REMATCH[1]}\""
+        eval "uri_arg_${BASH_REMATCH[1]}=\"${BASH_REMATCH[3]}\""
+        query="${query:${#BASH_REMATCH[0]}}"
+        let count++
+    done
+
+    # return success
+    return 0
+}
+
+# Parse input arguments
+# ----------------------------------------------------------------------------
+
+if [[ "$1" = '-h' || "$1" = '--help' || -z "$1" ]]; then help; fi;
+
+uri_parser "$URI";
+
+if [[ -z $uri_user || -z $uri_host || -z $uri_path ]]; then 
+    echo "$(color red)This argument is incorrect. Try using the format user@host/path$(color)"; 
+    exit 1;
+fi
+
+uri_path=${uri_path:1}
+
+# Process the transfer
+# ----------------------------------------------------------------------------
+
+echo "$(color green)Fetching data from $uri_path on $uri_host as $uri_user...$(color)";
+
+ssh $uri_user@$uri_host "find $uri_path -depth -print | cpio -oaV" | cpio -imVd;
+
+echo "$(color green)Finished$(color)";
 
 exit 0;
