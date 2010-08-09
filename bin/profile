@@ -106,8 +106,8 @@ fi
 alias alllogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f";
 
 if [ -e ~/Applications/synergy ]; then
-    alias synergys="ps aux | grep synergys | grep -v grep | awk '{print $2}' | xargs kill -9; ~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf -n newitt -f";
-    alias synergyc="~/Applications/synergy/synergyc --name vmware -f newitt";
+    alias synergys="ps aux | grep synergys | grep -v grep | awk '{print $2}' | xargs kill -9; ~/Applications/synergy/synergys -c ~/Applications/synergy/synergy.conf -n tinker -f";
+    alias synergyc="~/Applications/synergy/synergyc --name vmware -f tinker";
 fi
 
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
