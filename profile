@@ -51,6 +51,12 @@ if [ -e ~/bin/apache-maven ]; then                 # OSX Maven
     alias mvn='~/bin/apache-maven/bin/mvn';
 fi
 
+# Bash options
+# ----------------------------------------------------------------------------
+shopt -s cdspell    # Correct minor spelling errors in a cd command.
+shopt -s histappend # Append to history rather than overwrite
+shopt -s dotglob    # Show dot files in path expansion
+
 # Editor options
 # ----------------------------------------------------------------------------
 
@@ -65,6 +71,7 @@ if [ -e dircolors ]; then
 fi
 
 test -r /sw/bin/init.sh && . /sw/bin/init.sh; # OSX only
+export CLICOLOR=1; # QSX only
 
 # Alias shell commands
 # ----------------------------------------------------------------------------
@@ -81,12 +88,40 @@ if [ -e ~/bin/vircs.sh ]; then
     alias vi='vircs.sh'; # revision control with any edit
 fi
 
+# Alias extra commands
+# ----------------------------------------------------------------------------
+
+psgrep() {
+    if [ ! -z $1 ] ; then
+        echo "Grepping for processes matching $1..."
+            ps aux | grep $1 | grep -v grep
+        else
+            echo "!! Need name to grep for"
+        fi
+}
+
+start() {
+    match=`ls -1 /Applications | grep -i $1 | perl -pe 's/^(.*)\/$/$1/' | perl -pe 's/\s/\\\ /g'`;
+    num=`ls -1 /Applications | grep -i $1 | wc -l`;
+    if [ "$num" -eq 1 ]; then
+        echo "$(color green)Will try to open /Applications/$match$(color)"
+        open /Applications/$match
+    else
+        echo "$(color red)Can't open $match$(color)"
+    fi;
+}
+
 if [ -e ~/bin/drush ]; then
     alias drush='php ~/bin/drush/drush.php';
 fi
 
-# Alias extra commands
-# ----------------------------------------------------------------------------
+if [ -e /Applications/Eclipse_3.5/Eclipse.app ]; then
+    alias eclipse='open /Applications/Eclipse_3.5/Eclipse.app';
+fi;
+
+if [ -e /usr/local/bin/icalBuddy ]; then
+    alias meetings="icalBuddy -sc -n -f -eep notes eventsToday";
+fi
 
 if [ -e /Applications/MAMP ]; then
     alias phplog="tail -f /Applications/MAMP/logs/php_error.log";
