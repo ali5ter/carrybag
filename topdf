@@ -1,0 +1,16 @@
+#!/bin/bash
+# @file topdf
+# Wrapper for wkpdf <http://plessl.github.com/wkpdf/>
+
+SOURCE=$1
+FILENAME=`basename $SOURCE`
+TARGET=${FILENAME%%.*}
+
+wkpdf --source $SOURCE \
+      --output $TARGET.pdf \
+      --portrait \
+      --margin 30 \
+      --stylesheet-media print \
+      --print-background yes \
+
+
