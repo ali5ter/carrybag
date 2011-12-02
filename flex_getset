@@ -1,0 +1,68 @@
+#!/bin/bash
+# ----------------------------------------------------------------------------
+# @file flex_getset
+# General getter/setter for list of vars
+# @author Alister Lewis-Bowen [alister@vmware.com]
+# ----------------------------------------------------------------------------
+
+function help {
+	echo;
+	echo "Generate ActionScript get/set functions for specified properties";
+	echo;
+	echo "Usage:";
+	echo "flex_getset property:[ type ] [ property:[ type ]... ]";
+	echo;
+	echo "where:";
+	echo "property ... the variable name of the property";
+	echo "type ....... the type of the property, e.g. String, int, Boolean, etc. Defaults to String";
+	echo;
+	exit 1;
+}
+
+DECLARATIONS='';
+FUNCTIONS='';
+
+if [[ "$1" = '-h' || "$1" = '--help' || -z "$1" ]]; then help; fi;
+
+while (( "$#" )); do
+
+	VAR_NAME=${1%:*};
+	VAR_TYPE=${1#*:};
+	if [ $VAR_TYPE == $VAR_NAME ]; then 
+		VAR_TYPE=String; 
+	fi;
+	DECLARATIONS=$DECLARATIONS$(cat <<END_OF_DECLARATION_TEMPLATE
+
+private var _${VAR_NAME}:${VAR_TYPE};
+END_OF_DECLARATION_TEMPLATE)
+
+	FUNCTIONS=$FUNCTIONS$(cat <<END_OF_FUNCTIONS_TEMPLATE
+
+
+[Bindable("${VAR_NAME}Changed")]
+/**
+ * ${VAR_NAME}
+ */
+public function get ${VAR_NAME}():${VAR_TYPE} {
+    return _${VAR_NAME};
+}
+
+/**
+ * @private
+ */
+public function set ${VAR_NAME}(value:${VAR_TYPE}):void {
+    if (_${VAR_NAME} != value) {
+        _${VAR_NAME} = value;
+        dispatchEvent(new Event("${VAR_NAME}Changed"));
+    }
+}
+
+END_OF_FUNCTIONS_TEMPLATE)
+
+	shift;
+done;
+
+echo "$DECLARATIONS";
+echo "$FUNCTIONS";
+
+exit 0;
