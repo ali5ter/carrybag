@@ -154,6 +154,8 @@ alias show_svn='find . | egrep svn';
 
 alias un='tar -zxf $1';
 
+alias rmxattr='xattr -d `xattr $1` $1';
+
 # Alias host logins
 # ----------------------------------------------------------------------------
 
@@ -195,13 +197,6 @@ alias sof="ssh alister@sof-vcloud-dev.eng.vmware.com $1"; # because i am
 #alias vm2="ssh alister@10.150.5.239 $1"; # because i am
 #alias vm1="ssh alister@10.150.11.127 $1"; # because i am
 alias vm1="ssh root@10.150.150.134 $1"; # akimbi
-
-# The .script_aliases script is used to alias any of my .sh to name only
-# ----------------------------------------------------------------------------
-
-if [ -e ~/.script_aliases ]; then
-    ~/.script_aliases;
-fi;
 
 # Get local aliases and functions
 # ----------------------------------------------------------------------------
