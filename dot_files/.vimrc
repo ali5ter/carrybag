@@ -7,8 +7,8 @@ set noexrc " don't use local version of .(g)vimrc, .exrc
 set background=dark " we plan to use a dark background
 syntax on
 
-set cursorcolumn " highlight the current column
-set cursorline " highlight current line
+"set cursorcolumn " highlight the current column
+"set cursorline " highlight current line
 set nohlsearch " do not highlight searched for phrases
 set number " turn on line numbers
 set numberwidth=5 " We are good up to 99999 lines
@@ -19,3 +19,10 @@ set listchars=tab:>-,trail:- " show tabs and trailing
 set nowrap " do not wrap line
 set tabstop=4 "set tab character to 4 characters
 set expandtab "turn tabs into whitespace
+
+syntax enable
+set t_Co=16
+let g:solarized_termcolors=16
+colorscheme solarized
+
+set laststatus=2

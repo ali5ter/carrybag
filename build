@@ -1,0 +1,27 @@
+#!/bin/bash
+
+BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+case "$1" in
+    d)
+        for i in $(find $BASE/dot_files -type f -name ".*"); do
+            ln -sf $i
+        done
+        ;;
+    s)
+        for i in $(find $BASE/scripts -type f -name "*"); do
+            ln -sf $i
+        done
+        ;;
+    help|h|*)
+        echo "Build symlinks back to carrybag items. 
+
+Usage:
+$(color bd)build$(color) [ d | s ]
+
+where:
+$(color bd)build d$(color) creates links to the carrybag dot files in the current directory
+$(color bd)build s$(color) creates links to the carrybag script files in the current directory";
+        ;;
+esac
+

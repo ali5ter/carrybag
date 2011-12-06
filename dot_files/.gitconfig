@@ -1,0 +1,10 @@
+[user]
+	name = Alister Lewis-Bowen
+	email = alister@different.com
+[color]
+	diff = auto
+	status = auto
+	branch = auto
+[github]
+	user = ali5ter
+	token = 48de5aa8a1f17a4b7cbd67419d3c2664
