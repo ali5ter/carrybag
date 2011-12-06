@@ -1,0 +1,21 @@
+
+# Don't display the copyright
+startup_message off
+
+# Set scroll history to 5000 lines
+defscrollback 5000
+
+# Define the format of the status line
+hardstatus on
+hardstatus alwayslastline
+hardstatus string '%{= kG}[ %{G}%H %{g}][%= %{=kw}%?%-Lw%?%{r}(%{W}%n*%f%t%?(%u)%?%{r})%{w}%?%+Lw%?%?%= %{g}][%{B}%Y-%m-%d %{W}%c %{g}]'
+
+# Define the default screens to be started
+screen  -t build    1 bash -l
+screen  -t cell     2 bash -l
+screen  -t logs     3 bash -l
+select 1
+
+# Key bindings
+#bindkey "^[Od" prev  # change window with ctrl-left
+#bindkey "^[Oc" next  # change window with ctrl-right

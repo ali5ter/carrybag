@@ -1,0 +1,55 @@
+
+# General
+
+*.tmp
+*.bak
+*.swp
+.svn/
+
+# Rev control
+
+/CVS/*
+*/CVS/*
+.cvsignore
+*/.cvsignore
+.*.sw[a-z]
+
+# OSX
+
+.DS_Store
+._*
+
+# Eclipse
+
+.project
+.metadata
+local.properties
+.classpath
+.settings/
+.loadpath
+*.launch
+bin/
+bin-debug/
+
+# Archives
+
+*.7z
+*.jar
+*.rar
+*.zip
+*.gz
+*.bzip
+*.xz
+*.lzma
+*.iso
+*.tar
+
+# Installation
+
+*.dmg
+*.xpi
+*.gem
+*.egg
+*.deb
+*.rpm
+

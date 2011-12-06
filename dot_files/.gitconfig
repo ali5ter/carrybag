@@ -8,3 +8,5 @@
 [github]
 	user = ali5ter
 	token = 48de5aa8a1f17a4b7cbd67419d3c2664
+[core]
+	excludesfile = /Users/abowen/.gitignore
