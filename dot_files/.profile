@@ -17,28 +17,8 @@ if [ `uname` == 'Darwin' ]; then                   # OSX Tiger XCode paths
   export PATH=/Developer/Tools:/Developer/Applications:$PATH;
 fi
 
-if [ -e fink ]; then                               # OSX Fink paths
-  export PATH=/sw/bin/:/sw/sbin:$PATH;
-fi
-
 if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
   export PATH=/Applications/MAMP/Library/bin:$PATH;
-fi
-
-if [ -e ~/bin/shunit ]; then                       # ShUnit path
-    export SHUNIT_HOME=~/bin/shunit;
-    export PATH=$PATH:$SHUNIT_HOME;
-fi
-
-if [ -e /opt/local ]; then                         # MacPort path
-    export PATH=/opt/local/bin:/opt/local/sbin:$PATH;
-    export MANPATH=/opt/local/share/man:$MANPATH
-fi
-
-export USER_BASH_COMPLETION_DIR=~/.bash_completion.d
-
-if [ -f /opt/local/etc/bash_completion ]; then     # MacPort bash completion
-    . /opt/local/etc/bash_completion
 fi
 
 if [ -e ~/bin/p4 ]; then                           # OSX p4
@@ -70,8 +50,7 @@ if [ -e dircolors ]; then
     export `dircolors`;      # set up shell colors
 fi
 
-test -r /sw/bin/init.sh && . /sw/bin/init.sh; # OSX only
-export CLICOLOR=1; # QSX only
+export CLICOLOR=1; # OSX only
 
 # Alias shell commands
 # ----------------------------------------------------------------------------
@@ -83,10 +62,6 @@ else
 fi
 
 alias rm='rm -i';     # confirm any delete
-
-if [ -e ~/bin/vircs.sh ]; then
-    alias vi='vircs.sh'; # revision control with any edit
-fi
 
 # Alias extra commands
 # ----------------------------------------------------------------------------
@@ -147,8 +122,6 @@ fi
 
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
 
-#alias profile='co -l ~/.profile; vim ~/.profile; ci ~/.profile; co ~/.profile;. ~/.profile';
-
 alias clean_svn='find . | egrep svn | xargs rm -R';
 alias show_svn='find . | egrep svn';
 
@@ -174,28 +147,8 @@ alias newitt="ssh alister@newitt $1";
 alias horton="ssh alister@horton $1";
 alias cropley="ssh alister@cropley $1";
 
-# Clients
-
-alias casw="ssh alister@server1.casw.org $1";
-
-# Harvard
-
-#alias dev1="ssh abowen@itgdev.iic.harvard.edu $1"; # because i am
-#alias rdev="ssh root@iic-dev.seas.harvard.edu $1"; # WhatacrazyW0rld
-#alias rprod="ssh root@iic-prod.seas.harvard.edu $1"; # WhatacrazyW0rld
-#alias dev="ssh abowen@iic-dev.seas.harvard.edu $1"; # because i am
-#alias prod="ssh abowen@iic-prod.seas.harvard.edu $1"; # because i am
-#alias iic="ssh web@star.iic.harvard.edu $1";      # for cloth sk
-#alias im="ssh harviic@imageandmeaning.org $1";    # IIC
-#alias scf="ssh abowen@scfdev.iic.harvard.edu $1"; # science
-
 # VMware
 
-alias prod="ssh alister@vcloud.eng.vmware.com $1"; # becuase i am
-alias dev="ssh alister@vcloud-dev.eng.vmware.com $1"; # because i am
-alias sof="ssh alister@sof-vcloud-dev.eng.vmware.com $1"; # because i am
-#alias vm2="ssh alister@10.150.5.239 $1"; # because i am
-#alias vm1="ssh alister@10.150.11.127 $1"; # because i am
 alias vm1="ssh root@10.150.150.134 $1"; # akimbi
 
 # Get local aliases and functions
