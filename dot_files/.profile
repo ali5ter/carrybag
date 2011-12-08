@@ -21,16 +21,6 @@ if [ -e /Applications/MAMP ]; then                 # OSX MAMP paths
   export PATH=/Applications/MAMP/Library/bin:$PATH;
 fi
 
-if [ -e ~/bin/p4 ]; then                           # OSX p4
-    export P4CONFIG=.p4config;
-fi
-
-if [ -e ~/bin/apache-maven ]; then                 # OSX Maven
-    export M2_HOME=~/bin/apache-maven;
-    export MAVEN_OPTS='-Xmx1024M -XX:MaxPermSize=128m';
-    alias mvn='~/bin/apache-maven/bin/mvn';
-fi
-
 # Bash options
 # ----------------------------------------------------------------------------
 shopt -s cdspell    # Correct minor spelling errors in a cd command.
@@ -90,10 +80,6 @@ if [ -e ~/bin/drush ]; then
     alias drush='php ~/bin/drush/drush.php';
 fi
 
-if [ -e /Applications/Eclipse_3.5/Eclipse.app ]; then
-    alias eclipse='open /Applications/Eclipse_3.5/Eclipse.app';
-fi;
-
 if [ -e /usr/local/bin/icalBuddy ]; then
     alias meetings="icalBuddy -sc -n -f -eep notes eventsToday";
 fi
@@ -130,24 +116,9 @@ alias un='tar -zxf $1';
 # Alias host logins
 # ----------------------------------------------------------------------------
 
-# Home
-
-alias pair="ssh alister@erraj.pair.com $1";
-alias dreamhost="ssh ali5ter@snocap.dreamhost.com $1";
-alias dreamhost="ssh ali5ter@silversurfer.dreamhost.com $1";
-alias blue="ssh alister@blue.different.com $1";
-alias green="ssh alister@green.different.com $1";
-alias red="ssh alister@red.different.com $1";
-alias home="ssh alister@home.different.com -p 2112 $1";
-alias hugo="ssh alister@hugo $1";
-alias trott="ssh alister@trott $1";
-alias newitt="ssh alister@newitt $1";
-alias horton="ssh alister@horton $1";
-alias cropley="ssh alister@cropley $1";
-
-# VMware
-
-alias vm1="ssh root@10.150.150.134 $1"; # akimbi
+if [ -f ~/.hosts ]; then
+    . ~/.hosts
+fi
 
 # Get local aliases and functions
 # ----------------------------------------------------------------------------
@@ -155,7 +126,4 @@ alias vm1="ssh root@10.150.150.134 $1"; # akimbi
 if [ -f ~/.profile_local ]; then
     . ~/.profile_local
 fi
-
-
-
 
