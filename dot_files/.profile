@@ -127,8 +127,6 @@ alias show_svn='find . | egrep svn';
 
 alias un='tar -zxf $1';
 
-alias rmxattr='xattr -d `xattr $1` $1';
-
 # Alias host logins
 # ----------------------------------------------------------------------------
 
