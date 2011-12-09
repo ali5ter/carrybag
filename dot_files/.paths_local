@@ -1,0 +1,17 @@
+#
+# @file Local paths
+# Optional file to contain local path customizations
+# @author Alister Lewis-Bowen <alister@different.com>
+#
+
+#
+# OSX Developer Tools paths
+#
+
+[ `uname` == 'Darwin' ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
+
+#
+# OSX MAMP bin path
+#
+
+[ -e /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH;

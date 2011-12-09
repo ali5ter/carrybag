@@ -1,0 +1,13 @@
+#!/bin/bash
+
+match=`ls -1 /Applications | grep -i $1 | perl -pe 's/^(.*)\/$/$1/' | perl -pe 's/\s/\\\ /g'`;
+
+num=`ls -1 /Applications | grep -i $1 | wc -l`;
+
+if [ "$num" -eq 1 ]; then
+    echo "$(color green)Will try to open /Applications/$match$(color)"
+    open /Applications/$match
+else
+    echo "$(color red)Can't open $match$(color)"
+fi;
+

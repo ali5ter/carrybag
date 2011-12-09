@@ -1,5 +1,6 @@
 #
-# @file hosts
+# @file machines_local
+# Optional file to contain local machine aliases
 # @author Alister Lewis-Bowen <alister@different.com>
 #
 
