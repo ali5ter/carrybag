@@ -3,6 +3,7 @@
 # @file rmxattr
 # Remove OSX extended attributes from a file or directory
 # @author Alister Lewis-Bowen <alister@different.com>
+# @requires color (http://code.google.com/p/ansi-color/)
 #
 
 case $1 in
