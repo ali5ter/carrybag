@@ -116,6 +116,11 @@ rcsedit () {
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
 
 #
+# edit and source .profile
+#
+alias sourcep="source ~/.profile"
+
+#
 # Additional alias customizations
 #
 
