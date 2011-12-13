@@ -42,9 +42,9 @@ export CLICOLOR=1; # OSX only
 #
 
 export EDITOR='vi'  # set default to vi
-set -o vi;          # set vi history
+set -o vi           # set vi history
 
-if [ "$(type mvim | grep 'not found')" == "" ]; then
+if [ "$(command -v mvim)" != "" ]; then
     export EDITOR='mvim'    # default to mac vim if installed
     alias vi='mvim'
 fi
@@ -101,7 +101,7 @@ alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d
 #
 
 rcsedit () {
-    if [ "$(type rcs | grep 'not found')" == "" ]; then
+    if [ "$(command -v rcs)" == "" ]; then
         [ ! -e $(dirname $1)/RCS ] && mkdir $(dirname $1)/RCS   # Create RCS dir next to file
         co -l $1; /usr/bin/vi $1; ci $1; co $1                  # rcs wrapped edit
     else
