@@ -1,12 +1,21 @@
+#
+# @file gitignore
+# File exclusion from git commit
+# @author Alister Lewis-Bowen <alister@different.com>
+#
 
+#
 # General
+#
 
 *.tmp
 *.bak
 *.swp
 .svn/
 
+#
 # Rev control
+#
 
 /CVS/*
 */CVS/*
@@ -14,12 +23,16 @@
 */.cvsignore
 .*.sw[a-z]
 
+#
 # OSX
+#
 
 .DS_Store
 ._*
 
+#
 # Eclipse
+#
 
 .project
 .metadata
@@ -31,7 +44,9 @@ local.properties
 bin/
 bin-debug/
 
+#
 # Archives
+#
 
 *.7z
 *.jar
@@ -44,7 +59,9 @@ bin-debug/
 *.iso
 *.tar
 
+#
 # Installation
+#
 
 *.dmg
 *.xpi

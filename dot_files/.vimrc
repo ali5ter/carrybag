@@ -1,6 +1,9 @@
+"
 " @file vimrc
-" Alister's custom vim settings
-" ref: http://www.vi-improved.org/vimrc.php
+" Custom vim settings
+" @author Alister Lewis-Bowen <alister@different.com>
+" @see http://www.vi-improved.org/vimrc.php
+"
 
 set nocompatible " explicitly get out of vi-compatible mode
 set noexrc " don't use local version of .(g)vimrc, .exrc

@@ -1,6 +1,6 @@
 #
 # @file profile
-# My bash command line configuration
+# Bash configuration
 # @author Alister Lewis-Bowen <alister@different.com>
 #
 
