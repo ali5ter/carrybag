@@ -1,36 +1,36 @@
 "
 " @file gvimrc
-" Custom mac vim settings
+" ★ Custom gui vim settings
 " @author Alister Lewis-Bowen <alister@different.com>
 "
 
 "
-" Set the font (https://github.com/b4winckler/macvim/wiki/FAQ)
+" General
+"
 "
 
-set guifont=Monaco:h14
+set guifont=Monaco:h14 " particularly OSX
+set lines=48 " height
+set columns=120 " width
+set guioptions-=T " hide the toolbar
 
 "
-" Set the default size of the window
-"
-
-set lines=48
-set columns=120
-
-"
-" Hide the toolbar
-"
-
-set guioptions-=T
-
-"
-" Set color scheme (https://github.com/altercation/vim-colors-solarized)
+" Colors
+" ● https://github.com/altercation/vim-colors-solarized)
 "
 
 syntax enable
 colorscheme solarized
-"if has('gui_running')
-"    set background=light
-"else
-    set background=dark
-"endif
+set background=dark
+
+"
+" Mappings
+"
+
+nmap <c-tab> :tabnext<cr> " cntl-tab cycle forward through tabs
+imap <c-tab> <c-o>:tabnext<cr>
+vmap <c-tab> <c-o>:tabnext<cr>
+nmap <c-s-tab> :tabprevious<cr> " cntl-shift-tab cycle back through tabs
+imap <c-s-tab> <c-o>:tabprevious<cr>
+vmap <c-s-tab> <c-o>:tabprevious<cr>
+

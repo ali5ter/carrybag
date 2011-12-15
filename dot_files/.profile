@@ -1,6 +1,6 @@
 #
 # @file profile
-# Bash configuration
+# ★ Bash configuration
 # @author Alister Lewis-Bowen <alister@different.com>
 #
 
@@ -16,7 +16,10 @@ shopt -s dotglob    # Show dot files in path expansion
 # Paths
 #
 
-export PATH=.:~/bin:/usr/local/bin:/usr/bin:$PATH; # standard path extensions
+export PATH=.:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:$PATH
+
+export MANPATH=/usr/local/man:$MANPATH
+
 
 #
 # Additional path definitions

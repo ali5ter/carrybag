@@ -1,31 +1,87 @@
 "
 " @file vimrc
-" Custom vim settings
+" ★ Custom vim settings
 " @author Alister Lewis-Bowen <alister@different.com>
-" @see http://www.vi-improved.org/vimrc.php
 "
 
-set nocompatible " explicitly get out of vi-compatible mode
+"
+" General
+"
+set nocompatible " enable advanced features
 set noexrc " don't use local version of .(g)vimrc, .exrc
-set background=dark " we plan to use a dark background
-syntax on
+set noswapfile " stop leaving .swp files around
+"set backup " make backup files
+"set backupdir= ~/.vim/backup " dir for backup files
+set noerrorbells " make silent
+set nostartofline " try to stay in same column when scrolling
 
-"set cursorcolumn " highlight the current column
-"set cursorline " highlight current line
-set nohlsearch " do not highlight searched for phrases
-set number " turn on line numbers
-set numberwidth=5 " We are good up to 99999 lines
-set ruler " Always show current positions along the bottom
-set list " we do what to show tabs, to ensure we get them out of my files
-set listchars=tab:>-,trail:- " show tabs and trailing 
+"
+" Syntax coloring
+" ● Solarized (http://ethanschoonover.com/solarized/vim-colors-solarized)
+"
 
-set nowrap " do not wrap line
-set tabstop=4 "set tab character to 4 characters
-set expandtab "turn tabs into whitespace
-
-syntax enable
-set t_Co=16
-let g:solarized_termcolors=16
+syntax on " turn on syntax coloring
+set background=dark " use dark background terminal
+"set t_Co=16 " as recommended by solarized doc
+" let g:solarized_termcolors=16 | 256
+" let g:solarized_termtrans=0 | 1
+" let g:solarized_degrade=0 | 1
+" let g:solarized_bold=1 | 0
+" let g:solarized_underline=1 | 0
+" let g:solarized_italic=1 | 0
+" let g:solarized_contrast='normal'| 'high' or 'low'
+" let g:solarized_visibility='normal'| 'high' or 'low'
 colorscheme solarized
 
-set laststatus=2
+"
+" Formatting
+"
+set nowrap " do not wrap line
+set shiftwidth=4 " set shift (>>) to 4 spaces
+set autoindent " turn on auto indentation
+set smartindent " smarter auto indentation
+"set cindent " really smart auto indentation
+set tabstop=4 " set tab character to 4 characters
+set expandtab " turn tabs into whitespace
+set nosmarttab " no tabs
+set textwidth=80 " wrap at 80 chars
+
+
+"
+" Visuals
+"
+
+set laststatus=2 " always show status line
+set visualbell " no flashing
+set wildmenu " turn on command completion
+set wildmode=list:longest,full " list all possible completions
+set noshowcmd " don't show partial commands
+set nolazyredraw " tuen off lazy menu
+set showmatch " show matching braces
+set incsearch " show search as you type
+set ignorecase " ignore case when searching
+set nohlsearch " highlight searched for phrases
+set number " turn on line numbers
+set numberwidth=5 " width for up to 99999 lines
+set ruler "show current cursor position
+"set cursorcolumn " highlight the current column
+"set cursorline " highlight current line
+set list " show hidden characters
+set listchars=tab:▸\ ,trail:- " show tabs and trailing
+
+
+"
+" Text expansions
+"
+
+abbreviate lorem Lorem<space>ipsum<space>dolor<space>sit<space>amet,<space>consectetuer<space>adipiscing<space>elit.<space>Ut<space>ultrices.<space>Phasellus<space>lectus<space>leo,<space>molestie<space>ac,<space>sollicitudin<space>a,<space>suscipit<space>at,<space>ante.<space>Praesent<space>nec<space>purus.<space>Proin<space>cursus.<space>Praesent<space>ipsum<space>pede,<space>posuere<space>id,<space>congue<space>a,<space>hendrerit<space>id,<space>ligula.<space>Phasellus<space>tempus<space>pede<space>ut<space>neque<space>sagittis<space>dignissim.<space>Integer<space>in<space>odio<space>sed<space>est<space>dignissim<space>blandit.<space>Sed<space>sodales<space>viverra<space>nunc.<space>Pellentesque<space>feugiat.<space>Nulla<space>id<space>lorem<space>sit<space>amet<space>purus<space>egestas<space>rhoncus.<space>Vestibulum<space>nonummy.<space>Pellentesque<space>quis<space>lorem<space>et<space>erat<space>blandit<space>aliquam.<space>Ut<space>ut<space>ante<space>eu<space>sapien<space>viverra<space>lacinia.<space>Curabitur<space>sodales<space>dui<space>vel<space>turpis.<space>Fusce<space>felis<space>odio,<space>vestibulum<space>lacinia,<space>laoreet<space>eget,<space>tristique<space>eget,<space>tortor.<space>Sed<space>mauris.
+abbreviate bbr ==============================================================================
+abbreviate br ------------------------------------------------------------------------------
+
+"
+" Mappings
+"
+
+set backspace=indent,eol,start " more useful backspace capability
+nmap <leader>l :set list!<CR> " show/hide hidden characters
+
