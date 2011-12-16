@@ -10,8 +10,8 @@
 set nocompatible " enable advanced features
 set noexrc " don't use local version of .(g)vimrc, .exrc
 set noswapfile " stop leaving .swp files around
-"set backup " make backup files
-"set backupdir= ~/.vim/backup " dir for backup files
+set backup " make backup files
+set backupdir=~/.vim/backup " dir for backup files
 set noerrorbells " make silent
 set nostartofline " try to stay in same column when scrolling
 
@@ -36,16 +36,16 @@ colorscheme solarized
 "
 " Formatting
 "
+
 set nowrap " do not wrap line
 set shiftwidth=4 " set shift (>>) to 4 spaces
 set autoindent " turn on auto indentation
 set smartindent " smarter auto indentation
-"set cindent " really smart auto indentation
+set cindent " really smart auto indentation
 set tabstop=4 " set tab character to 4 characters
 set expandtab " turn tabs into whitespace
 set nosmarttab " no tabs
 set textwidth=80 " wrap at 80 chars
-
 
 "
 " Visuals
@@ -69,7 +69,6 @@ set ruler "show current cursor position
 set list " show hidden characters
 set listchars=tab:▸\ ,trail:- " show tabs and trailing
 
-
 "
 " Text expansions
 "
@@ -79,9 +78,29 @@ abbreviate bbr =================================================================
 abbreviate br ------------------------------------------------------------------------------
 
 "
+" Functions
+"
+
+function! StripTrailingWhitespace()
+    let _s=@/ " save last search
+    let l = line(".") " save cursor position
+    let c = col(".")
+    exec ':%s/\s\+$//gc'
+    let @/=_s " restore previous search
+    call cursor(l, c) : restore cursor position
+endfunction
+
+"
 " Mappings
 "
 
 set backspace=indent,eol,start " more useful backspace capability
+let mapleader = "_" " lead with _
 nmap <leader>l :set list!<CR> " show/hide hidden characters
+nmap <leader>s : call StripTrailingWhitespace()<CR>
 
+"
+" Filetypes
+"
+
+au BufNewFile,BufRead *.as set ft=actionscript " remove Atlas association

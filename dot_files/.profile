@@ -17,7 +17,6 @@ shopt -s dotglob    # Show dot files in path expansion
 #
 
 export PATH=.:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:$PATH
-
 export MANPATH=/usr/local/man:$MANPATH
 
 
