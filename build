@@ -13,6 +13,7 @@ case "$1" in
         for i in $(find $BASE/dot_files -type f -name ".*"); do
             ln -sf $i
         done
+        ln -sf $BASE/dot_files/.vim
         ;;
     -s)
         for i in $(find $BASE/scripts -type f -name "*"); do
