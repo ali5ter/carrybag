@@ -12,6 +12,7 @@
 *.bak
 *.swp
 .svn/
+*.pyc
 
 #
 # Rev control
