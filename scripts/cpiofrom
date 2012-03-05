@@ -4,35 +4,57 @@
 # Wrapper for cpio'ing a remote dir structure over ssh 
 # @author Alister Lewis-Bowen <alister@different.com>
 # @requires color (http://code.google.com/p/ansi-color/)
+# @requires parseuri 
 #
 
+#
+# directory this script exists within
+#
+scriptDir=$(dirname $(stat -f $0))
+
+#
+# includes
+#
+source $scriptDir/parseuri
+
+#
+# main
+#
 case $1 in
-	-h|-help)
-		echo "
+
+    #
+    # help
+    #
+    -h|--help|h|help|?)
+    echo "
 Wrapper for cpio to transfer a remote dir structure to this machine via ssh.
 
 usage:
-$(color bd)cpiofrom$(color) user@hostname/path
+$(color bd)cpiofrom$(color) user[:password]@hostname/path
 $(color bd)cpiofrom$(color) [ -h | --help ]
 
 examples
-  cpiofrom alister@green.different.com:projects/site/htdocs
+  cpiofrom alister@green.different.com/projects/site/htdocs
 pulls the entire htdocs directory down to the current directory
 "
-		;;
-	*)
-		parseuri "$1";
+        ;;
 
-		if [[ -z $uri_user || -z $uri_host || -z $uri_path ]]; then 
-		    echo "$(color red)This argument is incorrect. Try using the format user@host/path$(color)"; 
-		    exit 1;
-		fi
-		
-		uri_path=${uri_path:1}
-		
-		echo "$(color green)Fetching data from $uri_path on $uri_host as $uri_user...$(color)";
-		ssh $uri_user@$uri_host "find $uri_path -depth -print | cpio -oaV" | cpio -imVd;
-		echo "$(color green)Finished$(color)";
-		;;
+    #
+    # process transfer
+    #
+    *)
+        parseuri "$1" || {
+            echo "$(color red)This argument is incorrect. Try using the format user@host/path$(color)";
+            exit 1; }
+
+        [[ -n $uri_user && -n $uri_host && -n $uri_path ]] || {
+            echo "$(color red)Need at least the user, host and path to be successful. Try using the format user@host/path$(color)"; 
+            exit 1; }
+
+        uri_path=${uri_path:1}
+
+        echo "$(color green)Fetching data from $uri_path on $uri_host as $uri_user...$(color)";
+        (ssh $uri_user@$uri_host "find $uri_path -depth -print | cpio -oa" | cpio -imd)
+        echo "$(color green)Finished$(color)";
+        ;;
 esac
-

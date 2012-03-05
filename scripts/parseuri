@@ -2,7 +2,9 @@
 #
 # @file parseuri
 # Parse out elements of a given uri
-# @author Alister Lewis-Bowen <alister@different.com>
+#
+# [schema://][user[:password]@]host[:port][/path][?[arg1=val1]...][#fragment]
+#
 # @see http://valeriu.palos.ro/537/uri-parsing-using-bash-built-in-features/
 #
 
