@@ -46,10 +46,10 @@ export CLICOLOR=1; # OSX only
 export EDITOR='vi'  # set default to vi
 set -o vi           # set vi history
 
-if [ "$(command -v mvim)" != "" ]; then
-    export EDITOR='mvim'    # default to mac vim if installed
-    alias vi='mvim'
-fi
+#if [ "$(command -v mvim)" != "" ]; then
+#    export EDITOR='mvim'    # default to mac vim if installed
+#    alias vi='mvim'
+#fi
 
 #
 # Aliases existing commands
