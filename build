@@ -11,12 +11,14 @@ BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 case "$1" in
     -d)
         for i in $(find $BASE/dot_files -type f -name ".*"); do
+	    rm -f $1 2>/dev/null
             ln -sf $i
         done
         ln -sf $BASE/dot_files/.vim
         ;;
     -s)
         for i in $(find $BASE/scripts -type f -name "*"); do
+	    rm -f $1 2>/dev/null
             ln -sf $i
         done
         ;;
