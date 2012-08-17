@@ -75,7 +75,7 @@ set listchars=tab:▸\ ,trail:- " show tabs and trailing
 
 abbreviate lorem Lorem<space>ipsum<space>dolor<space>sit<space>amet,<space>consectetuer<space>adipiscing<space>elit.<space>Ut<space>ultrices.<space>Phasellus<space>lectus<space>leo,<space>molestie<space>ac,<space>sollicitudin<space>a,<space>suscipit<space>at,<space>ante.<space>Praesent<space>nec<space>purus.<space>Proin<space>cursus.<space>Praesent<space>ipsum<space>pede,<space>posuere<space>id,<space>congue<space>a,<space>hendrerit<space>id,<space>ligula.<space>Phasellus<space>tempus<space>pede<space>ut<space>neque<space>sagittis<space>dignissim.<space>Integer<space>in<space>odio<space>sed<space>est<space>dignissim<space>blandit.<space>Sed<space>sodales<space>viverra<space>nunc.<space>Pellentesque<space>feugiat.<space>Nulla<space>id<space>lorem<space>sit<space>amet<space>purus<space>egestas<space>rhoncus.<space>Vestibulum<space>nonummy.<space>Pellentesque<space>quis<space>lorem<space>et<space>erat<space>blandit<space>aliquam.<space>Ut<space>ut<space>ante<space>eu<space>sapien<space>viverra<space>lacinia.<space>Curabitur<space>sodales<space>dui<space>vel<space>turpis.<space>Fusce<space>felis<space>odio,<space>vestibulum<space>lacinia,<space>laoreet<space>eget,<space>tristique<space>eget,<space>tortor.<space>Sed<space>mauris.
 abbreviate bbr ==============================================================================
-abbreviate br ------------------------------------------------------------------------------
+"abbreviate br ------------------------------------------------------------------------------
 
 "
 " Functions
