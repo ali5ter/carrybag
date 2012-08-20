@@ -63,6 +63,12 @@ alias ls='ls -F'    # show dirs, exec and sym link files
 #
 
 #
+# todir string ... mkdir and cd into it
+#
+
+todir () { mkdir -p $1 && cd $1 ; }
+
+#
 # ffile string ... find a file from this directory
 #
 
