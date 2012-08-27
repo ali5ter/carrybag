@@ -45,7 +45,7 @@ set cindent " really smart auto indentation
 set tabstop=4 " set tab character to 4 characters
 set expandtab " turn tabs into whitespace
 set nosmarttab " no tabs
-set textwidth=80 " wrap at 80 chars
+"set textwidth=80 " wrap at 80 chars
 
 "
 " Visuals
@@ -68,6 +68,12 @@ set ruler "show current cursor position
 "set cursorline " highlight current line
 set list " show hidden characters
 set listchars=tab:▸\ ,trail:- " show tabs and trailing
+" show column 80 as a width guide...
+if exists('+colorcolumn')
+    set colorcolumn=80
+else
+    au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
+endif
 
 "
 " Text expansions
