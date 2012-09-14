@@ -76,6 +76,15 @@ else
 endif
 
 "
+" Map extensions to existing syntax highlighters
+"
+
+autocmd BufNewFile,BufRead *.module set ft=php
+autocmd BufNewFile,BufRead *.mxml set ft=xml
+autocmd BufNewFile,BufRead *.as set ft=javascript
+autocmd BufNewFile,BufRead *.json set ft=javascript
+
+"
 " Text expansions
 "
 
