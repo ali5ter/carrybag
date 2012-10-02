@@ -103,13 +103,13 @@ todir () { mkdir -p $1 && cd $1 ; }
 # ffile string ... find a file from this directory
 #
 
-ffile () { find . | grep -i "$1" ;  }
+ffile () { find . | grep -i "$1" 2>/dev/null ;  }
 
 #
 # ftext string ... find text the files from this directory
 #
 
-ftext () { find . | xargs grep -i "$1" ; }
+ftext () { find . | xargs grep -i "$1" 2>/dev/null; }
 
 #
 # fproc string ... find a process
