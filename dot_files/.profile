@@ -155,8 +155,15 @@ rcsedit () {
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
 
 #
+# ips [interface]... list ips available on this machines NICs
+#
+
+ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
+
+#
 # edit and source .profile
 #
+
 alias sourcep="source ~/.profile"
 
 #
