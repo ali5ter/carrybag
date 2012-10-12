@@ -57,6 +57,7 @@ set -o vi           # set vi history
 
 alias rm='rm -i'    # confirm any delete
 alias ls='ls -F'    # show dirs, exec and sym link files
+alias wget='curl -O'    # when curl is just too much to remember
 
 #
 # git aliases
@@ -161,10 +162,25 @@ alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sud
 ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
 
 #
-# end [file] ... show the last 100 lines of a file
+# end file ... show the last 100 lines of a file
 #
 
 end () { tail -n100 $1; }
+
+#
+# cleanup file ... clean out tabs, trailing spaces, carriage returns, etc.
+#
+
+cleanup () {
+    cp $1 $1.bak
+    local tmp="/tmp/$RANDOM.tmp"
+    cat $1 | \
+        perl -pe 'if (defined $x && /\S/) { print $x; $x = ""; } $x .= "\n" x chomp; s/\s*?$//; if (eof) { print "\n"; $x = ""; }' | \
+        perl -pe 's/\t/    /g' | \
+        perl -pe 's/\r\n$/\n/g' \
+        > $tmp
+    mv $tmp $1
+}
 
 #
 # edit and source .profile
