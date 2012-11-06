@@ -1,0 +1,119 @@
+#!/bin/bash
+#
+# @file jump
+# ☆  Script to create command for bookmarking directories and moving directly
+#    to them using said bookmarks
+# NOTE: Alias this to '. jump' so that cd will work outside the subshell, e.g.
+#       alias jump='. ~/bin/jump'
+# @author Alister Lewis-Bowen <alister@vmware.com>
+# @dependencies color <http://code.google.com/p/ansi-color/>
+#
+
+#
+# Working directory
+#
+WDIR=~/.jump
+#
+# Bookmark store
+#
+STORE=$WDIR/bookmarks
+
+function _help {
+    local helpText="
+$(color bd)Bookmark directories and jump to them$(color)
+
+$(color bd)bdir $(color ul)name$(color) will move you to the directory \
+bookmarked with $(color ul)name$(color)
+
+Usage: $(color bd)jump [$(color ul)option$(color)$(color bd)] [$(color ul)name\
+$(color)$(color bd)]$(color)
+
+Options:
+-a, --add $(color ul)name$(color)    bookmark current directory with \
+$(color ul)name$(color)
+-d, --delete $(color ul)name$(color)   delete bookmark $(color ul)name$(color)
+-l, --list          list current bookmarked directories
+"
+    echo "$helpText"
+}
+
+function _exists {
+    local matches=$(grep "^$1::" $STORE | wc -l)
+    if [ "$matches" -gt "0" ]; then
+        return 0
+    fi
+    return 1
+}
+
+[ ! -d $WDIR ] && mkdir -p $WDIR
+[ ! -f $STORE ] && touch $STORE
+
+case "$1" in
+    ''|--help|-h)
+        _help
+        ;;
+    #
+    # Add a directory to the bookmarks store
+    #
+    add|--add|-a)
+        if [ ! -z $2 ]; then
+            _exists $2;
+            if [ $? -eq 1 ]; then
+                echo $2'::'$(pwd) >> $STORE
+                echo "$(color green)Bookmark has been added$(color)"
+            else
+                echo "$(color yellow)This bookmark already exists:$(color)"
+                jump list
+            fi
+        else
+            _help
+        fi
+        ;;
+    #
+    # Delete a bookmark
+    #
+    rm|del|--delete|-d)
+        if [ ! -z $2 ]; then
+            _exists $2;
+            if [ $? -eq 0 ]; then
+                sed -i"*.bak" "/^$2::/d" $STORE &&
+                    echo "$(color green)Bookmark has been deleted$(color)"
+            else
+                echo "$(color red)Unable to find a bookmark named, \
+$(color bd)$2:$(color)"
+                jump list
+            fi
+        else
+            _help
+        fi
+        ;;
+    #
+    # List current bookmarked directories
+    #
+    list|--list|-l)
+        current="$(color blue)►$(color)"
+        badDir="$(color red)✖$(color)"
+        while read line; do
+            name=${line%::*}
+            path=${line#*::}
+            state=' '
+            [ "$(pwd)" == "$path" ] && state=$current
+            [ ! -d $path ] && state=$badDir
+            printf "%1s $(color white)%-10s $(color cyan)%-60s$(color)\n" \
+"$state" "$name" "$path"
+        done < $STORE
+        echo
+        ;;
+    #
+    # cd to the bookmarked directory
+    #
+    *)
+        _exists $1;
+        if [ $? -eq 0 ]; then
+            bm=$(grep $1 $STORE)
+            cd ${bm#*::}
+        else
+            echo "$(color red)Unable to find '$1'$(color)"
+        fi
+        ;;
+esac

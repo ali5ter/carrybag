@@ -60,6 +60,12 @@ alias ls='ls -F'    # show dirs, exec and sym link files
 alias wget='curl -O'    # when curl is just too much to remember
 
 #
+# Aliasing custom scripts
+#
+
+alias jump='. ~/bin/jump'
+
+#
 # git aliases
 #
 
