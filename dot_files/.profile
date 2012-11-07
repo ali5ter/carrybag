@@ -58,12 +58,13 @@ set -o vi           # set vi history
 alias rm='rm -i'    # confirm any delete
 alias ls='ls -F'    # show dirs, exec and sym link files
 alias wget='curl -O'    # when curl is just too much to remember
+alias sourcep="source ~/.profile"   # lazy about sourceing the profile
 
 #
 # Aliasing custom scripts
 #
 
-alias jump='. ~/bin/jump'
+alias jump='. ~/bin/jump'   # jump to bookmarked directories
 
 #
 # git aliases
@@ -107,25 +108,25 @@ alias gbm="git fetch origin master && git rebase origin/master"
 todir () { mkdir -p $1 && cd $1 ; }
 
 #
-# ffile string ... find a file from this directory
+# ffile string ... find a file from this directory down
 #
 
 ffile () { find . | grep -i --color=always "$1" 2>/dev/null ;  }
 
 #
-# ftext string ... find text the files from this directory
+# ftext string ... find text in files from this directory down
 #
 
 ftext () { find . | xargs grep -i -C 2 --color=always "$1" 2>/dev/null; }
 
 #
-# fproc string ... find a process
+# fproc string ... find a process matching the given string
 #
 
 fproc () { ps aux | grep "$1" | grep -v 'grep' ; }
 
 #
-# kproc string ... kill a set of processes
+# kproc string ... kill a set of processes matching the given string
 #
 
 kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
@@ -149,14 +150,14 @@ alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d
 rcsedit () {
     if [ "$(command -v rcs)" == "" ]; then
         [ ! -e $(dirname $1)/RCS ] && mkdir $(dirname $1)/RCS   # Create RCS dir next to file
-        co -l $1; /usr/bin/vi $1; ci $1; co $1                  # rcs wrapped edit
+        co -l $1; $EDITOR $1; ci $1; co $1                      # rcs wrapped edit
     else
         $EDITOR $1;                                             # Regular edit if rcs not installed
     fi
 }
 
 #
-# hosts ... edit the /etc/hosts file
+# hosts ... edit the /etc/hosts file using rcs
 #
 
 alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
@@ -168,7 +169,7 @@ alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sud
 ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
 
 #
-# end file ... show the last 100 lines of a file
+# end file ... show the last 100 lines of a given file
 #
 
 end () { tail -n100 $1; }
@@ -179,7 +180,7 @@ end () { tail -n100 $1; }
 
 cleanup () {
     cp $1 $1.bak
-    local tmp="/tmp/$RANDOM.tmp"
+    local tmp=$(mktemp -t ${RANDOM})
     cat $1 | \
         perl -pe 'if (defined $x && /\S/) { print $x; $x = ""; } $x .= "\n" x chomp; s/\s*?$//; if (eof) { print "\n"; $x = ""; }' | \
         perl -pe 's/\t/    /g' | \
@@ -189,26 +190,20 @@ cleanup () {
 }
 
 #
-# edit and source .profile
-#
-
-alias sourcep="source ~/.profile"
-
-#
-# Additional alias customizations
+# Additional alias customizations/overrides
 #
 
 [ -f ~/.alias_local ] && . ~/.alias_local
 
 #
-# Machines
+# Additional log-in aliases
 # e.g. alias foo='ssh bar@foo.com -p 123 $1'
 #
 
 [ -f ~/.machines_local ] && . ~/.machines_local
 
 #
-# Additional extended capabilities
+# Additional extended capabilities/overrides
 #
 
 [ -f ~/.profile_local ] && . ~/.profile_local
