@@ -22,7 +22,7 @@ function _help {
     local helpText="
 $(color bd)Bookmark directories and jump to them$(color)
 
-$(color bd)bdir $(color ul)name$(color) will move you to the directory \
+$(color bd)jump $(color ul)name$(color) will move you to the directory \
 bookmarked with $(color ul)name$(color)
 
 Usage: $(color bd)jump [$(color ul)option$(color)$(color bd)] [$(color ul)name\
