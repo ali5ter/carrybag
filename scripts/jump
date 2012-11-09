@@ -6,8 +6,7 @@
 # NOTE: Alias this to '. jump' so that cd will work outside the subshell, e.g.
 #       alias jump='. ~/bin/jump'
 # @author Alister Lewis-Bowen <alister@different.com>
-# @dependencies
-# ● color <http://code.google.com/p/ansi-color/>
+# @requires color <http://code.google.com/p/ansi-color/>
 #
 # This software is distributed under the the MIT License.
 #
