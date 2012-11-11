@@ -5,4 +5,4 @@ These include:
 * color     <http://ansi-color.googlecode.com>
 * solarized <https://github.com/altercation/solarized>
 * NERDTree  <https://github.com/scrooloose/nerdtree>
-* jshint    <https://github.com/jshint/jshint>
+* jshint    <https://github.com/walm/jshint.vim>

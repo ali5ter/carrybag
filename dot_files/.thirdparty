@@ -19,6 +19,10 @@ function get_package {
     esac
 }
 
+for file in {bundle,autoload,bitmaps,colors,doc}; do
+    [ ! -d ~/.vim/$file] && mkdir -p ~/.vim/$file
+done
+
 #
 # color
 #
@@ -30,13 +34,22 @@ ln -sf $PACKAGE_DIR/ansi-color/ansi-color/color ~/bin/color
 # solarized
 #
 
-# TODO: make a git submodule of this
-get_package github altercation/solarized
 for file in {autoload/togglebg.vim,bitmaps/togglebg.png,colors/solarized.vim,doc/solarized.txt,doc/tags}; do
-    mkdir -p ~/.vim/$(dirname $file)
     ln -sf $PACKAGE_DIR/solarized/vim-colors-solarized/$file ~/.vim/$file
 done
 
-# TODO: NERDTree and jshint
+#
+# NERDTree
+#
+
+ln -sf $PACKAGE_DIR/nertree ~/.vim/bundle/nerdtree
+
+#
+# jshint
+#
+
+for file in {plugin/jshint.vim,doc/jshint.txt}; do
+    ln -sf $PACKAGE_DIR/jshint/$file ~/.vim/$file
+done
 
 unset PACKAGE_DIR
