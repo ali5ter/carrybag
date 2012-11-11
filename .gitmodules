@@ -1,0 +1,9 @@
+[submodule "dot_files/.thirdpartypackages/solarized"]
+	path = dot_files/.thirdpartypackages/solarized
+	url = git://github.com/altercation/solarized.git
+[submodule "dot_files/.thirdpartypackages/nerdtree"]
+	path = dot_files/.thirdpartypackages/nerdtree
+	url = git://github.com/scrooloose/nerdtree.git
+[submodule "dot_files/.thirdpartypackages/jshint"]
+	path = dot_files/.thirdpartypackages/jshint
+	url = git://github.com/jshint/jshint.git

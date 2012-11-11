@@ -5,6 +5,14 @@
 # @see .bashrc
 
 #
+# Colors
+#
+
+export CLICOLOR=1
+
+# TODO: solarized
+
+#
 # Path exports
 #
 

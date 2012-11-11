@@ -20,7 +20,7 @@ function get_package {
 }
 
 #
-#   color
+# color
 #
 
 get_package googlecode ansi-color
@@ -30,6 +30,7 @@ ln -sf $PACKAGE_DIR/ansi-color/ansi-color/color ~/bin/color
 # solarized
 #
 
+# TODO: make a git submodule of this
 get_package github altercation/solarized
 for file in {autoload/togglebg.vim,bitmaps/togglebg.png,colors/solarized.vim,doc/solarized.txt,doc/tags}; do
     mkdir -p ~/.vim/$(dirname $file)
