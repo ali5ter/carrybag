@@ -1,8 +1,6 @@
-"
 " @file gvimrc
-" ★ Custom gui vim settings
+" @brief  Custom gui vim settings
 " @author Alister Lewis-Bowen <alister@different.com>
-"
 
 "
 " General

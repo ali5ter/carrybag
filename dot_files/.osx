@@ -1,0 +1,12 @@
+# @file .osx
+# @brief OSX customizations for my bash configuration and other os tweeks
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see https://github.com/mathiasbynens/dotfiles/blob/master/.osx
+# @see .bashrc
+
+#
+# Path exports
+#
+
+[ -d /Developer ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
+[ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH;

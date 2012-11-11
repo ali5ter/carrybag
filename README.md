@@ -1,3 +1,5 @@
-Bag of scripts and configurations that I carry around.
+Bag of scripts and configurations that I carry from machine to machine
 
-Dependencies: https://ansi-color.googlecode.com/
+Dependencies
+------------
+* color https://ansi-color.googlecode.com/

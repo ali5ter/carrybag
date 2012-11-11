@@ -1,0 +1,67 @@
+# @file .aliases
+# @brief Aliases for my bash configuration
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see .bashrc
+
+alias rm='rm -i'    # confirm any delete
+alias ls='ls -F'    # show dirs, exec and sym link files
+alias wget='curl -O'    # when curl is just too much to remember
+alias sourcep="source ~/.profile"   # lazy about sourceing the profile
+alias jump='. ~/bin/jump'   # jump to bookmarked directories
+
+alias gl="git log --stat" # summary of which files changed
+alias gs="git status -s" # short output of modified/staged files
+alias gw="git show" # diff of last commit
+alias gd="git diff"  # diff of unstaged changes
+alias gdc="git diff --cached"  # diff of staged changes
+alias gdh="git diff HEAD" # diff of all changes
+alias gc="git commit -a -m" # commit all tracked files
+alias gco="git commit -m"  # commit staged files
+alias gca="git add --all && git commit -m"  # commit all modified/added/removed
+#alias gcaf="git add --all && git commit --no-verify -m"
+alias gp='git push' # push to remote (cloned repo)
+alias gpp='git pull --rebase && git push' # sync with remote
+#alias gps='git stash && gpp && git stash pop'
+alias go="git checkout" # show branches
+alias gb="git checkout -b" # switch branches
+alias got="git checkout -"
+alias gom="git checkout master" # switch to master branch
+alias gr="git branch -d"
+alias grr="git branch -D"
+alias gcp="git cherry-pick"
+alias gam="git commit --amend"
+alias gamm="git add --all && git commit --amend -C HEAD"
+alias gg="git log --grep"
+alias gba="git rebase --abort"
+alias gbc="git add -A && git rebase --continue"
+alias gbm="git fetch origin master && git rebase origin/master"
+
+#
+# allogs ... (all-logs) tail all logs under /var/log
+#
+
+alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f";
+
+#
+# wwwerror ... tail just the httpd error log
+#
+
+[ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log";
+
+#
+# http logs
+#
+
+[ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log";
+
+#
+# hosts ... edit the /etc/hosts file using rcs
+#
+
+alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
+
+#
+# Additional alias customizations/overrides
+#
+
+[ -f ~/.alias_local ] && . ~/.alias_local

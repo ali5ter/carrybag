@@ -1,8 +1,6 @@
-#
 # @file gitignore
-# File exclusion from git commit
+# @brief File exclusion from git commit
 # @author Alister Lewis-Bowen <alister@different.com>
-#
 
 #
 # General

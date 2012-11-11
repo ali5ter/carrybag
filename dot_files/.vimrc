@@ -1,8 +1,6 @@
-"
 " @file vimrc
-" ★ Custom vim settings
+" @brief Custom vim settings
 " @author Alister Lewis-Bowen <alister@different.com>
-"
 
 "
 " General
@@ -74,6 +72,7 @@ if exists('+colorcolumn')
 else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
+let NERDTreeShowHidden=1 "show dot files when using NERDTree
 
 "
 " Map extensions to existing syntax highlighters

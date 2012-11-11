@@ -1,0 +1,53 @@
+#!/bin/bash
+#
+# @file install
+# @brief Install carrybag items into the given directory
+# @author Alister Lewis-Bowen <alister@different.com>
+# @requires color (http://code.google.com/p/ansi-color/)
+
+BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+PWD="$(pwd)"
+OPTN=$1
+cd ${2:-.}
+
+function clean {
+    ls -la | grep "^l" | grep "/carrybag/" | awk '{print $9}' | cut -d'@' -f1 \
+        | xargs rm
+}
+
+function link {
+    for file in $(ls -Ad $BASE/$1); do
+        ln -sf $file >/dev/null
+    done
+}
+
+case "$OPTN" in
+    -c|--clean)
+        clean
+        ;;
+    -d|--dot-files)
+        clean
+        link dot_files/.*
+        ;;
+    -s|--scripts)
+        clean
+        link scripts/*
+        ;;
+    --help|-h|*)
+        echo "
+Install carrybag items at the given location.
+
+Usage:
+$(color bd)install$(color) [ $(color ul)-d$(color)$(color bd) \
+| $(color ul)-s$(color)$(color bd) | $(color ul)-c$(color)$(color bd)] \
+[directory]$(color)
+
+Options:
+$(color ul)-d$(color) install the dot files
+$(color ul)-s$(color) install the script files
+$(color ul)-c$(color) delete any sym'linked carrybag items
+";
+        ;;
+esac
+
+cd $PWD

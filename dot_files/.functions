@@ -1,0 +1,80 @@
+# @file .functions
+# @brief Functions to support my bash configuration
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see .bashrc
+
+#
+# todir string ... mkdir and cd into it
+#
+
+todir () { mkdir -p $1 && cd $1 ; }
+
+#
+# ffile string ... find a file from this directory down
+#
+
+ffile () { find . | grep -i --color=always "$1" 2>/dev/null ;  }
+
+#
+# ftext string ... find text in files from this directory down
+#
+
+ftext () { find . | xargs grep -i -C 2 --color=always "$1" 2>/dev/null; }
+
+#
+# fproc string ... find a process matching the given string
+#
+
+fproc () { ps aux | grep "$1" | grep -v 'grep' ; }
+
+#
+# kproc string ... kill a set of processes matching the given string
+#
+
+kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
+
+#
+# ips [interface] ... list ips available on this machines NICs
+#
+
+ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
+
+#
+# end file ... show the last 100 lines of a given file
+#
+
+end () { tail -n100 $1; }
+
+#
+# rcsedit file ... rcs wrapped edit
+#
+
+rcsedit () {
+    if [ "$(command -v rcs)" == "" ]; then
+        [ ! -e $(dirname $1)/RCS ] && mkdir $(dirname $1)/RCS   # Create RCS dir next to file
+        co -l $1; $EDITOR $1; ci $1; co $1                      # rcs wrapped edit
+    else
+        $EDITOR $1;                                             # Regular edit if rcs not installed
+    fi
+}
+
+#
+# cleanup file ... clean out tabs, trailing spaces, carriage returns, etc.
+#
+
+cleanup () {
+    cp $1 $1.bak
+    local tmp=$(mktemp -t ${RANDOM})
+    cat $1 | \
+        perl -pe 'if (defined $x && /\S/) { print $x; $x = ""; } $x .= "\n" x chomp; s/\s*?$//; if (eof) { print "\n"; $x = ""; }' | \
+        perl -pe 's/\t/    /g' | \
+        perl -pe 's/\r\n$/\n/g' \
+        > $tmp
+    mv $tmp $1
+}
+
+#
+# Additional function customizations/overrides
+#
+
+[ -f ~/.functions_local ] && . ~/.functions_local

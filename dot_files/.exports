@@ -1,0 +1,42 @@
+# @file .exports
+# @brief Exports for my bash configuration
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see .bashrc
+
+#
+# Paths
+#
+
+export PATH=.:$HOME/bin:/usr/local/bin:/usr/local/sbin:/usr/bin:$PATH
+export MANPATH=/usr/local/man:$MANPATH
+
+#
+# Prompt
+#
+
+export PS1="[\u@\h \W] $";
+
+#
+# Colors
+#
+
+[ -e dircolors ] && export `dircolors`;
+export CLICOLOR=1; # OSX only
+
+#
+# Editor
+#
+
+export EDITOR='vi'  # set default to vi
+set -o vi           # set vi history
+
+#if [ "$(command -v mvim)" != "" ]; then
+#    export EDITOR='mvim'    # default to mac vim if installed
+#    alias vi='mvim'
+#fi
+
+#
+# Additional export customizations/overrides
+#
+
+[ -f ~/.exports_local ] && . ~/.exports_local
