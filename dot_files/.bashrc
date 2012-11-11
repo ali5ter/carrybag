@@ -14,7 +14,7 @@ shopt -s dotglob    # Show dot files in path expansion
 # Source specific configurations
 #
 
-for file in ~/.{exports,aliases,functions}; do source "$file"; done
+for file in ~/.{exports,aliases,functions,thirdparty}; do source "$file"; done
 unset file
 
 #
@@ -22,11 +22,11 @@ unset file
 #
 
 case "$(uname)" in
-    Linux)  source .linux;;
-    Darwin) source .osx;;
+    Linux)  source ~/.linux;;
+    Darwin) source ~/.osx;;
 esac
 
 #
 # Additional configurations/overrides
 #
-[ -r .bashrc_local ] && source .bashrc_local
+[ -r ~/.bashrc_local ] && source ~/.bashrc_local

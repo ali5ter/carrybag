@@ -8,7 +8,7 @@
 BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD="$(pwd)"
 OPTN=$1
-cd ${2:-.}
+cd ${2:-~}
 
 function clean {
     ls -la | grep "^l" | grep "/carrybag/" | awk '{print $9}' | cut -d'@' -f1 \
@@ -17,7 +17,7 @@ function clean {
 
 function link {
     for file in $(ls -Ad $BASE/$1); do
-        ln -sf $file >/dev/null
+        ln -sf $file &>/dev/null
     done
 }
 
@@ -28,6 +28,7 @@ case "$OPTN" in
     -d|--dot-files)
         clean
         link dot_files/.*
+        source .bashrc
         ;;
     -s|--scripts)
         clean

@@ -1,0 +1,41 @@
+# @file .thirdparty
+# @brief 3rd party packages for my bash configuration
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see .bashrc
+
+PACKAGE_DIR=~/.thirdpartypackages
+
+function get_package {
+    case "$1" in
+        googlecode)
+            [ ! -d $PACKAGE_DIR/$2 ] &&
+                svn co http://${2}.googlecode.com/svn/trunk/ $PACKAGE_DIR/$2
+            ;;
+        github)
+            local package=$(basename $2)
+            [ ! -d $PACKAGE_DIR/$package ] &&
+                git clone git://github.com/${2}.git $PACKAGE_DIR/$package
+            ;;
+    esac
+}
+
+#
+#   color
+#
+
+get_package googlecode ansi-color
+ln -sf $PACKAGE_DIR/ansi-color/ansi-color/color ~/bin/color
+
+#
+# solarized
+#
+
+get_package github altercation/solarized
+for file in {autoload/togglebg.vim,bitmaps/togglebg.png,colors/solarized.vim,doc/solarized.txt,doc/tags}; do
+    mkdir -p ~/.vim/$(dirname $file)
+    ln -sf $PACKAGE_DIR/solarized/vim-colors-solarized/$file ~/.vim/$file
+done
+
+# TODO: NERDTree and jshint
+
+unset PACKAGE_DIR
