@@ -72,7 +72,14 @@ if exists('+colorcolumn')
 else
     au BufWinEnter * let w:m2=matchadd('ErrorMsg', '\%>80v.\+', -1)
 endif
+
+"
+" NERDTree
+"
+
 let NERDTreeShowHidden=1 "show dot files when using NERDTree
+autocmd vimenter * if !argc() | NERDTree | endif "start when no file to edit
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif "close on exit
 
 "
 " Map extensions to existing syntax highlighters

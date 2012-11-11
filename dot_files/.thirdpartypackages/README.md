@@ -1,4 +1,5 @@
-Dependencies of my bash configuration outside of the bash builtins
+Dependencies needed for this bash configuration outside of the bash builtins
+are downloaded automatically by .thirdparty
 
 These include:
 * color     <http://ansi-color.googlecode.com>
