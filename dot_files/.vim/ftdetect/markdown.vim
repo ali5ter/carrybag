@@ -1,0 +1,1 @@
+/Users/alister/.thirdpartypackages/vim-markdown/ftdetect/markdown.vim

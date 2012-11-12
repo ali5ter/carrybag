@@ -8,7 +8,6 @@
 BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 PWD="$(pwd)"
 OPTN=$1
-cd ${2:-~}
 
 function clean {
     ls -la | grep "^l" | grep "/carrybag/" | awk '{print $9}' | cut -d'@' -f1 \
@@ -22,32 +21,32 @@ function link {
 }
 
 case "$OPTN" in
-    -c|--clean)
-        clean
-        ;;
-    -d|--dot-files)
-        clean
-        link dot_files/.*
-        source .bashrc
-        ;;
-    -s|--scripts)
-        clean
-        link scripts/*
-        ;;
-    --help|-h|*)
+    -h|--help)
         echo "
-Install carrybag items at the given location.
+Bootstrap installer for carrybag dotfiles and scripts.
 
 Usage:
 $(color bd)install$(color) [ $(color ul)-d$(color)$(color bd) \
 | $(color ul)-s$(color)$(color bd) | $(color ul)-c$(color)$(color bd)] \
-[directory]$(color)
+$(color)
 
 Options:
 $(color ul)-d$(color) install the dot files
 $(color ul)-s$(color) install the script files
 $(color ul)-c$(color) delete any sym'linked carrybag items
 ";
+        ;;
+    -c|--clean)
+        cd ~ && clean && cd ~/bin && clean
+        ;;
+    -d|--dot-files)
+        cd ~ && clean && link dot_files/.* && source .bashrc
+        ;;
+    -s|--scripts)
+        cd ~/bin && clean && link scripts/*
+        ;;
+    *)
+        install -d && install -s
         ;;
 esac
 

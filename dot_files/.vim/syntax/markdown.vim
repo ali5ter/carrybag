@@ -1,0 +1,1 @@
+/Users/alister/.thirdpartypackages/vim-markdown/syntax/markdown.vim

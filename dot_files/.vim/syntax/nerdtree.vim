@@ -1,0 +1,1 @@
+/Users/alister/.thirdpartypackages/nerdtree/syntax/nerdtree.vim

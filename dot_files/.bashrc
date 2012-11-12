@@ -29,4 +29,5 @@ esac
 #
 # Additional configurations/overrides
 #
+
 [ -r ~/.bashrc_local ] && source ~/.bashrc_local
