@@ -10,3 +10,6 @@
 [submodule "dot_files/.thirdpartypackages/actionscript.vim"]
 	path = dot_files/.thirdpartypackages/actionscript.vim
 	url = git://github.com/vim-scripts/actionscript.vim.git
+[submodule "dot_files/.thirdpartypackages/nerdtree"]
+	path = dot_files/.thirdpartypackages/nerdtree
+	url = git://github.com/scrooloose/nerdtree.git
