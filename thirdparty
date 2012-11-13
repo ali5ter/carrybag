@@ -1,23 +1,10 @@
-# @file .thirdparty
-# @brief 3rd party packages for my bash configuration
+#!/bin/bash
+# @file thirdparty
+# @brief Configure dependencies on 3rd party packages
 # @author Alister Lewis-Bowen <alister@different.com>
-# @see .bashrc
+# @see .thirdpartypackages
 
 PACKAGE_DIR=~/.thirdpartypackages
-
-function get_package {
-    case "$1" in
-        googlecode)
-            [ ! -d $PACKAGE_DIR/$2 ] &&
-                svn co http://${2}.googlecode.com/svn/trunk/ $PACKAGE_DIR/$2
-            ;;
-        github)
-            local package=$(basename $2)
-            [ ! -d $PACKAGE_DIR/$package ] &&
-                git clone git://github.com/${2}.git $PACKAGE_DIR/$package
-            ;;
-    esac
-}
 
 for file in {autoload,bitmaps,colors,doc,syntax,ftdetect,ftplugin}; do
     [ ! -d ~/.vim/$file ] && mkdir -p ~/.vim/$file
@@ -27,7 +14,6 @@ done
 # bash script color and formating
 #
 
-get_package googlecode ansi-color
 ln -sf $PACKAGE_DIR/ansi-color/ansi-color/color ~/bin/color
 
 #
@@ -43,6 +29,7 @@ ln -sf $PACKAGE_DIR/solarized/xresources-colors-solarized/Xresources ~/.Xresourc
 #
 # NERDTree for vim
 #
+
 for file in {doc/NERD_tree.txt,plugin/NERD_tree.vim,syntax/nerdtree.vim}; do
     ln -sf $PACKAGE_DIR/nerdtree/$file ~/.vim/$file
 done
@@ -71,6 +58,3 @@ done
 for file in {ftdetect/markdown.vim,ftplugin/markdown.vim,syntax/markdown.vim}; do
     ln -sf $PACKAGE_DIR/vim-markdown/$file ~/.vim/$file
 done
-
-unset file
-unset PACKAGE_DIR

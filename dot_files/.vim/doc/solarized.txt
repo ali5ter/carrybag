@@ -1,1 +1,1 @@
-/Users/alister/.thirdpartypackages/solarized/vim-colors-solarized/doc/solarized.txt
+/Users/abowen/.thirdpartypackages/solarized/vim-colors-solarized/doc/solarized.txt

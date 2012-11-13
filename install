@@ -1,12 +1,11 @@
 #!/bin/bash
-#
 # @file install
 # @brief Install carrybag items into the given directory
 # @author Alister Lewis-Bowen <alister@different.com>
 # @requires color (http://code.google.com/p/ansi-color/)
 
-BASE="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-PWD="$(pwd)"
+BASE=$( cd "$( dirname "$0" )" && pwd )
+PWD=$(pwd)
 OPTN=$1
 
 function clean {
@@ -37,16 +36,26 @@ $(color ul)-c$(color) delete any sym'linked carrybag items
 ";
         ;;
     -c|--clean)
-        cd ~ && clean && cd ~/bin && clean
+        cd ~
+        clean
+        cd ~/bin
+        clean
         ;;
     -d|--dot-files)
-        cd ~ && clean && link dot_files/.* && source .bashrc
+        cd ~
+        clean
+        link dot_files/.*
+        $($BASE/thirdparty)
+        source .bashrc
         ;;
     -s|--scripts)
-        cd ~/bin && clean && link scripts/*
+        cd ~/bin
+        clean
+        link scripts/*
         ;;
     *)
-        install -d && install -s
+        install -d
+        install -s
         ;;
 esac
 

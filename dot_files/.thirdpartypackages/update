@@ -1,0 +1,27 @@
+#!/bin/bash -x
+# @file update
+# @brief Fetch 3rd party packages used for this bash configuration
+# @author Alister Lewis-Bowen <alister@different.com>
+
+PACKAGE_DIR=${1:-.}
+
+function get_package {
+    case "$1" in
+        googlecode)
+            [ -d $PACKAGE_DIR/$2 ] && rm -fR $PACKAGE_DIR/$2
+            svn co http://${2}.googlecode.com/svn/trunk/ $PACKAGE_DIR/$2
+            ;;
+        github)
+            local package=$(basename $2)
+            [ -d $PACKAGE_DIR/$package ] && rm -fR $PACKAGE_DIR/$package
+            git clone https://github.com/${2}.git $PACKAGE_DIR/$package
+            ;;
+    esac
+}
+
+get_package googlecode ansi-color
+get_package github altercation/solarized
+get_package github scrooloose/nerdtree
+get_package github vim-scripts/actionscript.vim
+get_package github walm/jshint.vim
+get_package github tpope/vim-markdown
