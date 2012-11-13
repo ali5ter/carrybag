@@ -1,9 +1,6 @@
 [submodule "dot_files/.thirdpartypackages/solarized"]
 	path = dot_files/.thirdpartypackages/solarized
 	url = git://github.com/altercation/solarized.git
-[submodule "dot_files/.thirdpartypackages/nerdtree"]
-	path = dot_files/.thirdpartypackages/nerdtree
-	url = git://github.com/scrooloose/nerdtree.git
 [submodule "dot_files/.thirdpartypackages/jshint.vim"]
 	path = dot_files/.thirdpartypackages/jshint.vim
 	url = git://github.com/walm/jshint.vim.git
