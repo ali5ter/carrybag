@@ -46,18 +46,6 @@ ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
 end () { tail -n100 $1; }
 
 #
-# git_submodule_rm path ... remove a git submodule at the given repo path
-#
-# @see http://stackoverflow.com/questions/1260748/how-do-i-remove-a-git-submodule
-#
-
-git_submodule_rm () {
-    git rm $1
-    git config -f .git/config --remove-section submodule.$1
-    git config -f .gitmodules --remove-section submodule.$1
-}
-
-#
 # rcsedit file ... rcs wrapped edit
 #
 
