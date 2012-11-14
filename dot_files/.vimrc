@@ -1,5 +1,5 @@
 " @file vimrc
-" @brief Custom vim settings
+" ★  Carrybag vim configuration
 " @author Alister Lewis-Bowen <alister@different.com>
 
 "

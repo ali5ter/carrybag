@@ -1,5 +1,5 @@
 " @file gvimrc
-" @brief  Custom gui vim settings
+" ★  Carrybag gui vim configuration
 " @author Alister Lewis-Bowen <alister@different.com>
 
 "

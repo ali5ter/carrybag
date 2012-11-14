@@ -1,5 +1,5 @@
 # @file .aliases
-# @brief Aliases for my bash configuration
+# ★  Carrybag aliases
 # @author Alister Lewis-Bowen <alister@different.com>
 # @see .bashrc
 
@@ -8,7 +8,6 @@ alias ls='ls -F'    # show dirs, exec and sym link files
 alias wget='curl -O'    # when curl is just too much to remember
 alias sourcep="source ~/.bashrc"   # lazy about sourcing the bash config
 alias jump='. ~/bin/jump'   # jump to bookmarked directories
-
 alias gl="git log --stat" # summary of which files changed
 alias gs="git status -s" # short output of modified/staged files
 alias gw="git show" # diff of last commit

@@ -1,5 +1,5 @@
 # @file .bashrc
-# @brief My bash configuration
+# ★  Carrybag bash configuration
 # @author Alister Lewis-Bowen <alister@different.com>
 
 #
