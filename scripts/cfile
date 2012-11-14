@@ -1,0 +1,152 @@
+#!/bin/bash
+#
+# @file cfile
+# ☆  Create a file based on a template
+# @author Alister Lewis-Bowen <alister@different.com>
+# @requires color <http://code.google.com/p/ansi-color/>
+#
+# This software is distributed under the the MIT License.
+#
+# Copyright (c) 2012 Alister Lewis-Bowen
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+#
+# Working directory
+#
+WDIR=~/.touch
+#
+# Template store
+#
+TMPLS=$WDIR/templates
+#
+# Default template
+#
+TMPL=<<EOT
+# @file %FILENAME%
+# @author %AUTHOR%
+# @copyright Copyright (c) 2012 %AUTHOR%. All rights reserved.
+EOT
+#
+# Default metadata
+#
+DATA=<<EOD
+author="$(id -P|cut -d':' -f8)"
+EOD
+
+function _help {
+    local helpText="
+$(color bd)Create a new file using a template$(color)
+
+$(color bd)touch $(color ul)file$(color) will attempt to parse the extension from $(color ul)file($color) to understand which template to use
+
+Usage:
+$(color bd)touch [$(color ul)option$(color)$(color bd) [$(color ul)file$(color bd)]$(color)
+
+Options:
+-e, --ext $(color ul)ext$(color)  create file using the template for $(color ul)ext$(color)
+-i, --init $(color ul)ext$(color) create file using the template for $(color ul)ext$(color)
+-l, --list      list current templates
+"
+    echo "$helpText"
+}
+
+function _init {
+    [ ! -d $WDIR ] && mkdir -p $TMPLS
+    echo $TMPL >> $TMPLS/default
+    echo $DATA >> $WDIR/config
+}
+
+function _readConfig {
+    
+}
+
+[ ! -d $WDIR ] && cfile init
+
+#sed -e "s;%AUTHOR%;$1;" -e "s;%EMAIL%;$2;" -e "s;%DIR%;$3;" template.txt > $FILE
+
+case "$1" in
+    ''|--help|-h)
+        _help
+        ;;
+    #
+    # Add a directory to the bookmarks store
+    #
+    add|--add|-a)
+        if [ ! -z $2 ]; then
+            _exists $2;
+            if [ $? -eq 1 ]; then
+                echo $2'::'$(pwd) >> $STORE
+                echo "$(color green)Bookmark has been added$(color)"
+            else
+                echo "$(color yellow)This bookmark already exists:$(color)"
+                jump list
+            fi
+        else
+            _help
+        fi
+        ;;
+    #
+    # Delete a bookmark
+    #
+    rm|del|--delete|-d)
+        if [ ! -z $2 ]; then
+            _exists $2;
+            if [ $? -eq 0 ]; then
+                sed -i"*.bak" "/^$2::/d" $STORE &&
+                    echo "$(color green)Bookmark has been deleted$(color)"
+            else
+                echo "$(color red)Unable to find a bookmark named, \
+$(color bd)$2:$(color)"
+                jump list
+            fi
+        else
+            _help
+        fi
+        ;;
+    #
+    # List current bookmarked directories
+    #
+    list|--list|-l)
+        current="$(color blue)►$(color)"
+        badDir="$(color red)✖$(color)"
+        while read line; do
+            name=${line%::*}
+            path=${line#*::}
+            state=' '
+            [ "$(pwd)" == "$path" ] && state=$current
+            [ ! -d $path ] && state=$badDir
+            printf "%1s $(color white)%-10s $(color cyan)%-60s$(color)\n" \
+"$state" "$name" "$path"
+        done < $STORE
+        echo
+        ;;
+    #
+    # cd to the bookmarked directory
+    #
+    *)
+        _exists $1;
+        if [ $? -eq 0 ]; then
+            bm=$(grep $1 $STORE)
+            cd ${bm#*::}
+        else
+            echo "$(color red)Unable to find '$1'$(color)"
+        fi
+        ;;
+esac

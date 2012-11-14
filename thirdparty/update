@@ -1,0 +1,62 @@
+#!/bin/bash
+# @file update
+# @brief Update dependencies on third party software
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see .thirdpartypackages
+
+BASE=$( cd "$( dirname "$0" )" && pwd )
+PACKAGE_DIR=$BASE/thirdparty
+
+function setVimDirs {
+    local dirs='autoload bitmaps colors doc syntax ftdetect ftplugin backup'
+    local dir
+    for local dir in $dirs ; do
+        [ ! -d ~/.vim/$dir ] && mkdir -p ~/.vim/$dir
+    done
+}
+
+function _cpFiles {
+    for file in $1; do cp $PACKAGE_DIR/$2/$file $3/$file; done
+}
+
+function setColor {
+    cp $PACKAGE_DIR/ansi-color/ansi-color/color ~/bin/color
+}
+
+function setSolarized {
+    local files='autoload/togglebg.vim bitmaps/togglebg.png colors/solarized.vim doc/solarized.txt doc/tags'
+    _cpFiles $files 'solarized/vim-colors-solarized' '~/.vim'
+    cp $PACKAGE_DIR/solarized/xresources-colors-solarized/Xresources ~/.Xdefaults
+    cp $PACKAGE_DIR/solarized/xresources-colors-solarized/Xresources ~/.Xresources
+}
+
+function setNerdtree {
+    local files='doc/NERD_tree.txt plugin/NERD_tree.vim syntax/nerdtree.vim'
+    local file
+    for file in $files
+        cp $PACKAGE_DIR/nerdtree/$file ~/.vim/$file
+    done
+    cp $PACKAGE_DIR/nerdtree/nerdtree_plugin ~/.vim/nerdtree_plugin
+}
+
+function setActionscript {
+    cp $PACKAGE_DIR/actionscript.vim/syntax/actionscript.vim ~/.vim/syntax/actionscript.vim
+}
+
+#
+# jshint for vim
+#
+# ● Assumes https://github.com/jshint/jshint is installed
+#
+
+for file in {plugin/jshint.vim,doc/jshint.txt}; do
+    ln -sf $PACKAGE_DIR/jshint.vim/$file ~/.vim/$file
+done
+
+#
+# markdown for vim
+#
+
+for file in {ftdetect/markdown.vim,ftplugin/markdown.vim,syntax/markdown.vim}; do
+    ln -sf $PACKAGE_DIR/vim-markdown/$file ~/.vim/$file
+done

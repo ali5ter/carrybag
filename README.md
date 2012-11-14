@@ -1,9 +1,14 @@
-Bag of scripts and configurations that I carry from machine to machine
+Bag of dot_files and scripts
 
 Boot strap
 ----------
 ./install
 
-install -h for more info
-
-<em>Dependencies are provided in .thirdpartypackages</em>
+Dependencies
+------------
+* color             <http://ansi-color.googlecode.com>
+* solarized         <https://github.com/altercation/solarized>
+* NERDTree          <https://github.com/scrooloose/nerdtree>
+* jshint.vim        <https://github.com/walm/jshint.vim>
+* markdown-vim      <https://github.com/tpope/vim-markdown>
+* actionscript-vim  <https://github.com/vim-scripts/actionscript.vim>
