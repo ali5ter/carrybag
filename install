@@ -1,19 +1,21 @@
 #!/bin/bash
+#
 # @file install
-# @brief Install carrybag items into the given directory
+# ★  Unpack the carrybag into the correct places.
+# Note that the items are sym'linked back to the source dir and not copied.
 # @author Alister Lewis-Bowen <alister@different.com>
-# @requires color (http://code.google.com/p/ansi-color/)
+#
 
 BASE=$( cd "$( dirname "$0" )" && pwd )
 PWD=$(pwd)
 OPTN=$1
 
-function clean {
+function _clean {
     ls -la | grep "^l" | grep "/carrybag/" | awk '{print $9}' | cut -d'@' -f1 \
         | xargs rm
 }
 
-function link {
+function _link {
     for file in $(ls -Ad $BASE/$1); do
         ln -sf $file &>/dev/null
     done
@@ -22,36 +24,29 @@ function link {
 case "$OPTN" in
     -h|--help)
         echo "
-Bootstrap installer for carrybag dotfiles and scripts.
+Bootstrap installer for carrybag
 
 Usage:
-$(color bd)install$(color) [ $(color ul)-d$(color)$(color bd) \
-| $(color ul)-s$(color)$(color bd) | $(color ul)-c$(color)$(color bd)] \
-$(color)
+install [ -d | -s | -c ]
 
 Options:
-$(color ul)-d$(color) install the dot files
-$(color ul)-s$(color) install the script files
-$(color ul)-c$(color) delete any sym'linked carrybag items
+-d install the dot files
+-s install the script files
+-c delete any installed carrybag items
 ";
         ;;
     -c|--clean)
-        cd ~
-        clean
-        cd ~/bin
-        clean
+        cd ~ && _clean
+        cd ~/bin && _clean
         ;;
     -d|--dot-files)
-        cd ~
-        clean
-        link dot_files/.*
-        $($BASE/thirdparty)
+        cd ~ && _clean
+        _link dot_files/.*
         source .bashrc
         ;;
     -s|--scripts)
-        cd ~/bin
-        clean
-        link scripts/*
+        cd ~/bin && _clean
+        _link scripts/*
         ;;
     *)
         install -d
