@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/nerdtree/plugin/NERD_tree.vim
+/Users/alister/.thirdpartypackages/nerdtree/plugin/NERD_tree.vim

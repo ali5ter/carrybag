@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/actionscript.vim/syntax/actionscript.vim
+/Users/alister/.thirdpartypackages/actionscript.vim/syntax/actionscript.vim

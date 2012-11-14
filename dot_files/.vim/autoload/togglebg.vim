@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/solarized/vim-colors-solarized/autoload/togglebg.vim
+/Users/alister/.thirdpartypackages/solarized/vim-colors-solarized/autoload/togglebg.vim

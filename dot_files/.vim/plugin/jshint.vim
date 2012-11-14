@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/jshint.vim/plugin/jshint.vim
+/Users/alister/.thirdpartypackages/jshint.vim/plugin/jshint.vim

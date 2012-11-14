@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/vim-markdown/ftdetect/markdown.vim
+/Users/alister/.thirdpartypackages/vim-markdown/ftdetect/markdown.vim

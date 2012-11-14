@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/nerdtree/syntax/nerdtree.vim
+/Users/alister/.thirdpartypackages/nerdtree/syntax/nerdtree.vim

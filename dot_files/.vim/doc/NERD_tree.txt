@@ -1,1 +1,1 @@
-/Users/abowen/.thirdpartypackages/nerdtree/doc/NERD_tree.txt
+/Users/alister/.thirdpartypackages/nerdtree/doc/NERD_tree.txt
