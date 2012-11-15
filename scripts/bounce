@@ -1,0 +1,164 @@
+#!/bin/bash
+#
+# @file bounce
+# ☆  Bouce an ball within a box
+# @author Alister Lewis-Bowen <alister@different.com>
+# @requires color <http://code.google.com/p/ansi-color/>
+#
+# This software is distributed under the the MIT License.
+#
+# Copyright (c) 2012 Alister Lewis-Bowen
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+# Inspiration and references:
+# ● http://www.shellscriptgames.com
+# ● http://ascii-table.com/ansi-escape-sequences-vt-100.php
+# ● http://vt100.net/docs/vt100-ug/chapter3.html
+# ● http://www.ominous-valve.com/ascii.txt
+
+#
+# Store any args passed to this script
+#
+ARGS=$@
+#
+# Store the tty (TeleTYpewriter - terminal) state so we can restore it on exit
+#
+TTYSTATE=$(stty -g)
+#
+# Dimensions of the tty
+#
+ROWS=$(stty size | awk '{print $1}');
+COLS=$(stty size | awk '{print $2}');
+
+#
+# Reset the tty back to normal
+#
+
+_resetScreen () {
+    stty sane           # Turn on interactive mode
+    stty $TTYSTATE      # restore saved tty state
+    echo -e '\033L'     # Erase Display
+}
+
+#
+# Prepare the tty for animation:
+# - Make this script interpret the input character sequence not the tty.
+# - Hide the cursor
+#
+
+_initScreen () {
+    stty raw            # Turn off interactive mode
+    echo -en '\033[c'   # Reset terminal to initial state
+    echo -en '\033[?71' # Wraparound off
+#echo -e '\033L'     # Erase Display
+    _hideCsr
+}
+
+#
+# Unhide cursor
+#
+
+_showCsr () { echo -en '\033[?25h'; }
+
+#
+# Hide cursor
+#
+
+_hideCsr () { echo -en '\033[?25l'; }
+
+#
+# Set the cursor position (CUP -- Cursor Position)
+#
+
+_setCsrPos () { echo -en '\033['$1';'$2'H'; }
+
+#
+# Get the cursor position (CPR -- Cursor Position Report)
+#
+
+_getCsrPos () { echo -en '\033['$1';'$2'R'; }
+
+#
+# Tests
+#
+
+function _testInit {
+    _initScreen
+    echo -n "$(color yellow red) ☞  Test $1 $(color)";
+    echo
+}
+
+function _testConfirm {
+    local msg=${1:-'Next test?'}
+    echo -n "$(color white blue)$msg (Y/N):$(color)";
+    stty sane
+    read answer
+    case "$answer" in
+        y|Y) return 0;;
+        *) exit 1;;
+    esac
+}
+
+function _test_1 {
+    _testInit 'One: Details of the existing TTY'
+    echo
+    echo "$(color bd)TTY dimensions.$(color)"
+    echo "Rows: $ROWS, Columns: $COLS"
+    echo "$(color bd)TTY state.$(color)"
+    echo "$TTYSTATE"
+    echo
+    _testConfirm
+}
+
+function _test_2 {
+    _testInit 'Two: Drawing in raw mode'
+    _initScreen
+    _setCsrPos 10 10
+    echo -n "$(color yellow)┏━━━━━━┓$(color)"
+    _setCsrPos 11 10
+    echo -n "$(color yellow)┃      ┃$(color)"
+    _setCsrPos 12 10
+    echo -n "$(color yellow)┃      ┃$(color)"
+    _setCsrPos 13 10
+    echo -n "$(color yellow)┗━━━━━━┛$(color)"
+    sleep 3
+    _setCsrPos 9 10
+    _testConfirm "Did you see a yellow box here?"
+}
+
+function _test_3 {
+    _testInit 'Three: Animation in raw mode'
+    _testConfirm
+}
+
+function _test_4 {
+    _testInit 'Four: Key entry detection'
+    _testConfirm
+}
+
+function _tests {
+    _test_1
+    _test_2
+    _test_3
+    _test_4
+    _resetScreen
+}
+
+_tests
