@@ -38,7 +38,7 @@
 #
 ARGS=$@
 #
-# Store the tty (TeleTYpewriter - terminal) state so we can restore it on exit
+# Store the tty state
 #
 TTYSTATE=$(stty -g)
 #
@@ -48,13 +48,14 @@ ROWS=$(stty size | awk '{print $1}');
 COLS=$(stty size | awk '{print $2}');
 
 #
-# Reset the tty back to normal
+# Reset the tty to its 'normal' congifuration
 #
 
-_resetScreen () {
-    stty sane           # Turn on interactive mode
+rscreen () {
+    stty sane           # interactive mode on
+    reset &>/dev/null   # initialize the tty
+    clear               # erase any contents and home the cursor
     stty $TTYSTATE      # restore saved tty state
-    echo -e '\033L'     # Erase Display
 }
 
 #
@@ -75,32 +76,33 @@ _initScreen () {
 # Unhide cursor
 #
 
-_showCsr () { echo -en '\033[?25h'; }
+scursor () { echo -en '\033[?25h'; }
 
 #
 # Hide cursor
 #
 
-_hideCsr () { echo -en '\033[?25l'; }
+hcursor () { echo -en '\033[?25l'; }
 
 #
 # Set the cursor position (CUP -- Cursor Position)
 #
 
-_setCsrPos () { echo -en '\033['$1';'$2'H'; }
+setpos () { echo -en '\033['$1';'$2'H'; }
 
 #
 # Get the cursor position (CPR -- Cursor Position Report)
 #
 
-_getCsrPos () { echo -en '\033['$1';'$2'R'; }
+getpos () { echo -en '\033['$1';'$2'R'; }
 
 #
 # Tests
 #
 
 function _testInit {
-    _initScreen
+    clear
+    hcursor
     echo -n "$(color yellow red) ☞  Test $1 $(color)";
     echo
 }
@@ -108,6 +110,7 @@ function _testInit {
 function _testConfirm {
     local msg=${1:-'Next test?'}
     echo -n "$(color white blue)$msg (Y/N):$(color)";
+    scursor
     stty sane
     read answer
     case "$answer" in
@@ -116,49 +119,49 @@ function _testConfirm {
     esac
 }
 
-function _test_1 {
+function test_1 {
     _testInit 'One: Details of the existing TTY'
     echo
     echo "$(color bd)TTY dimensions.$(color)"
-    echo "Rows: $ROWS, Columns: $COLS"
+    echo -e "\tRows: $ROWS, Columns: $COLS"
+    echo
     echo "$(color bd)TTY state.$(color)"
-    echo "$TTYSTATE"
+    echo -e "\t$TTYSTATE"
     echo
     _testConfirm
 }
 
-function _test_2 {
+function test_2 {
     _testInit 'Two: Drawing in raw mode'
-    _initScreen
-    _setCsrPos 10 10
+    setpos 10 10
     echo -n "$(color yellow)┏━━━━━━┓$(color)"
-    _setCsrPos 11 10
+    setpos 11 10
     echo -n "$(color yellow)┃      ┃$(color)"
-    _setCsrPos 12 10
+    setpos 12 10
     echo -n "$(color yellow)┃      ┃$(color)"
-    _setCsrPos 13 10
+    setpos 13 10
     echo -n "$(color yellow)┗━━━━━━┛$(color)"
-    sleep 3
-    _setCsrPos 9 10
-    _testConfirm "Did you see a yellow box here?"
+    sleep 2
+    setpos 9 10
+    _testConfirm "Do you see a yellow box below?"
 }
 
-function _test_3 {
+function test_3 {
     _testInit 'Three: Animation in raw mode'
     _testConfirm
 }
 
-function _test_4 {
+function test_4 {
     _testInit 'Four: Key entry detection'
     _testConfirm
 }
 
-function _tests {
-    _test_1
-    _test_2
-    _test_3
-    _test_4
-    _resetScreen
+function runTests {
+    test_1
+    test_2
+    test_3
+    test_4
+    rscreen
 }
 
-_tests
+runTests    # check library subroutines
