@@ -49,8 +49,8 @@ Options:
         _link scripts/*
         ;;
     *)
-        install -d
-        install -s
+        $BASE/install -d
+        $BASE/install -s
         ;;
 esac
 
