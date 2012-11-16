@@ -59,20 +59,6 @@ rscreen () {
 }
 
 #
-# Prepare the tty for animation:
-# - Make this script interpret the input character sequence not the tty.
-# - Hide the cursor
-#
-
-_initScreen () {
-    stty raw            # Turn off interactive mode
-    echo -en '\033[c'   # Reset terminal to initial state
-    echo -en '\033[?71' # Wraparound off
-#echo -e '\033L'     # Erase Display
-    _hideCsr
-}
-
-#
 # Unhide cursor
 #
 
@@ -115,7 +101,7 @@ function _testConfirm {
     read answer
     case "$answer" in
         y|Y) return 0;;
-        *) exit 1;;
+        *) rscreen; exit 1;;
     esac
 }
 
