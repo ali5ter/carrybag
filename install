@@ -45,6 +45,7 @@ Options:
         source .bashrc
         ;;
     -s|--scripts)
+        [ ! -d ~/bin ] && mkdir ~/bin
         cd ~/bin && _clean
         _link scripts/*
         ;;
