@@ -63,4 +63,4 @@ alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sud
 # Additional alias customizations/overrides
 #
 
-[ -f ~/.alias_local ] && . ~/.alias_local
+[ -f ~/.aliases_local ] && . ~/.aliases_local

@@ -4,7 +4,6 @@
 # ★  Unpack the carrybag into the correct places.
 # Note that the items are sym'linked back to the source dir and not copied.
 # @author Alister Lewis-Bowen <alister@different.com>
-#
 
 BASE=$( cd "$( dirname "$0" )" && pwd )
 PWD=$(pwd)

@@ -1,5 +1,5 @@
 # @file .osx
-# ★  Carrybag osx specific tweeks
+# ★  Carrybag osx tweeks
 # @author Alister Lewis-Bowen <alister@different.com>
 # @see https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # @see .bashrc
@@ -18,9 +18,58 @@ export CLICOLOR=1
 
 [ -d /Developer ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
 [ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH;
-
-#
-# java 7
-#
-
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+
+#
+# OSX list file colors
+#
+
+[ `uname` != 'Darwin' ] && alias ls='ls -FG --color=auto';
+
+#
+# Drush for manipulating Drupal installations
+#
+
+[ -e ~/bin/drush ] && alias drush='php ~/bin/drush/drush.php';
+
+#
+# iCall access from the command line
+# meetings ... show all todays iCall events
+# @see http://hasseg.org/icalBuddy/
+#
+
+[ -e /usr/local/bin/icalBuddy ] && alias meetings="icalBuddy -sc -n -f -eep notes eventsToday";
+
+#
+# KBM control
+# synergys 'server hostname' ..................... start synergy server
+# synergyc 'client hostname' 'server hostname' ... start synergy client
+# @see http://synergy-foss.org/
+#
+
+if [ -e ~/Applications/synergy ]; then
+    alias synergys="killit synergys; ~/Applications/synergy/synergys -c ~/.synergy.conf -n $1 -f";
+    alias synergyc="killit synergyc; ~/Applications/synergy/synergyc --name $1 -f $2";
+fi
+
+#
+# MAMP utils
+# phplog ...... tail the PHP error log
+# cleanmamp ... delete the pid files for apache and mysql
+# @see http://www.mamp.info/en/
+#
+
+if [ -e /Applications/MAMP ]; then
+    alias phplog="tail -f /Applications/MAMP/logs/php_error.log";                   # Tail the php error log
+    alias clean_mamp="cd /Applications/MAMP; find . -name "*.pid" | xargs rm -f";   # Clean MAMP pid files
+fi
+
+#
+# rmDS_Store ... delete DS_Store files from the current directory
+#
+alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
+
+#
+# fword word ... find a word in the OSX dictionary
+#
+[ -e /Applications/Dictionary.app ] && fword () { open dict:///"$@" ; }
