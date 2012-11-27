@@ -1,4 +1,6 @@
-Bag of dot_files and scripts
+Bag of dot_files and scripts.
+
+Tested on OSX Mountian Lion and Ubuntu 12.
 
 Boot strap
 ----------
