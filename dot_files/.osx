@@ -10,27 +10,31 @@
 
 export CLICOLOR=1
 
-# TODO: solarized
-
 #
 # Path exports
 #
 
 [ -d /Developer ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
-[ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH;
+[ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 
 #
 # OSX list file colors
 #
 
-[ `uname` != 'Darwin' ] && alias ls='ls -FG --color=auto';
+alias ls='ls -FG --color=auto'
+
+#
+# Curl is naive to OSX
+#
+
+alias wget='curl -O'
 
 #
 # Drush for manipulating Drupal installations
 #
 
-[ -e ~/bin/drush ] && alias drush='php ~/bin/drush/drush.php';
+[ -e ~/bin/drush ] && alias drush='php ~/bin/drush/drush.php'
 
 #
 # iCall access from the command line
@@ -38,7 +42,7 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 # @see http://hasseg.org/icalBuddy/
 #
 
-[ -e /usr/local/bin/icalBuddy ] && alias meetings="icalBuddy -sc -n -f -eep notes eventsToday";
+[ -e /usr/local/bin/icalBuddy ] && alias meetings="icalBuddy -sc -n -f -eep notes eventsToday"
 
 #
 # KBM control
@@ -48,8 +52,8 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 #
 
 if [ -e ~/Applications/synergy ]; then
-    alias synergys="killit synergys; ~/Applications/synergy/synergys -c ~/.synergy.conf -n $1 -f";
-    alias synergyc="killit synergyc; ~/Applications/synergy/synergyc --name $1 -f $2";
+    alias synergys="killit synergys; ~/Applications/synergy/synergys -c ~/.synergy.conf -n $1 -f"
+    alias synergyc="killit synergyc; ~/Applications/synergy/synergyc --name $1 -f $2"
 fi
 
 #
@@ -60,8 +64,8 @@ fi
 #
 
 if [ -e /Applications/MAMP ]; then
-    alias phplog="tail -f /Applications/MAMP/logs/php_error.log";                   # Tail the php error log
-    alias clean_mamp="cd /Applications/MAMP; find . -name "*.pid" | xargs rm -f";   # Clean MAMP pid files
+    alias phplog="tail -f /Applications/MAMP/logs/php_error.log"                   # Tail the php error log
+    alias clean_mamp="cd /Applications/MAMP; find . -name "*.pid" | xargs rm -f"   # Clean MAMP pid files
 fi
 
 #
