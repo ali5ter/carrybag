@@ -4,6 +4,10 @@ Boot strap
 ----------
 ./install
 
+Preferences
+-----------
+Additional preferences for OSX and gnome terminal colors are found under the 'preferences' dir
+
 Dependencies
 ------------
 * color             <http://ansi-color.googlecode.com>
