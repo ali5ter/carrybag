@@ -20,7 +20,7 @@ set nostartofline " try to stay in same column when scrolling
 
 syntax on " turn on syntax coloring
 set background=dark " use dark background terminal
-"set t_Co=16 " as recommended by solarized doc
+set t_Co=16 " as recommended by solarized doc
 " let g:solarized_termcolors=16 | 256
 " let g:solarized_termtrans=0 | 1
 " let g:solarized_degrade=0 | 1

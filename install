@@ -11,7 +11,7 @@ OPTN=$1
 
 function _clean {
     ls -la | grep "^l" | grep "/carrybag/" | awk '{print $9}' | cut -d'@' -f1 \
-        | xargs rm
+        | xargs rm 2>/dev/null
 }
 
 function _link {
