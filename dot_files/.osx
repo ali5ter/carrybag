@@ -23,7 +23,7 @@ export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 # OSX list file colors
 #
 
-alias ls='ls -FG --color=auto'
+alias ls='ls -FG $*'
 
 #
 # Curl is naive to OSX
