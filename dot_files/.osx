@@ -17,6 +17,7 @@ export CLICOLOR=1
 [ -d /Developer ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
 [ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 
 #
 # OSX list file colors
