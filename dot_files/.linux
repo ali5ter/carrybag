@@ -15,3 +15,13 @@ alias ls="ls --color=always $*"
 #
 
 git config --global credential.helper 'cache --timeout=3600'
+
+#
+# gcs ... Start the Universal G-Code Sender
+#
+
+gcs () {
+    [ -e ~/bin/UniversalGcodeSender.jar ] && {
+        java -jar -Xmx256m ~/bin/UniversalGcodeSender.jar &
+    }
+}
