@@ -9,3 +9,9 @@
 
 [ -r ~/.dircolors ] && eval $(dircolors ~/.dircolors)
 alias ls="ls --color=always $*"
+
+#
+# git credential helper
+#
+
+git config --global credential.helper 'cache --timeout=3600'
