@@ -7,3 +7,7 @@ Install using the following commands:
     eval `dircolors ~/.dircolors`
     cd gnome-terminal-colors-solarized
     ./install
+
+Dependencies
+------------
+* gnome-terminal-colors-solarized <https://github.com/sigurdga/gnome-terminal-colors-solarized.git>
