@@ -11,17 +11,17 @@
 alias ls="ls --color=always $*"
 
 #
+# CNC workflow config
+#
+
+alias ink="inkscape &"
+alias pycam="python ~/bin/pycam &"
+alias cambam="mono ~/bin/CamBam0.9.8/CamBam.exe &"
+alias ard="~/bin/arduino &"
+alias gcs="java -jar -Xmx256m ~/bin/UniversalGcodeSender.jar &"
+
+#
 # git credential helper
 #
 
 git config --global credential.helper 'cache --timeout=3600'
-
-#
-# gcs ... Start the Universal G-Code Sender
-#
-
-gcs () {
-    [ -e ~/bin/UniversalGcodeSender.jar ] && {
-        java -jar -Xmx256m ~/bin/UniversalGcodeSender.jar &
-    }
-}
