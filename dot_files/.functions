@@ -46,6 +46,12 @@ ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
 end () { tail -n100 $1; }
 
 #
+# bman command ... show bash help or a built-in command
+#
+
+bman () { man bash | less -p "^       $1 "; }
+
+#
 # rcsedit file ... rcs wrapped edit
 #
 
