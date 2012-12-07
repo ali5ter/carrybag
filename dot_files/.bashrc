@@ -14,7 +14,7 @@ shopt -s dotglob    # Show dot files in path expansion
 # Source specific configurations
 #
 
-for file in ~/.{exports,aliases,functions}; do source "$file"; done
+for file in ~/.{exports,aliases,functions,completion}; do source "$file"; done
 unset file
 
 #

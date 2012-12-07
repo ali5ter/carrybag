@@ -1,0 +1,17 @@
+# @file .completion
+# ★  Carrybag bash completions
+# @author Alister Lewis-Bowen <alister@different.com>
+# @see .bashrc
+
+#
+# jump ... tab completion of jump bookmarks
+#
+
+function _jump_complete {
+    local cur="${COMP_WORDS[COMP_CWORD]}"
+    local bookmarks=$(cat $HOME/.jump/bookmarks | awk -F'::' '{print $1}')
+    COMPREPLY=( $(compgen -W "${bookmarks}" -- ${cur}) )
+    return 0
+}
+
+complete -o default -o nospace -F _jump_complete jump

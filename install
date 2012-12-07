@@ -26,12 +26,11 @@ case "$OPTN" in
 Bootstrap installer for carrybag
 
 Usage:
-install [ -d | -s | -e | -c ]
+install [ -d | -s | -c ]
 
 Options:
 -d install the dot files
 -s install the script files
--e install the etc files
 -c delete any installed carrybag items
 ";
         ;;
@@ -49,15 +48,9 @@ Options:
         cd ~/bin && _clean
         _link scripts/*
         ;;
-    -e|--etc)
-        [ ! -d ~/etc ] && mkdir ~/etc
-        cd ~/etc && _clean
-        _link etc/*
-        ;;
     *)
         $BASE/install -d
         $BASE/install -s
-        $BASE/install -e
         ;;
 esac
 
