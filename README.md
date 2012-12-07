@@ -13,6 +13,7 @@ Additional preferences for OSX and gnome terminal colors are found under the 'pr
 Dependencies
 ------------
 * node              <http://nodejs.org>
+* Homebrew          <http://mxcl.github.com/homebrew/>
 * jshint            <https://npmjs.org/package/jshint>
 * color             <http://ansi-color.googlecode.com>
 * solarized         <https://github.com/altercation/solarized>

@@ -32,6 +32,20 @@ alias ls='ls -FG $*'
 alias wget='curl -O'
 
 #
+# HomeBrew installation
+# Installation: ruby -e "$(curl -fsSkL raw.github.com/mxcl/homebrew/go)"
+#
+
+#
+# bash completion installed using Homebrew
+# Installation: brew install bash-completion
+#
+
+if [ -f $(brew --prefix)/etc/bash_completion ]; then
+    . $(brew --prefix)/etc/bash_completion
+fi
+
+#
 # Drush for manipulating Drupal installations
 #
 

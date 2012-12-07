@@ -1,0 +1,13 @@
+_jump()
+{
+    local cur prev
+
+    COMPREPLY=()
+    cur="${COMP_WORDS[COMP_CWORD]}"
+    prev="${COMP_WORDS[COMP_CWORD-1]}"
+
+    local bookmarks=$(cat ~/.jump/bookmarks | awk -F'::' '{print $1}')
+    COMPREPLY=( $(compgen -W "${bookmarks}" -- ${cur}) )
+    return 0
+}
+complete -F _jump jump
