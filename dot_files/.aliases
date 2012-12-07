@@ -7,6 +7,9 @@ alias rm='rm -i'                    # confirm any delete
 alias ls='ls -F'                    # show dirs, exec and sym link files
 alias sourcep="source ~/.bashrc"    # lazy about sourcing the bash config
 alias jump='. ~/bin/jump'           # jump to bookmarked directories
+alias gs='git status -s'            # lazy git status summary
+alias ga="git add $*"               # lazy git add
+alias gc="git commit $*"            # lazy git commit
 
 #
 # allogs ... (all-logs) tail all logs under /var/log
