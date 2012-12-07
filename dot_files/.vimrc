@@ -97,9 +97,10 @@ endif
 " NERDTree
 "
 
-let NERDTreeShowHidden=1 "show dot files when using NERDTree
-autocmd vimenter * if !argc() | NERDTree | endif "start when no file to edit
-autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif "close on exit
+let NERDTreeShowHidden=1 " show dot files when using NERDTree
+let NERDTreeShowBookmarks=1 " show bookmarks when NERDTree starts
+autocmd vimenter * if !argc() | NERDTree | endif " start when no file to edit
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " close on exit
 
 "
 " Map extensions to existing syntax highlighters
