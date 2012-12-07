@@ -32,7 +32,7 @@ alias ls='ls -FG $*'
 alias wget='curl -O'
 
 #
-# Carry assumes bash completion is installed using Homebrew
+# Carrybag assumes bash completion is installed using Homebrew
 # @see http://mxcl.github.com/homebrew/
 # @see https://github.com/bobthecow/git-flow-completion/wiki/Install-Bash-git-completion
 #
