@@ -106,10 +106,12 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 " Map extensions to existing syntax highlighters
 "
 
-autocmd BufNewFile,BufRead *.module set ft=php
-autocmd BufNewFile,BufRead *.mxml set ft=xml
-autocmd BufNewFile,BufRead *.as set ft=javascript
-autocmd BufNewFile,BufRead *.json set ft=javascript
+autocmd BufNewFile,BufRead *.module set filetype=php
+autocmd BufNewFile,BufRead *.mxml set filetype=xml
+autocmd BufNewFile,BufRead *.as set filetype=javascript
+autocmd BufNewFile,BufRead *.json set filetype=javascript
+autocmd BufNewFile,BufRead *.pde set filetype=arduino
+autocmd BufNewFile,BufRead *.ino set filetype=arduino
 
 "
 " Text expansions
