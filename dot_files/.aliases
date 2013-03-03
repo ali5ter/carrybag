@@ -15,25 +15,25 @@ alias gc="git commit $*"            # lazy git commit
 # allogs ... (all-logs) tail all logs under /var/log
 #
 
-alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f";
+alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d' ' -f1 | sed -e's/:$//g' | grep -v '[0-9]$' | xargs tail -f"
 
 #
 # wwwerror ... tail just the httpd error log
 #
 
-[ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log";
+[ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log"
 
 #
 # http logs
 #
 
-[ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log";
+[ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log"
 
 #
 # hosts ... edit the /etc/hosts file using rcs
 #
 
-alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts";
+alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts"
 
 #
 # Additional alias customizations/overrides

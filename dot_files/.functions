@@ -34,6 +34,27 @@ fproc () { ps aux | grep "$1" | grep -v 'grep' ; }
 kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
 
 #
+# sshkey ... display public rsa key or create ssh keys if none found
+#
+
+sshkey() {
+    if [ -e ~/.ssh/id_rsa.pub ]; then
+        cat ~/.ssh/id_rsa.pub
+    else
+        local answer
+        echo -n "You don't have a public key. Want to create one? (Y/N): ";
+        read answer
+        case "$answer" in
+            y|Y)
+                type ssh-keygen >/dev/null 2>&1 ||
+                    { echo >&2 "ssh-keygen is not installed."; exit 1; }
+                ssh-keygen -t rsa -C "${USER}@${HOSTNAME}"
+                ;;
+        esac
+    fi
+}
+
+#
 # ips [interface] ... list ips available on this machines NICs
 #
 
