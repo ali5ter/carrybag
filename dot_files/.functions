@@ -4,6 +4,40 @@
 # @see .bashrc
 
 #
+# compress file/directory ... tar-gzip a file or directory
+#
+
+compress () {
+    local source="$1"
+    local file files archive
+
+    if [ -s "$source" ]; then
+        archive=$(basename "$source")
+        files="$source"
+
+        # for multiple files...
+        if [ ! -d "$source" ]; then
+            if [ $(ls "$source"|wc -l) -gt '2' ]; then
+                archive=$(basename $(dirname "$source"))
+                files=''
+                for file in $(ls "$source"); do
+                    files=$files' '$file
+                done
+                source=$files
+            fi
+        fi
+
+        tar -czvf ${archive}.tar.gz $files
+    fi
+}
+
+#
+# uncompress file/directory ... un-archive a tar.gz file
+#
+
+uncompress () { [ -s "$1" ] && tar -xzvf "$1" ; }
+
+#
 # todir string ... mkdir and cd into it
 #
 
@@ -37,7 +71,7 @@ kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
 # sshkey ... display public rsa key or create ssh keys if none found
 #
 
-sshkey() {
+sshkey () {
     if [ -e ~/.ssh/id_rsa.pub ]; then
         cat ~/.ssh/id_rsa.pub
     else
