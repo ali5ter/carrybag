@@ -92,9 +92,19 @@ fi
 #
 # rmDS_Store ... delete DS_Store files from the current directory
 #
+
 alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 
 #
 # fword word ... find a word in the OSX dictionary
 #
+
 [ -e /Applications/Dictionary.app ] && fword () { open dict:///"$@" ; }
+
+#
+# subl ... crank up sublime. Open directory if no args
+#
+
+[ -e '/Applications/Sublime Text 2.app' ] && subl () {
+	'/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl' ${1:-'.'}
+}
