@@ -10,6 +10,7 @@ alias jump='. ~/bin/jump'           # jump to bookmarked directories
 alias gs='git status -s'            # lazy git status summary
 alias ga="git add $*"               # lazy git add
 alias gc="git commit $*"            # lazy git commit
+alias webstart="python -m SimpleHTTPServer $*"  # instant httpd from current dir
 
 #
 # allogs ... (all-logs) tail all logs under /var/log

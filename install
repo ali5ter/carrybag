@@ -8,6 +8,8 @@
 BASE=$( cd "$( dirname "$0" )" && pwd )
 PWD=$(pwd)
 OPTN=$1
+unset helpCommand
+unset helpSummary
 
 function _clean {
     ls -la | grep "^l" | grep "/carrybag/" | awk '{print $9}' | cut -d'@' -f1 \
