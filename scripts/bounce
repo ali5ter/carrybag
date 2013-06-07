@@ -1,153 +1,109 @@
 #!/bin/bash
-#
-# @file bounce
-# ☆  Bouce an ball within a box
-# @author Alister Lewis-Bowen <alister@different.com>
-# @requires color <http://code.google.com/p/ansi-color/>
-#
-# This software is distributed under the the MIT License.
-#
-# Copyright (c) 2012 Alister Lewis-Bowen
-#
-# Permission is hereby granted, free of charge, to any person obtaining a copy
-# of this software and associated documentation files (the "Software"), to deal
-# in the Software without restriction, including without limitation the rights
-# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-# copies of the Software, and to permit persons to whom the Software is
-# furnished to do so, subject to the following conditions:
-#
-# The above copyright notice and this permission notice shall be included in
-# all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-# SOFTWARE.
+# Bouncing ball animation
+# Code to help me remember tput commands and use of signals to run async
+# functions such as the interaction and animations loops here
+# Inspired by http://bruxy.regnet.cz/web/linux/EN/housenka-bash-game/
 
-# Inspiration and references:
-# ● http://www.shellscriptgames.com
-# ● http://ascii-table.com/ansi-escape-sequences-vt-100.php
-# ● http://vt100.net/docs/vt100-ug/chapter3.html
-# ● http://www.ominous-valve.com/ascii.txt
+WIDTH=`tput cols`       # screen width
+HEIGHT=`tput lines`     # screen height
+XOFFSET=0               # viewport x offset
+((XWIDTH=WIDTH-2))      # viewport width
+YOFFSET=0               # viewport y offset
+((YHEIGHT=HEIGHT-3))    # viewport height
+XMIN=$XOFFSET           # viewport left
+((XMAX=XOFFSET+XWIDTH)) # viewport right
+YMIN=$YOFFSET           # viewport top
+((YMAX=YOFFSET+YHEIGHT))# viewport bottom
+DELAY=0.09              # delay to allow timing got animation loop
+XDIR=-1                 # x direction
+YDIR=-1                 # y direction
+((X=(XWIDTH/2)+XOFFSET))    # initial x pos
+((Y=(YHEIGHT/2)+YOFFSET))   # initial y pos
 
-#
-# Store any args passed to this script
-#
-ARGS=$@
-#
-# Store the tty state
-#
-TTYSTATE=$(stty -g)
-#
-# Dimensions of the tty
-#
-ROWS=$(stty size | awk '{print $1}');
-COLS=$(stty size | awk '{print $2}');
-
-#
-# Reset the tty to its 'normal' congifuration
-#
-
-rscreen () {
-    stty sane           # interactive mode on
-    reset &>/dev/null   # initialize the tty
-    clear               # erase any contents and home the cursor
-    stty $TTYSTATE      # restore saved tty state
+function drawFrame {
+    for row in `seq 0 $HEIGHT`; do
+        tput cup $row 0
+        printf "$(color white)%${WIDTH}s$(color)" " "
+    done
+    for row in `seq $YOFFSET $YHEIGHT`; do
+        tput cup $row $XOFFSET
+        printf "%${XWIDTH}s" " "
+    done
 }
 
-#
-# Unhide cursor
-#
+function clearBall {
+    tput cup $Y $X
+    echo -n " "
+}
 
-scursor () { echo -en '\033[?25h'; }
+function drawBall {
+    tput cup $Y $X
+    echo -n "$(color red)•$(color)"
+}
 
-#
-# Hide cursor
-#
+function drawStatus {
+    tput cup $HEIGHT 0
+    printf "$(color yellow blue)X:%3s Y:%3s$(tput el)$(color)" $X $Y
+}
 
-hcursor () { echo -en '\033[?25l'; }
+function move {
+    # set up animation loop
+    (sleep $DELAY && kill -ALRM $$) &
+    # check collision
+    if [ $X -gt $XMAX ] && [ $XDIR -eq 1 ]; then
+        XDIR=-1
+    elif [ $X -eq $XMIN ] && [ $XDIR -eq -1 ]; then
+        XDIR=1
+    fi
+    if [ $Y -gt $YMAX ] && [ $YDIR -eq 1 ]; then
+        YDIR=-1
+    elif [ $Y -eq $YMIN ] && [ $YDIR -eq -1 ]; then
+        YDIR=1
+    fi
+    # draw ball
+    clearBall
+    ((X=X+XDIR))
+    ((Y=Y+YDIR))
+    drawBall
+    # draw status line
+    drawStatus
+}
 
-#
-# Set the cursor position (CUP -- Cursor Position)
-#
-
-setpos () { echo -en '\033['$1';'$2'H'; }
-
-#
-# Get the cursor position (CPR -- Cursor Position Report)
-#
-
-getpos () { echo -en '\033['$1';'$2'R'; }
-
-#
-# Tests
-#
-
-function _testInit {
+function initScreen {
+    stty -echo  # turn off terminal echo
+    tput civis  # make cursor invisible
     clear
-    hcursor
-    echo -n "$(color yellow red) ☞  Test $1 $(color)";
-    echo
+    drawFrame
 }
 
-function _testConfirm {
-    local msg=${1:-'Next test?'}
-    echo -n "$(color white blue)$msg (Y/N):$(color)";
-    scursor
-    stty sane
-    read answer
-    case "$answer" in
-        y|Y) return 0;;
-        *) rscreen; exit 1;;
+function restoreScreen {
+    tput cvvis  # make cursor visible
+    stty echo   # turn on terminal echo
+    clear
+}
+
+initScreen
+
+trap move ALRM  # animation loop on signal
+move            # start animation loop
+
+# interation loop
+while true; do
+    read -s -n 1 key
+    case "$key" in
+        p)  # pause animation loop
+            trap '' ALRM
+            sleep $DELAY
+            ;;
+        r)  # resume animation loop
+            trap move ALRM
+            move
+            ;;
+        x)  # exit
+            restoreScreen
+            trap exit ALRM  # end animation loop
+            sleep $DELAY    # give animation loop time to end
+            exit 0          # then exit
+            ;;
     esac
-}
-
-function test_1 {
-    _testInit 'One: Details of the existing TTY'
-    echo
-    echo "$(color bd)TTY dimensions.$(color)"
-    echo -e "\tRows: $ROWS, Columns: $COLS"
-    echo
-    echo "$(color bd)TTY state.$(color)"
-    echo -e "\t$TTYSTATE"
-    echo
-    _testConfirm
-}
-
-function test_2 {
-    _testInit 'Two: Drawing in raw mode'
-    setpos 10 10
-    echo -n "$(color yellow)┏━━━━━━┓$(color)"
-    setpos 11 10
-    echo -n "$(color yellow)┃      ┃$(color)"
-    setpos 12 10
-    echo -n "$(color yellow)┃      ┃$(color)"
-    setpos 13 10
-    echo -n "$(color yellow)┗━━━━━━┛$(color)"
-    sleep 2
-    setpos 9 10
-    _testConfirm "Do you see a yellow box below?"
-}
-
-function test_3 {
-    _testInit 'Three: Animation in raw mode'
-    _testConfirm
-}
-
-function test_4 {
-    _testInit 'Four: Key entry detection'
-    _testConfirm
-}
-
-function runTests {
-    test_1
-    test_2
-    test_3
-    test_4
-    rscreen
-}
-
-runTests    # check library subroutines
+done
