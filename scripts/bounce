@@ -21,8 +21,16 @@ YDIR=-1                 # y direction
 ((Y=(YHEIGHT/2)+YOFFSET))   # initial y pos
 OX=0                    # obstical x pos
 OY=0                    # obstical y pos
-ODELAY=25               # obstical render delay
+ODELAY=10               # obstical render delay
 OCOORDS=''              # obstical co-ords
+ONUM=0                  # obstical total
+HITS=0                  # obsticals hit
+WX=0                    # wormhole x pos
+WY=0                    # wormhole y pos
+WDELAY=50               # wormhole render delay
+WCOORDS=''              # wormhole co-ords
+WNUM=0                  # wormhole total
+PORTS=0                 # wormhole ports
 
 function drawFrame {
     for (( row=0; row<$HEIGHT; row++ )); do
@@ -48,7 +56,7 @@ function drawBall {
 
 function drawStatus {
     tput cup $HEIGHT 0
-    printf "$(color yellow blue)X:%3s Y:%3s$(tput el)$(color)" $X $Y
+    printf "$(color yellow blue)X:%3s Y:%3s Rocks:%3s Hits:%3s Portals:%3s Ports:%3s$(tput el)$(color)" $X $Y $ONUM $HITS $WNUM $PORTS
 }
 
 function borderCollision {
@@ -67,16 +75,43 @@ function drawObstical {
     tput cup $OY $OX
     echo -n "$(color red)✦$(color)"
     OCOORDS=$OCOORDS"::$OX::$OY::"
+    ((ONUM += 1))
 }
 
 function obsticalCollision {
     local _xy="::${X}::${Y}::";
     if [[ "$OCOORDS" =~ "$_xy" ]]; then
         if [ $XDIR -eq 1 ]; then XDIR=-1; else XDIR=1; fi
-        if [ $YDIR -eq 1 ]; then YDIR=-1; else YDIR=1; fi
-        OCOORDS=$(echo $OCOORDS | sed -e "s/$_xy//")
+        #if [ $YDIR -eq 1 ]; then YDIR=-1; else YDIR=1; fi
+        OCOORDS=$(echo $OCOORDS | sed -e "s/${_xy}//")
         tput cup $OY $OX
         echo -n ' '
+        ((HITS += 1))
+        ((ONUM -= 1))
+    fi
+}
+
+function drawWormhole {
+    [[ $((($RANDOM % $WDELAY) + 1)) -ne 1 ]] && return
+    ((WX=(RANDOM % XWIDTH) + XOFFSET))
+    ((WY=(RANDOM % $YHEIGHT) + YOFFSET))
+    tput cup $WY $WX
+    echo -n "$(color white)☼$(color)"
+    WCOORDS=$WCOORDS"::$WX::$WY::"
+    ((WNUM += 1))
+}
+
+function wormholeCollision {
+    local _xy="::${X}::${Y}::";
+    if [[ "$WCOORDS" =~ "$_xy" ]]; then
+        clearBall
+        ((X=(RANDOM % XWIDTH) + XOFFSET))
+        ((Y=(RANDOM % $YHEIGHT) + YOFFSET))
+        WCOORDS=$(echo $WCOORDS | sed -e "s/${_xy}//")
+        tput cup $WY $WX
+        echo -n ' '
+        ((PORTS += 1))
+        ((WNUM -= 1))
     fi
 }
 
@@ -86,13 +121,15 @@ function move {
     # collision detection
     borderCollision
     obsticalCollision
+    wormholeCollision
     # draw ball
     clearBall
     ((X=X+XDIR))
     ((Y=Y+YDIR))
     drawBall
-    # add obstical
+    # add obsticals
     drawObstical
+    drawWormhole
     # draw status line
     drawStatus
 }
