@@ -122,6 +122,10 @@ rcsedit () {
 #
 # cleanup file ... clean out tabs, trailing spaces, carriage returns, etc.
 #
+# DOS, Windows   0D 0A   (\r\n)
+# UNIX           0A      (\n)
+# Machintosh     0D      (\r)
+#
 
 cleanup () {
     cp $1 $1.bak
@@ -129,7 +133,8 @@ cleanup () {
     cat $1 | \
         perl -pe 'if (defined $x && /\S/) { print $x; $x = ""; } $x .= "\n" x chomp; s/\s*?$//; if (eof) { print "\n"; $x = ""; }' | \
         perl -pe 's/\t/    /g' | \
-        perl -pe 's/\r\n$/\n/g' \
+        perl -pe 's/\r\n$/\n/g' | \
+        perl -pe 's/\r$/\n/g' \
         > $tmp
     mv $tmp $1
 }
