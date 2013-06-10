@@ -6,10 +6,10 @@
 
 WIDTH=`tput cols`       # screen width
 HEIGHT=`tput lines`     # screen height
-XOFFSET=0               # viewport x offset
-((XWIDTH=WIDTH-2))      # viewport width
-YOFFSET=0               # viewport y offset
-((YHEIGHT=HEIGHT-3))    # viewport height
+XOFFSET=5               # viewport x offset
+((XWIDTH=WIDTH-10-2))   # viewport width
+YOFFSET=2               # viewport y offset
+((YHEIGHT=HEIGHT-4-3)) # viewport height
 XMIN=$XOFFSET           # viewport left
 ((XMAX=XOFFSET+XWIDTH)) # viewport right
 YMIN=$YOFFSET           # viewport top
@@ -19,15 +19,20 @@ XDIR=-1                 # x direction
 YDIR=-1                 # y direction
 ((X=(XWIDTH/2)+XOFFSET))    # initial x pos
 ((Y=(YHEIGHT/2)+YOFFSET))   # initial y pos
+OX=0                    # obstical x pos
+OY=0                    # obstical y pos
+ODELAY=25               # obstical render delay
+OCOORDS=''              # obstical co-ords
 
 function drawFrame {
-    for row in `seq 0 $HEIGHT`; do
+    for (( row=0; row<$HEIGHT; row++ )); do
         tput cup $row 0
-        printf "$(color white)%${WIDTH}s$(color)" " "
+        printf "$(color white white)$(tput el)$(color)"
     done
-    for row in `seq $YOFFSET $YHEIGHT`; do
-        tput cup $row $XOFFSET
-        printf "%${XWIDTH}s" " "
+    let _xwidth=XWIDTH+2
+    for (( row=$YMIN; row<$YMAX+2; row++ )); do
+        tput cup $row $XMIN
+        printf "%${_xwidth}s" " "
     done
 }
 
@@ -38,7 +43,7 @@ function clearBall {
 
 function drawBall {
     tput cup $Y $X
-    echo -n "$(color red)•$(color)"
+    echo -n "$(color yellow)◎$(color)"
 }
 
 function drawStatus {
@@ -46,25 +51,48 @@ function drawStatus {
     printf "$(color yellow blue)X:%3s Y:%3s$(tput el)$(color)" $X $Y
 }
 
+function borderCollision {
+    if [ $X -gt $XMAX ] && [ $XDIR -eq 1 ]; then XDIR=-1
+    elif [ $X -eq $XMIN ] && [ $XDIR -eq -1 ]; then XDIR=1
+    fi
+    if [ $Y -gt $YMAX ] && [ $YDIR -eq 1 ]; then YDIR=-1
+    elif [ $Y -eq $YMIN ] && [ $YDIR -eq -1 ]; then YDIR=1
+    fi
+}
+
+function drawObstical {
+    [[ $((($RANDOM % $ODELAY) + 1)) -ne 1 ]] && return
+    ((OX=(RANDOM % XWIDTH) + XOFFSET))
+    ((OY=(RANDOM % $YHEIGHT) + YOFFSET))
+    tput cup $OY $OX
+    echo -n "$(color red)✦$(color)"
+    OCOORDS=$OCOORDS"::$OX::$OY::"
+}
+
+function obsticalCollision {
+    local _xy="::${X}::${Y}::";
+    if [[ "$OCOORDS" =~ "$_xy" ]]; then
+        if [ $XDIR -eq 1 ]; then XDIR=-1; else XDIR=1; fi
+        if [ $YDIR -eq 1 ]; then YDIR=-1; else YDIR=1; fi
+        OCOORDS=$(echo $OCOORDS | sed -e "s/$_xy//")
+        tput cup $OY $OX
+        echo -n ' '
+    fi
+}
+
 function move {
     # set up animation loop
     (sleep $DELAY && kill -ALRM $$) &
-    # check collision
-    if [ $X -gt $XMAX ] && [ $XDIR -eq 1 ]; then
-        XDIR=-1
-    elif [ $X -eq $XMIN ] && [ $XDIR -eq -1 ]; then
-        XDIR=1
-    fi
-    if [ $Y -gt $YMAX ] && [ $YDIR -eq 1 ]; then
-        YDIR=-1
-    elif [ $Y -eq $YMIN ] && [ $YDIR -eq -1 ]; then
-        YDIR=1
-    fi
+    # collision detection
+    borderCollision
+    obsticalCollision
     # draw ball
     clearBall
     ((X=X+XDIR))
     ((Y=Y+YDIR))
     drawBall
+    # add obstical
+    drawObstical
     # draw status line
     drawStatus
 }
