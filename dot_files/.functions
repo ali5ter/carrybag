@@ -140,6 +140,17 @@ cleanup () {
 }
 
 #
+# watch [seconds] command ... execute a program periodically, showing output fullscreen
+# NOTE: If an alias is messing with your command then apply a backslash before it
+#
+
+watch () {
+    local delay=0
+    if [ $# -gt 1 ]; then delay=$1; shift; fi
+    while :; do clear; eval "$@"; sleep $delay; done
+}
+
+#
 # Additional function customizations/overrides
 #
 

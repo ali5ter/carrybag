@@ -38,7 +38,7 @@ function parsePing {
             )
         else # when there is a timeout response...
             let "tdrop++"
-            pdrop=$(echo "scale=2; ($tdrop / $count) * 100" | bc -s)
+            pdrop=$(echo "scale=3; ($tdrop / $count) * 100" | bc -s)
             echo $pdrop > $PDROP
         fi
         printf "%d: Average time: %.2fms, Percentage packets lost: %2.2f%%\n" $count $(cat $ATIME) $(cat $PDROP)

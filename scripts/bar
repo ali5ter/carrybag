@@ -1,0 +1,20 @@
+#!/bin/bash
+# Simple horizontal bar chart
+# @see http://novemberochtend.blogspot.com/2008/12/poor-mans-bar-graph-in-bash.html
+# usage: bar metric scale
+# examples:
+#  bar `netstat -tn | wc -l` 1      # number of current TCP connections
+#  bar `ps -e | wc -l` 10           # number of processes
+#  bar `w -h | wc -l` 1             # number of user sessions
+#
+
+METRIC=$1
+SCALE=$2
+
+for i in $(seq $METRIC); do
+    if [ $(expr $i % $SCALE) -eq 0 ]; then
+        echo -n "|"
+    fi
+done
+
+echo " $METRIC"
