@@ -1,0 +1,55 @@
+#!/bin/bash
+# Example of playing with floating-point arithmetic using bc
+# and handling sub shell variables
+
+HOST=different.com
+TMPFILE=.pong-XXXXXXXXXX    # temp file name template
+METRICS=$(mktemp $TMPFILE)  # output file of ping results
+ATIME=$(mktemp $TMPFILE)    # average time store
+PDROP=$(mktemp $TMPFILE)    # percentage packets dropped store
+
+function startPing {
+    ping $HOST > $METRICS 2>/dev/null &
+}
+
+function parsePing {
+    local metric    # line of ping output
+    local count=0   # line count
+    local mtime     # icmp response time
+    local ctime=0   # icmp response count
+    local ttime     # total icmp response time
+    local _ttime    # total icmp response timetime temp var
+    local ttimef=$(mktemp $TMPFILE); echo '0' > $ttimef # total icmp response time store
+    local atime     # average icmp response time
+    local tdrop=0   # total packets dropped
+    local pdrop     # packets dropped
+    while true; do
+        metric=$(tail -n1 $METRICS); sleep 1
+        let "count++"
+        if [ "$(echo $metric | grep timeout -c)" -eq '0' ]; then
+            let "ctime++"
+            mtime=$(echo $metric | grep time= | perl -lpe's/.*time=(.*) ms.*/\1/g')
+            [ ! -z "$mtime" ] && (
+                _ttime=$(cat $ttimef)
+                ttime=$(echo "scale=3; $_ttime + $mtime" | bc -s)
+                echo $ttime > $ttimef
+                atime=$(echo "scale=3; $ttime / $ctime" | bc -s)
+                echo $atime > $ATIME
+            )
+        else # when there is a timeout response...
+            let "tdrop++"
+            pdrop=$(echo "scale=2; ($tdrop / $count) * 100" | bc -s)
+            echo $pdrop > $PDROP
+        fi
+        printf "%d: Average time: %.2fms, Percentage packets lost: %2.2f%%\n" $count $(cat $ATIME) $(cat $PDROP)
+    done
+}
+
+function finish {
+    rm -f ${TMPFILE//[X]}*    # clean up temp files
+}
+
+trap finish EXIT
+
+startPing
+parsePing
