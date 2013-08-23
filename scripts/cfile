@@ -118,6 +118,32 @@ function _templateExists {
     TMPL=$tmpl
 }
 
+function _matchTemplate {
+    local ext=$1
+    local tmpls=()
+    local tmpl
+    # grab templates names that match
+    while read -r tmpl; do
+        tmpls+=($(basename $tmpl))
+    done < <(find $TMPLS/*|xargs grep EXT:::|grep $ext|cut -d':' -f1)
+    # ask which one to use if more than one
+    if [ "${#tmpls[@]}" -gt 1 ]; then
+        echo "$(color yellow)These are the templates which you could apply:$(color)"
+        for (( i=0; i<${#tmpls[@]}; i++ )); do
+            printf "$(color green)%3s) $(color yellow)%-15s$(color)\n" $i ${tmpls[$i]}
+        done
+        REPLY=$i
+        ((i--))
+        echo
+        while [ $REPLY -lt 0 ] || [ $REPLY -gt $i ]; do
+            read -p "$(color yellow)Which template would you like to use? (0-$i): $(color)"
+        done
+        TMPL=${tmpls[$REPLY]}
+    else
+        TMPL=${tmpls[0]}
+    fi
+}
+
 function _createFile {
     # Copy tempalte with no metadata
     local _tmpl=$(mktemp $TMPFILE)
@@ -161,9 +187,8 @@ case "$1" in
         _createFile
         ;;
     *)          # create file using the file extension
-        # TODO: Extract extension
-        # TODO: Find template
-        # TODO: Merge data to template
-        # TODO: Write to new file
+        [ ! -z "$1" ] && FILE=$1; _addFilename
+        _matchTemplate ${FILE##*.}
+        _createFile
         ;;
 esac
