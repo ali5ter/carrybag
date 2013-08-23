@@ -1,11 +1,9 @@
 #!/bin/bash
-#
 # @file cpiofrom
-# Wrapper for cpio'ing a remote dir structure over ssh 
+# ☆  Wrapper for cpio'ing a remote dir structure over ssh 
 # @author Alister Lewis-Bowen <alister@different.com>
-# @requires color (http://code.google.com/p/ansi-color/)
-# @requires parseuri 
-#
+# @requires color <http://code.google.com/p/ansi-color/>
+# @requires parseuri <http://vpalos.com/537/uri-parsing-using-bash-built-in-features/>
 
 #
 # directory this script exists within
@@ -15,7 +13,7 @@ scriptDir=$(dirname $(stat -f $0))
 #
 # includes
 #
-source $scriptDir/parseuri
+. $scriptDir/parseuri.fnc
 
 #
 # main
