@@ -1,0 +1,10 @@
+DESC:::Simple bash template (with copyright)
+EXT:::sh
+#!/bin/bash
+# @file %FILENAME%
+# ☆  %DESCRIPTION%
+# @author %AUTHOR% <%EMAIL%>
+# @requires color <http://code.google.com/p/ansi-color/>
+# Copyright (c) %YEAR% %AUTHOR%
+
+BASE=$(dirname $(stat -f $0))

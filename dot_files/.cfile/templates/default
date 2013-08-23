@@ -1,0 +1,5 @@
+DESC:::Default template for all occasions (includes copyright)
+EXT:::-
+# @file %FILENAME%
+# @author %AUTHOR%
+# @copyright Copyright (c) %YEAR% %AUTHOR%. All rights reserved.

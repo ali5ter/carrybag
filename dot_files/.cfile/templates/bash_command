@@ -1,0 +1,84 @@
+DESC:::Bash command with command line parsing, help and license
+EXT:::sh
+#!/bin/bash
+# @file %FILENAME%
+# ☆  %DESCRIPTION%
+# @author %AUTHOR% <%EMAIL%>
+# @requires color <http://code.google.com/p/ansi-color/>
+#
+# This software is distributed under the the MIT License.
+#
+# Copyright (c) %YEAR% %AUTHOR%
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in
+# all copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
+BASE=$(dirname $(stat -f $0))
+. $BASE/function.fnc            # import function
+
+WDIR=~/.%FILENAME%      # working directory
+TMPFILE=.%FILENAME%-XXXXXXXX    # temp file name template
+TMPSTORE=$(mktemp $TMPFILE)     # temporary store
+
+function _help {
+    local text="
+$(color bd)%DESCRIPTION%$(color)
+
+Usage: $(color bd)%FILENAME% [$(color ul)option$(color)$(color bd)] $(color)
+
+Options:
+-c, --create $(color ul)foo$(color )    create $(color ul)foo$(create)
+-d, --delete $(color ul)foo$(color )    delete $(color ul)foo$(create)
+-r, --read $(color ul)foo$(color )      read $(color ul)foo$(create)
+-u, --update $(color ul)foo$(color )    update $(color ul)foo$(create)
+"
+    echo "$text"
+}
+
+function _error {
+    local msg=$1
+    echo "$(color red)$msg$(color)"
+    _help
+    exit 1
+}
+
+function _init {
+    [ ! -d $WDIR ] && mkdir -p $WDIR
+}
+
+function _finish {
+    rm -f ${TMPFILE//[X]}*      # remove all temp files
+}
+
+trap _finish EXIT               # clean up on exit
+_init                           # initialize
+case "$1" in
+    --help|-h)
+        _help
+        ;;
+    --create|-c)    # create foo
+        ;;
+    --delete|-d)    # delete foo
+        ;;
+    --read|-r)      # read foo
+        ;;
+    --update|-u)    # update foo
+        ;;
+    *)
+        ;;
+esac

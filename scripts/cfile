@@ -1,5 +1,4 @@
 #!/bin/bash
-#
 # @file cfile
 # ☆  Create a file based on a template
 # @author Alister Lewis-Bowen <alister@different.com>
@@ -27,126 +26,144 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-#
-# Working directory
-#
-WDIR=~/.touch
-#
-# Template store
-#
-TMPLS=$WDIR/templates
+WDIR=~/.cfile           # working dir
+TMPLS=$WDIR/templates   # templates dir
+CONFIG=$WDIR/config     # configuration file
+TMPL=''                 # template name
+EXT=''                  # extension name
+FILE='newfile'          # new file name
+TMPFILE=.cfile-XXXXXXXX # temp file name template
+
 #
 # Default template
 #
-TMPL=<<EOT
+TMPL=$(cat <<EOT
+DESC:::Default template for all occasions (includes copyright)
+EXT:::-
 # @file %FILENAME%
 # @author %AUTHOR%
-# @copyright Copyright (c) 2012 %AUTHOR%. All rights reserved.
+# @copyright Copyright (c) %YEAR% %AUTHOR%. All rights reserved.
 EOT
+)
+
 #
 # Default metadata
 #
-DATA=<<EOD
-author="$(id -P|cut -d':' -f8)"
+DATA=$(cat <<EOD
+AUTHOR:::$(id -P|cut -d':' -f8)
+YEAR:::$(date +"%Y")
 EOD
+)
 
 function _help {
     local helpText="
 $(color bd)Create a new file using a template$(color)
 
-$(color bd)touch $(color ul)file$(color) will attempt to parse the extension from $(color ul)file($color) to understand which template to use
+$(color bd)cfile $(color ul)file$(color) will attempt to parse the extension from $(color ul)file$(color) to understand which template to use
 
 Usage:
-$(color bd)touch [$(color ul)option$(color)$(color bd) [$(color ul)file$(color bd)]$(color)
+$(color bd)cfile [$(color ul)option$(color)$(color bd)] [$(color ul)file$(color bd)]$(color)
 
 Options:
--e, --ext $(color ul)ext$(color)  create file using the template for $(color ul)ext$(color)
--i, --init $(color ul)ext$(color) create file using the template for $(color ul)ext$(color)
+-t, --tmpl $(color ul)name$(color)  create file using the template $(color ul)name$(color)
 -l, --list      list current templates
 "
     echo "$helpText"
 }
 
 function _init {
-    [ ! -d $WDIR ] && mkdir -p $TMPLS
-    echo $TMPL >> $TMPLS/default
-    echo $DATA >> $WDIR/config
+    rm -f $WDIR 2>/dev/null
+    mkdir -p $TMPLS
+    echo "$TMPL" > $TMPLS/default
+    echo "$DATA" > $CONFIG
 }
 
-function _readConfig {
-    
+function _addFilename {
+    local _config=$(mktemp $TMPFILE)
+    if [ "$(grep -c FILENAME $CONFIG)" -gt '0' ]; then
+        sed '/FILENAME/d' $CONFIG > $_config
+        mv $_config $CONFIG
+    fi
+    echo "FILENAME:::$FILE" >> $CONFIG
 }
 
-[ ! -d $WDIR ] && cfile init
+function _listTemplates {
+    local tmpl
+    local desc
+    local ext
+    printf "$(color white)%-15s $(color cyan)%-60s $(color blue)%-4s$(color)\n" Name Description Ext
+    for tmpl in $(ls $TMPLS); do
+        desc=$(grep DESC::: $TMPLS/$tmpl); desc=${desc#*:::}
+        ext=$(grep EXT::: $TMPLS/$tmpl); ext=${ext#*:::}
+        printf "$(color white)%-15s $(color cyan)%-60s $(color blue)%-4s$(color)\n" $tmpl "$desc" $ext
+    done
+    echo
+}
 
-#sed -e "s;%AUTHOR%;$1;" -e "s;%EMAIL%;$2;" -e "s;%DIR%;$3;" template.txt > $FILE
+function _error {
+    local msg=$1
+    echo "$(color red)$msg$(color)"
+    _help
+    exit 1
+}
+
+function _templateExists {
+    local tmpl=$1
+    if [ "$(ls $TMPLS|grep -c $tmpl)" -ne '1' ]; then
+        echo "$(color red)Unable to find template named '$tmpl'$(color)"
+        echo -e "\nAvailable templates:"
+        _listTemplates
+        exit 1
+    fi
+    TMPL=$tmpl
+}
+
+function _createFile {
+    # Copy tempalte with no metadata
+    local _tmpl=$(mktemp $TMPFILE)
+    if [ "$(grep -c ::: $TMPLS/$TMPL)" -gt '0' ]; then
+        sed '/:::/d' $TMPLS/$TMPL > $_tmpl
+    fi
+    # Merge data into template copy and write to file
+    local line
+    local key
+    local value
+    local cmd='sed '
+    while read line; do
+        key=${line%%:::*}; value=${line#*:::}
+        cmd=$cmd"-e \"s;%${key}%;${value};\" "
+    done < "$CONFIG"
+    cmd=$cmd"$_tmpl > $FILE"
+    eval $cmd
+    rm -f $_tmpl
+}
+
+[ ! -d $WDIR ] && _init     # create working directory
+_addFilename
 
 case "$1" in
-    ''|--help|-h)
+    --help|-h)
         _help
         ;;
-    #
-    # Add a directory to the bookmarks store
-    #
-    add|--add|-a)
-        if [ ! -z $2 ]; then
-            _exists $2;
-            if [ $? -eq 1 ]; then
-                echo $2'::'$(pwd) >> $STORE
-                echo "$(color green)Bookmark has been added$(color)"
-            else
-                echo "$(color yellow)This bookmark already exists:$(color)"
-                jump list
-            fi
-        else
-            _help
-        fi
+    --init)     # init the working directory
+        _init
         ;;
-    #
-    # Delete a bookmark
-    #
-    rm|del|--delete|-d)
-        if [ ! -z $2 ]; then
-            _exists $2;
-            if [ $? -eq 0 ]; then
-                sed -i"*.bak" "/^$2::/d" $STORE &&
-                    echo "$(color green)Bookmark has been deleted$(color)"
-            else
-                echo "$(color red)Unable to find a bookmark named, \
-$(color bd)$2:$(color)"
-                jump list
-            fi
-        else
-            _help
-        fi
+    --config)     # show config data
+        cat $CONFIG
         ;;
-    #
-    # List current bookmarked directories
-    #
-    list|--list|-l)
-        current="$(color blue)►$(color)"
-        badDir="$(color red)✖$(color)"
-        while read line; do
-            name=${line%::*}
-            path=${line#*::}
-            state=' '
-            [ "$(pwd)" == "$path" ] && state=$current
-            [ ! -d $path ] && state=$badDir
-            printf "%1s $(color white)%-10s $(color cyan)%-60s$(color)\n" \
-"$state" "$name" "$path"
-        done < $STORE
-        echo
+    --list|-l)  # list available templates
+        _listTemplates
         ;;
-    #
-    # cd to the bookmarked directory
-    #
-    *)
-        _exists $1;
-        if [ $? -eq 0 ]; then
-            bm=$(grep $1 $STORE)
-            cd ${bm#*::}
-        else
-            echo "$(color red)Unable to find '$1'$(color)"
-        fi
+    --tmpl|-t)  # create file using a given template name
+        [ -z "$2" ] && _error "Please supply the template name"
+        [ ! -z "$3" ] && FILE=$3; _addFilename
+        _templateExists $2
+        _createFile
+        ;;
+    *)          # create file using the file extension
+        # TODO: Extract extension
+        # TODO: Find template
+        # TODO: Merge data to template
+        # TODO: Write to new file
         ;;
 esac
