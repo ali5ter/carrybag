@@ -5,7 +5,7 @@
 # @requires color <http://code.google.com/p/ansi-color/>
 # @requires graph.fnc <http://bashscripts.org/forum/viewtopic.php?f=7&t=1141>
 
-. ./graph.fnc               # import graph function
+. $(dirname $(stat -f $0))/graph.fnc    # import graph function
 
 HOST=${1:-different.com}    # default host
 HEIGHT=10                   # graph height
@@ -39,7 +39,7 @@ function start {
 
 function graphIt {
     clear
-    echo "Response from $HOST in milliseconds:"
+    echo "$(color yellow)Response from $(color bd)$HOST$(color)$(color yellow) in milliseconds:$(color)"
     graph $HEIGHT $(cat $DATA)
 }
 
