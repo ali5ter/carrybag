@@ -1,48 +1,46 @@
 #!/bin/bash
-# Example of playing with floating-point arithmetic using bc
-# and handling sub shell variables
+# @file pong
+# ☆  Graphs ICMP response times
+# @author Alister Lewis-Bowen <alister@different.com>
+# @requires color <http://code.google.com/p/ansi-color/>
+# @requires graph.fnc <http://bashscripts.org/forum/viewtopic.php?f=7&t=1141>
 
-HOST=different.com
+. ./graph.fnc               # import graph function
+
+HOST=${1:-different.com}    # default host
+HEIGHT=10                   # graph height
+WIDTH=79                    # graph width
 TMPFILE=.pong-XXXXXXXXXX    # temp file name template
 METRICS=$(mktemp $TMPFILE)  # output file of ping results
-ATIME=$(mktemp $TMPFILE)    # average time store
-PDROP=$(mktemp $TMPFILE)    # percentage packets dropped store
+DATA=$(mktemp $TMPFILE)     # data store
 
-function startPing {
+function init {
     ping $HOST > $METRICS 2>/dev/null &
+    echo $(for i in $(seq $WIDTH); do echo 0; done) > $DATA
 }
 
-function parsePing {
+function start {
     local metric    # line of ping output
-    local count=0   # line count
     local mtime     # icmp response time
-    local ctime=0   # icmp response count
-    local ttime     # total icmp response time
-    local _ttime    # total icmp response timetime temp var
-    local ttimef=$(mktemp $TMPFILE); echo '0' > $ttimef # total icmp response time store
-    local atime     # average icmp response time
-    local tdrop=0   # total packets dropped
-    local pdrop     # packets dropped
+    local data      # temp store for data
     while true; do
-        metric=$(tail -n1 $METRICS); sleep 1
-        let "count++"
-        if [ "$(echo $metric | grep timeout -c)" -eq '0' ]; then
-            let "ctime++"
+        metric=$(tail -n1 $METRICS)
+        [ "$(echo $metric | grep timeout -c)" -eq '0' ] && (
             mtime=$(echo $metric | grep time= | perl -lpe's/.*time=(.*) ms.*/\1/g')
             [ ! -z "$mtime" ] && (
-                _ttime=$(cat $ttimef)
-                ttime=$(echo "scale=3; $_ttime + $mtime" | bc -s)
-                echo $ttime > $ttimef
-                atime=$(echo "scale=3; $ttime / $ctime" | bc -s)
-                echo $atime > $ATIME
+                data=$(cat $DATA)
+                echo $(echo $data $mtime | cut -d' ' -f2-$WIDTH) > $DATA
             )
-        else # when there is a timeout response...
-            let "tdrop++"
-            pdrop=$(echo "scale=3; ($tdrop / $count) * 100" | bc -s)
-            echo $pdrop > $PDROP
-        fi
-        printf "%d: Average time: %.2fms, Percentage packets lost: %2.2f%%\n" $count $(cat $ATIME) $(cat $PDROP)
+        )
+        graphIt
+        sleep 1
     done
+}
+
+function graphIt {
+    clear
+    echo "Response from $HOST in milliseconds:"
+    graph $HEIGHT $(cat $DATA)
 }
 
 function finish {
@@ -51,5 +49,5 @@ function finish {
 
 trap finish EXIT
 
-startPing
-parsePing
+init
+start
