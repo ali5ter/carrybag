@@ -4,12 +4,34 @@
 # @see .bashrc
 
 #
-# compress file/directory ... tar-gzip a file or directory
+# List usage metadata from carrybag dot files of the format:
+# @usage carrybag ... list commands provided by carrybag
+#
+
+carrybag () {
+    #            0        1         2         3         4
+    #            1234567890123456789012345678901234567890
+    local _line='..........................'
+    local _base=$(dirname $(ls -l ~/.functions | awk '{print $11}'))
+    local _usage _cmd _sum
+    IFS=$'\n'
+    for _usage in $(find $_base | grep -v 'vim/backup' | xargs grep -s '# @usage' | grep -v 'xargs grep'); do
+        _usage=${_usage#*@usage }
+        _cmd=${_usage%% ...*}
+        _sum=${_usage#*... }
+        printf "$(color bd)%s$(color) %s %s\n" $_cmd ${_line:${#_cmd}} $_sum
+    done
+    unset IFS
+}
+
+#
+# @usage compress file/dir ... tar-gzip a file or directory
 #
 
 compress () {
     local source="$1"
     local file files archive
+    _setHelp 'compress file/dir' 'tar-gzip a file or directory'
 
     if [ -s "$source" ]; then
         archive=$(basename "$source")
@@ -32,43 +54,43 @@ compress () {
 }
 
 #
-# uncompress file/directory ... un-archive a tar.gz file
+# @usage uncompress file/dir ... un-archive a tar.gz file
 #
 
 uncompress () { [ -s "$1" ] && tar -xzvf "$1" ; }
 
 #
-# todir string ... mkdir and cd into it
+# @usage todir string ... mkdir and cd into it
 #
 
 todir () { mkdir -p $1 && cd $1 ; }
 
 #
-# ffile string ... find a file from this directory down
+# @usage ffile string ... find a file from this directory down
 #
 
 ffile () { find . | grep -i --color=always "$1" 2>/dev/null ;  }
 
 #
-# ftext string ... find text in files from this directory down
+# @usage ftext string ... find text in files from this directory down
 #
 
 ftext () { find . | xargs grep -i -C 2 --color=always "$1" 2>/dev/null; }
 
 #
-# fproc string ... find a process matching the given string
+# @usage fproc string ... find a process matching the given string
 #
 
 fproc () { ps aux | grep "$1" | grep -v 'grep' ; }
 
 #
-# kproc string ... kill a set of processes matching the given string
+# @usage kproc string ... kill a set of processes matching the given string
 #
 
 kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
 
 #
-# sshkey ... display public rsa key or create ssh keys if none found
+# @usage sshkey ... display public rsa key or create ssh keys if none found
 #
 
 sshkey () {
@@ -89,25 +111,25 @@ sshkey () {
 }
 
 #
-# ips [interface] ... list ips available on this machines NICs
+# @usage ips [interface] ... list ips available on this machines NICs
 #
 
 ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
 
 #
-# end file ... show the last 100 lines of a given file
+# @usage end file ... show the last 100 lines of a given file
 #
 
 end () { tail -n100 $1; }
 
 #
-# bman command ... show bash help or a built-in command
+# @usage bman command ... show bash help or a built-in command
 #
 
 bman () { man bash | less -p "^       $1 "; }
 
 #
-# rcsedit file ... rcs wrapped edit
+# @usage rcsedit file ... rcs wrapped edit
 #
 
 rcsedit () {
@@ -120,7 +142,7 @@ rcsedit () {
 }
 
 #
-# cleanup file ... clean out tabs, trailing spaces, carriage returns, etc.
+# @usage cleanup file ... clean out tabs, trailing spaces, carriage returns, etc.
 #
 # DOS, Windows   0D 0A   (\r\n)
 # UNIX           0A      (\n)
@@ -140,7 +162,7 @@ cleanup () {
 }
 
 #
-# watch [seconds] command ... execute a program periodically, showing output fullscreen
+# @usage watch [seconds] command ... execute a program periodically, showing output fullscreen
 # NOTE: If an alias is messing with your command then apply a backslash before it
 #
 

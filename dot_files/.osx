@@ -52,13 +52,13 @@ fi
 }
 
 #
-# Drush for manipulating Drupal installations
+# @usage drush ... manipulating Drupal installations
 #
 
 [ -e ~/bin/drush ] && alias drush='php ~/bin/drush/drush.php'
 
 #
-# iCall access from the command line
+# @usage meetings ... display todays events from iCal
 # meetings ... show all todays iCall events
 # @see http://hasseg.org/icalBuddy/
 #
@@ -67,8 +67,8 @@ fi
 
 #
 # KBM control
-# synergys 'server hostname' ..................... start synergy server
-# synergyc 'client hostname' 'server hostname' ... start synergy client
+# @usage synergys server_name ... start synergy server
+# @usage synergyc client_name server_name ... start synergy client
 # @see http://synergy-foss.org/
 #
 
@@ -79,8 +79,8 @@ fi
 
 #
 # MAMP utils
-# phplog ...... tail the PHP error log
-# cleanmamp ... delete the pid files for apache and mysql
+# @usage phplog ... tail the PHP error log
+# @usage cleanmamp ... delete the pid files for apache and mysql
 # @see http://www.mamp.info/en/
 #
 
@@ -90,21 +90,21 @@ if [ -e /Applications/MAMP ]; then
 fi
 
 #
-# rmDS_Store ... delete DS_Store files from the current directory
+# @usage rmDS_Store ... delete DS_Store files from the current directory
 #
 
 alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 
 #
-# fword word ... find a word in the OSX dictionary
+# @usage fword word ... find a word in the OSX dictionary
 #
 
 [ -e /Applications/Dictionary.app ] && fword () { open dict:///"$@" ; }
 
 #
-# subl ... crank up sublime. Open directory if no args
+# @usage subl ... crank up sublime. Open directory if no args
 #
 
 [ -e '/Applications/Sublime Text 2.app' ] && subl () {
-	'/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl' ${1:-'.'}
+    '/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl' ${1:-'.'}
 }
