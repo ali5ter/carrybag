@@ -5,12 +5,13 @@
 
 alias rm='rm -i'                    # confirm any delete
 alias ls='ls -F'                    # show dirs, exec and sym link files
-alias sourcep="source ~/.bashrc"    # lazy about sourcing the bash config
-alias jump='. ~/bin/jump'           # jump to bookmarked directories
-alias gs='git status -s'            # lazy git status summary
-alias ga="git add $*"               # lazy git add
-alias gc="git commit $*"            # lazy git commit
-alias webstart="python -m SimpleHTTPServer $*"  # instant httpd from current dir
+
+alias sourcep="source ~/.bashrc"    # @usage sourcep ... source carrybag dot files
+alias jump='. ~/bin/jump'           # @usage jump bookmark ... jump to bookmarked directories
+alias gs='git status -s'            # @usage gs ... git status summary
+alias ga="git add $*"               # @usage ga files ... git add
+alias gc="git commit -m$*"          # @usage gc comment ... git commit
+alias webstart="python -m SimpleHTTPServer $*"  # @usage webstart ... instant httpd from current dir
 
 #
 # @usage allogs ... (all-logs) tail all logs under /var/log

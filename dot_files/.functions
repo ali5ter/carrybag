@@ -14,8 +14,11 @@ carrybag () {
     local _line='..........................'
     local _base=$(dirname $(ls -l ~/.functions | awk '{print $11}'))
     local _usage _cmd _sum
+    local _data=$(find $_base | grep -v 'vim/backup' | cut -d':' -f1 | \
+            xargs grep -s '# @usage' | awk '{ sub(/.*# @usage /,""); print }' | \
+            grep -v 'xargs grep' | grep -v '); print' | sort)
     IFS=$'\n'
-    for _usage in $(find $_base | grep -v 'vim/backup' | xargs grep -s '# @usage' | grep -v 'xargs grep'); do
+    for _usage in $_data; do
         _usage=${_usage#*@usage }
         _cmd=${_usage%% ...*}
         _sum=${_usage#*... }
@@ -159,6 +162,23 @@ cleanup () {
         perl -pe 's/\r$/\n/g' \
         > $tmp
     mv $tmp $1
+}
+
+#
+# @usage rotate file ... typical rotate backup command up to a max of 30 files
+#
+
+rotate () {
+    local _file=$1
+    local _max="30"
+    [ -f $_file ] && {
+        while [ $_max -gt 0 ]; do
+            [ -f $_file.$[$_max-1] ] && mv $_file.$[$_max-1] $_file.$_max
+            ((_max--))
+        done
+        mv $_file $_file.0
+    }
+    cat /dev/null > $_file
 }
 
 #
