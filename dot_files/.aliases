@@ -28,10 +28,10 @@ alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d
 [ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log"
 
 #
-# @usage hosts ... edit the /etc/hosts file using rcs
+# @usage hosts ... edit /etc/hosts
 #
 
-alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts"
+alias hosts="sudo vim /etc/hosts"
 
 #
 # Additional alias customizations/overrides
