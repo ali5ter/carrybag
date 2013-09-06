@@ -8,12 +8,18 @@ alias ls='ls -F'                    # show dirs, exec and sym link files
 
 alias sourcep="source ~/.bashrc"    # @usage sourcep ... source carrybag dot files
 alias jump='. ~/bin/jump'           # @usage jump bookmark ... jump to bookmarked directories
+alias webstart="python -m SimpleHTTPServer $*"  # @usage webstart ... instant httpd from current dir
 alias gs='git status -s'            # @usage gs ... git status summary
+alias gl='git log --pretty=oneline' # @usage gl ... show git log in one liners
+alias gb='git blame $* --date short'    # @usage gb files ... show blame for files
 alias gd='git diff'                 # @usage gd ... git diff
 alias gds='git diff --staged'       # @usage gds ... git diff of staged changes
-alias ga="git add $*"               # @usage ga files ... git add
-alias gc="git commit -m$*"          # @usage gc comment ... git commit
-alias webstart="python -m SimpleHTTPServer $*"  # @usage webstart ... instant httpd from current dir
+alias ga='git add $*'               # @usage ga files ... git add
+alias gc='git commit -m$*'          # @usage gc comment ... git commit
+alias gca='git commit --amend  -m$*'    # @usage gca comment ... ammend to last commit
+alias gr='git reset --soft HEAD^'   # @usage gr ... undo (reset) last commit to staging
+alias gc='git checkout $*'          # @usage gc branch ... checkout branch
+alias gcn='git checkout -b $*'      # @usage gcn branch ... checkout new branch
 
 #
 # @usage allogs ... (all-logs) tail all logs under /var/log
@@ -28,10 +34,10 @@ alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d
 [ -e /var/log/httpd/error_log ] && alias wwwerror="sudo tail -f /var/log/httpd/error_log"
 
 #
-# @usage hosts ... edit the /etc/hosts file using rcs
+# @usage hosts ... edit /etc/hosts
 #
 
-alias hosts="sudo co -l /etc/hosts; sudo vim /etc/hosts; sudo ci /etc/hosts; sudo co /etc/hosts; sudo cp /etc/hosts /Users/$USER/Resources/Configurations/hosts"
+alias hosts="sudo vim /etc/hosts"
 
 #
 # Additional alias customizations/overrides
