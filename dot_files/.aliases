@@ -10,6 +10,7 @@ alias sourcep="source ~/.bashrc"    # @usage sourcep ... source carrybag dot fil
 alias jump='. ~/bin/jump'           # @usage jump bookmark ... jump to bookmarked directories
 alias gs='git status -s'            # @usage gs ... git status summary
 alias gd='git diff'                 # @usage gd ... git diff
+alias gds='git diff --staged'       # @usage gds ... git diff of staged changes
 alias ga="git add $*"               # @usage ga files ... git add
 alias gc="git commit -m$*"          # @usage gc comment ... git commit
 alias webstart="python -m SimpleHTTPServer $*"  # @usage webstart ... instant httpd from current dir
