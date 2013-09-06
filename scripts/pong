@@ -8,8 +8,8 @@
 . $(dirname $(stat -f $0))/graph.fnc    # import graph function
 
 HOST=${1:-different.com}    # default host
-HEIGHT=10                   # graph height
-WIDTH=79                    # graph width
+HEIGHT=${2:-10}             # graph height
+WIDTH=${3:-79}              # graph width
 TMPFILE=.pong-XXXXXXXXXX    # temp file name template
 METRICS=$(mktemp $TMPFILE)  # output file of ping results
 DATA=$(mktemp $TMPFILE)     # data store
