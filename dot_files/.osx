@@ -24,13 +24,13 @@ export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 #
 
 alias ls='ls -FG $*'
-alias wget='curl -O'    // since curl is native to OSX
+alias wget='curl -O'    # since curl is native to OSX
 
 #
 # System tweeks
 #
 
-chflags nohidden ~/Library  // don't hide the Library dir
+chflags nohidden ~/Library  # don't hide the Library dir
 
 #
 # Carrybag assumes bash completion is installed using Homebrew
