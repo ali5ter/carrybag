@@ -20,16 +20,17 @@ export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 
 #
-# OSX list file colors
+# Aliases
 #
 
 alias ls='ls -FG $*'
+alias wget='curl -O'    // since curl is native to OSX
 
 #
-# Curl is naive to OSX
+# System tweeks
 #
 
-alias wget='curl -O'
+chflags nohidden ~/Library  // don't hide the Library dir
 
 #
 # Carrybag assumes bash completion is installed using Homebrew
