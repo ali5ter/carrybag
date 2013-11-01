@@ -132,7 +132,7 @@ end () { tail -n100 $1; }
 bman () { man bash | less -p "^       $1 "; }
 
 #
-# @usage presicion value number ... set number of digits after the decimal point in the value provided. number defaults to 2
+# @usage presicion value [number] ... round off to the number of digits after the decimal point in the value provided. Number defaults to 2
 #
 
 precision () { p=${2:-2}; printf "%.${p}f" $1; }
