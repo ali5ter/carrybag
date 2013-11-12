@@ -79,6 +79,13 @@ if [ -e ~/Applications/synergy ]; then
 fi
 
 #
+# @usage ovftool ... https://www.vmware.com/support/developer/ovf/
+# @see https://www.vmware.com/support/developer/ovf/ovf350/ovftool-350-userguide.pdf
+#
+
+[ -e '/Applications/VMware OVF Tool' ] && alias ovftool="/Applications/VMware\ OVF\ Tool/ovftool $*"
+
+#
 # MAMP utils
 # @usage phplog ... tail the PHP error log
 # @usage cleanmamp ... delete the pid files for apache and mysql
