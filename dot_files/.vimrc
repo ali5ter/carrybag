@@ -36,11 +36,11 @@ colorscheme solarized
 "
 
 set nowrap " do not wrap line
-set shiftwidth=4 " set shift (>>) to 4 spaces
+set shiftwidth=2 " set shift (>>) to 4 spaces
 set autoindent " turn on auto indentation
 set smartindent " smarter auto indentation
 set cindent " really smart auto indentation
-set tabstop=4 " set tab character to 4 characters
+set tabstop=2 " set tab character to 4 characters
 set expandtab " turn tabs into whitespace
 set nosmarttab " no tabs
 "set textwidth=80 " wrap at 80 chars
