@@ -21,4 +21,6 @@ Dependencies
 * jshint.vim        <https://github.com/walm/jshint.vim>
 * markdown-vim      <https://github.com/tpope/vim-markdown>
 * actionscript-vim  <https://github.com/vim-scripts/actionscript.vim>
+* gist-vim          <https://github.com/mattn/gist-vim>
+* webapi-vim        <https://github.com/mattn/webapi-vim>
 * gnome-terminal-colors-solarized <https://github.com/sigurdga/gnome-terminal-colors-solarized.git>
