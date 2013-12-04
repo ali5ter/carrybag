@@ -28,6 +28,12 @@ carrybag () {
 }
 
 #
+# @usage inspiration ... let the cow speak
+#
+
+inspire () { fortune | cowsay -f small; }
+
+#
 # @usage compress file/dir ... tar-gzip a file or directory
 #
 
