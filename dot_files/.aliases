@@ -1,3 +1,4 @@
+#!/bin/bash
 # @file .aliases
 # ★  Carrybag aliases
 # @author Alister Lewis-Bowen <alister@different.com>
@@ -6,6 +7,7 @@
 alias rm='rm -i'                    # confirm any delete
 alias ls='ls -F'                    # show dirs, exec and sym link files
 alias ctags='ctags -R -f .tags'     # create tags recursively to a defined file
+
 alias sourcep="source ~/.bashrc"    # @usage sourcep ... source carrybag dot files
 alias jump='. ~/bin/jump'           # @usage jump bookmark ... jump to bookmarked directories
 alias webstart="python -m SimpleHTTPServer $*"  # @usage webstart ... instant httpd from current dir
@@ -20,6 +22,7 @@ alias gca='git commit --amend  -m$*'    # @usage gca comment ... ammend to last 
 alias gr='git reset --soft HEAD^'   # @usage gr ... undo (reset) last commit to staging
 alias gc='git checkout $*'          # @usage gc branch ... checkout branch
 alias gcn='git checkout -b $*'      # @usage gcn branch ... checkout new branch
+alias npml='npm list -g --depth=0'	# @usage npml ... list primary node packaes in the global space
 
 #
 # @usage allogs ... (all-logs) tail all logs under /var/log
