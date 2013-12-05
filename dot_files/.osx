@@ -37,18 +37,23 @@ chflags nohidden ~/Library  # don't hide the Library dir
 
 #
 # Bootstrapping some apps
+# @see http://mxcl.github.com/homebrew/
+# @see https://github.com/joyent/node/wiki/installation
 #
 
 $(which -s brew); [[ $? != 0 ]] && \
     ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+$(which -s git); [[ $? != 0 ]] && brew install git
+$(which -s node); [[ $? != 0 ]] && brew install node
 [ ! -f $(brew --prefix)/etc/bash_completion ] && brew install bash-completion
 [ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
 $(which -s fortune); [[ $? != 0 ]] && brew install fortune
 $(which -s cowsay); [[ $? != 0 ]] && brew install cowsay
+$(which -s node-inspector); [[ $? != 0 ]] && npm install node-inspector -g
+$(which -s nodemon); [[ $? != 0 ]] && npm install nodemon -g
 
 #
 # Carrybag assumes bash completion is installed using Homebrew
-# @see http://mxcl.github.com/homebrew/
 # @see https://github.com/bobthecow/git-flow-completion/wiki/Install-Bash-git-completion
 #
 
