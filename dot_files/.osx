@@ -49,6 +49,7 @@ $(which -s node); [[ $? != 0 ]] && brew install node
 [ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
 $(which -s fortune); [[ $? != 0 ]] && brew install fortune
 $(which -s cowsay); [[ $? != 0 ]] && brew install cowsay
+$(which -s jshint); [[ $? != 0 ]] && npm install jshint -g
 $(which -s node-inspector); [[ $? != 0 ]] && npm install node-inspector -g
 $(which -s nodemon); [[ $? != 0 ]] && npm install nodemon -g
 
