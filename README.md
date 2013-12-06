@@ -18,6 +18,7 @@ Dependencies
 * color             <http://ansi-color.googlecode.com>
 * solarized         <https://github.com/altercation/solarized>
 * NERDTree          <https://github.com/scrooloose/nerdtree>
+* Powerline         <https://github.com/Lokaltog/powerline>
 * vim-javascript-syntax <https://github.com/jelera/vim-javascript-syntax>
 * jshint.vim        <https://github.com/walm/jshint.vim>
 * markdown-vim      <https://github.com/tpope/vim-markdown>
