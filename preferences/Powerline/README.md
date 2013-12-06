@@ -10,6 +10,6 @@ Install using the following commands:
 Dependencies
 ------------
 
-Patched Powerline fonts are available from https://github.com/Lokaltog/powerline-fonts
+The patched Powerline fonts here are pulled from https://github.com/Lokaltog/powerline-fonts
 
-To install the AnonymusePro font here, just double click on teh ttl files and click install. Then set the preferences for the Terminal app to use it.
+To install one of these fonts on OSX: Double click on the chosen <code>ttl</code> files and click install. Then set the preferences for the Terminal app to use it.
