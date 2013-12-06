@@ -18,9 +18,12 @@ Dependencies
 * color             <http://ansi-color.googlecode.com>
 * solarized         <https://github.com/altercation/solarized>
 * NERDTree          <https://github.com/scrooloose/nerdtree>
+* vim-javascript-syntax <https://github.com/jelera/vim-javascript-syntax>
 * jshint.vim        <https://github.com/walm/jshint.vim>
 * markdown-vim      <https://github.com/tpope/vim-markdown>
 * actionscript-vim  <https://github.com/vim-scripts/actionscript.vim>
+* vim-jade          <https://github.com/digitaltoad/vim-jade>
+* vim-stylus        <https://github.com/wavded/vim-stylus>
 * gist-vim          <https://github.com/mattn/gist-vim>
 * webapi-vim        <https://github.com/mattn/webapi-vim>
 * gnome-terminal-colors-solarized <https://github.com/sigurdga/gnome-terminal-colors-solarized.git>
