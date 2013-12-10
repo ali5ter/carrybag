@@ -152,7 +152,7 @@ alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 housekeeping () {
     brew doctor && brew update  # get homebrew up-to-date
     [ -z $? ] && brew upgrade   # all okay then apply any updates
-    npm update -g               # get npm global packages up-to-date
+    sudo npm update -g          # get npm global packages up-to-date
     # if there's a problem then we'd do...
-    # (curl https://npmjs.org/install.sh | sh) && rm install.sh
+    # (curl https://npmjs.org/install.sh | sudo sh) && rm install.sh
 }
