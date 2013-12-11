@@ -32,4 +32,4 @@ esac
 
 [ -r ~/.bashrc_local ] && source ~/.bashrc_local
 
-echo; inspire; echo # put a smile on my face Mr.Cow
+echo; echo "λ $(color red bd)$(hostname)$(color)"; echo
