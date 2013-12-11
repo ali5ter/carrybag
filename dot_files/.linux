@@ -18,6 +18,7 @@ alias ls="ls --color=always $*"
 
 which git >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install git
 which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
+which rcs >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install rcs
 which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
 which cowsay >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install cowsay
 which fortune >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install fortune
