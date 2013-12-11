@@ -16,9 +16,6 @@ alias ls="ls --color=always $*"
 # @see https://help.ubuntu.com/12.04/serverguide/apt-get.html
 #
 
-#sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get -y dist-upgrade \
-#&& sudo apt-get -y autoremove
-
 which git >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install git
 which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
 which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
