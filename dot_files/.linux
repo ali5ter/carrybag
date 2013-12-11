@@ -12,6 +12,40 @@
 alias ls="ls --color=always $*"
 
 #
+# Boostrapping some apps using apt-get
+# @see https://help.ubuntu.com/12.04/serverguide/apt-get.html
+#
+
+#sudo apt-get update && sudo apt-get -y upgrade && sudo apt-get -y dist-upgrade \
+#&& sudo apt-get -y autoremove
+
+which git >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install git
+which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
+which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
+which cowsay >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install cowsay
+which fortune >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install fortune
+[[ $(dpkg --list | grep exim4 | grep -c exim) -eq 0 ]] && {
+    sudo apt-get -y install exim4
+    sudo dpkg-reconfigure exim4-config
+    echo "Test from $(hostname)" | mail -s TEST alister@different.com
+}
+which node >/dev/null; [[ $? != 0 ]] && {
+    sudo apt-get -y install python-software-properties python g++ make
+    sudo add-apt-repository ppa:chris-lea/node.js
+    sudo apt-get update
+    sudo apt-get -y install nodejs
+}
+which jshint >/dev/null; [[ $? != 0 ]] && sudo npm install jshint -g
+which node-inspector >/dev/null; [[ $? != 0 ]] && sudo npm install node-inspector -g
+which nodemon >/dev/null; [[ $? != 0 ]] && sudo npm install nodemon -g
+#        sudo apt-get install mongodb
+#        sudo service mongodb start
+#        sudo apt-get install nginx
+#        sudo service nginx start
+
+# bash_completion?
+
+#
 # CNC workflow config
 #
 
@@ -26,3 +60,17 @@ alias gcs="java -jar -Xmx256m ~/bin/UniversalGcodeSender.jar &"
 #
 
 git config --global credential.helper 'cache --timeout=3600'
+
+#
+# @usage housekeeping ... housekeeping for things like apt-get
+#
+
+housekeeping () {
+        sudo apt-get update && \            # get pacakges up-to-date
+        sudo apt-get -y upgrade && \        # apply any updates
+        sudo apt-get -y dist-upgrade && \   # ..
+        sudo apt-get -y autoremove          # cleam up the crud
+        sudo npm update -g  # get npm global packages up-to-date
+        # if there's a problem then we'd do...
+        # (curl https://npmjs.org/install.sh | sudo sh) && rm install.sh
+}

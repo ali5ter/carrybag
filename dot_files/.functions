@@ -32,7 +32,7 @@ carrybag () {
 # @usage inspiration ... let the cow speak
 #
 
-inspire () { fortune | cowsay -f small; }
+inspire () { fortune | cowsay; }
 
 #
 # @usage compress file/dir ... tar-gzip a file or directory
