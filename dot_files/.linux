@@ -23,6 +23,7 @@ which cowsay >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install cowsay
 which fortune >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install fortune
 [[ $(dpkg --list | grep exim4 | grep -c exim) -eq 0 ]] && {
     sudo apt-get -y install exim4
+    # @see https://www.digitalocean.com/community/articles/how-to-install-the-send-only-mail-server-exim-on-ubuntu-12-04
     sudo dpkg-reconfigure exim4-config
     echo "Test from $(hostname)" | mail -s TEST alister@different.com
 }
