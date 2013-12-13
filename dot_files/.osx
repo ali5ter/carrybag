@@ -45,8 +45,7 @@ $(which -s brew); [[ $? != 0 ]] && \
 $(which -s git); [[ $? != 0 ]] && brew install git
 [ ! -f $(brew --prefix)/etc/bash_completion ] && brew install bash-completion
 [ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
-$(which -s fortune); [[ $? != 0 ]] && brew install fortune
-$(which -s cowsay); [[ $? != 0 ]] && brew install cowsay
+$(which -s figlet); [[ $? != 0 ]] && brew install figlet
 $(which -s webkit2png); [[ $? != 0 ]] && brew install webkit2png
 
 #

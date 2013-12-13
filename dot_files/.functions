@@ -29,6 +29,21 @@ carrybag () {
 }
 
 #
+# @usage banner [message] ... show host name with any other optional message
+# like a legal disclaimer, e.g. Any malicious and/or unauthorized activity is
+# strictly forbidden. All activity may be logged by [Org Name].
+# Useful when creating a motd with some default banner.
+#
+
+banner () {
+    hostname | cut -d'.' -f1 | figlet
+    echo
+    echo "Welcome to $(hostname)."
+    [[ ! -z "$1" ]] && echo -e "$1"
+    echo
+}
+
+#
 # @usage inspiration ... let the cow speak
 #
 

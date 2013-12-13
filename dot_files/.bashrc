@@ -31,5 +31,3 @@ esac
 #
 
 [ -r ~/.bashrc_local ] && source ~/.bashrc_local
-
-echo; echo "λ $(color red bd)$(hostname)$(color)"; echo
