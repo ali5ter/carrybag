@@ -21,8 +21,6 @@ which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
 which rcs >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install rcs
 which bc >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install bc
 which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
-which cowsay >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install cowsay
-which fortune >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install fortune
 [[ $(dpkg --list | grep exim4 | grep -c exim) -eq 0 ]] && {
     sudo apt-get -y install exim4
     # @see https://www.digitalocean.com/community/articles/how-to-install-the-send-only-mail-server-exim-on-ubuntu-12-04
