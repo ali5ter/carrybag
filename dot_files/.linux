@@ -18,8 +18,7 @@ alias ls="ls --color=always $*"
 
 multiverse='multiverse-precise.list'
 [[ ! -e /etc/apt/sources.list.d/$multiverse ]] && {
-    echo "deb http://us.archive.ubuntu.com/ubuntu/ precise multiverse" >> /tmp/$multiverse
-    echo "deb http://us.archive.ubuntu.com/ubuntu/ precise-updates multiverse" >> /tmp/$multiverse
+    echo "deb http://mirrors.kernel.org/ubuntu precise main multiverse" >> /tmp/$multiverse
     sudo cp /tmp/$multiverse /etc/apt/sources.list.d/
     rm -f /tmp/$multiverse
 }
@@ -29,6 +28,7 @@ which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
 which rcs >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install rcs
 which bc >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install bc
 which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
+which figlet >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install figlet
 [[ $(dpkg --list | grep exim4 | grep -c exim) -eq 0 ]] && {
     sudo apt-get -y install exim4
     # @see https://www.digitalocean.com/community/articles/how-to-install-the-send-only-mail-server-exim-on-ubuntu-12-04
