@@ -54,12 +54,17 @@ $(which -s webkit2png); [[ $? != 0 ]] && brew install webkit2png
 # NOTE: Found that installing node using brew screws up permisstions.
 #  @issacs recommendation: Go to http://nodejs.org/ and click the big green
 #  button. It is also recommended to run npm using sudo (for global at least)
+# Can also check what's installed using 'npm ls --global --depth 0'
 #
 
-$(which -s node); [[ $? != 0 ]] && echo 'Install node from nodejs.org'
-$(which -s jshint); [[ $? != 0 ]] && sudo npm install jshint -g
-$(which -s node-inspector); [[ $? != 0 ]] && sudo npm install node-inspector -g
-$(which -s nodemon); [[ $? != 0 ]] && sudo npm install nodemon -g
+$(which -s node); if [ $? != 0 ]; then
+    echo 'Install node from nodejs.org'
+else
+    $(which -s jshint); [[ $? != 0 ]] && sudo npm install jshint -g
+    $(which -s node-inspector); [[ $? != 0 ]] && sudo npm install node-inspector -g
+    $(which -s nodemon); [[ $? != 0 ]] && sudo npm install nodemon -g
+    $(which -s grunt); [[ $? != 0 ]] && sudo npm install grunt-cli -g
+fi
 
 #
 # Carrybag assumes bash completion is installed using Homebrew
