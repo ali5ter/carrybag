@@ -306,6 +306,19 @@ watch () {
 }
 
 #
+# @usage ml source_file target_dir ... move a file then link it back to original place
+#
+
+ml () {
+    local _source=$1
+    local _target=$2
+    local _file=$(basename $_source)
+    [ -f $_target/$_file ] && rotate $_target/$_file
+    mv $_source $_target
+    ln -sf $_target/$_file $_source
+}
+
+#
 # Additional function customizations/overrides
 #
 
