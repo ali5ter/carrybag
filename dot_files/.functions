@@ -15,8 +15,11 @@ carrybag () {
     local _line='..........................'
     local _base=$(dirname $(\ls -l ~/.functions | awk '{print $11}'))
     local _usage _cmd _sum
-    local _data=$(find $_base | grep -v 'vim/backup' | cut -d':' -f1 | \
-            xargs grep -s '# @usage' | awk '{ sub(/.*# @usage /,""); print }' | \
+    local _os='osx'
+    [ $(uname | grep -c 'Linux') -gt 0 ] && _os='linux'
+    local _data=$(find $_base | grep -v 'vim/backup' | grep -v $_os | \
+            cut -d':' -f1 | xargs grep -s '# @usage' | \
+            awk '{ sub(/.*# @usage /,""); print }' | \
             grep -v 'xargs grep' | grep -v '); print' | sort)
     IFS=$'\n'
     for _usage in $_data; do
