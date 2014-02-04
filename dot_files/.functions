@@ -257,7 +257,7 @@ d2h () { echo 'obase=16;'$@ | bc -l; }
 # @usage h2d hexidecimal_number ... convert base-16 to base-10
 #
 
-h2d () { echo 'ibase=16;'$( echo $@ | tr '[a-f]' '[A-F]' ) | bc -l; }
+h2d () { echo 'obase=10;ibase=16;'$( echo $@ | tr '[a-f]' '[A-F]' ) | bc -l; }
 
 #
 # @usage d2b decimal_number ... convert base-10 to base-2
@@ -269,7 +269,7 @@ d2b () { echo 'obase=2;'$@ | bc -l; }
 # @usage b2d binary_number ... convert base-2 to base-10
 #
 
-b2d () { echo 'ibase=2;obase=A;'$@ | bc -l; }
+b2d () { echo 'obase=10;ibase=2;'$@ | bc -l; }
 
 #
 # @usage h2b hexidecimal_number ... convert base-16 to base-2
