@@ -248,16 +248,16 @@ rgb2hsl () {
 }
 
 #
-# @usage dec2hex ... convert base-10 to base-16
+# @usage d2h decimal_number ... convert base-10 to base-16
 #
 
-dec2hex () { echo 'obase=16;'$1 | bc -l; }
+d2h () { echo 'obase=16;'$@ | bc -l; }
 
 #
-# @usage hex2dec hex ... convert base-16 to base-10
+# @usage h2d hexidecimal_number ... convert base-16 to base-10, e.g. h2d C0
 #
 
-hex2dec () { echo 'ibase=16;obase=A;'$1 | bc -l; }
+h2d () { echo 'ibase=16;'$( echo $@ | tr '[a-f]' '[A-F]' ) | bc -l; }
 
 #
 # @usage rcsedit file ... rcs wrapped edit
