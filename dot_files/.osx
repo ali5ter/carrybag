@@ -15,12 +15,16 @@ export CLICOLOR=1
 # Path exports
 #
 
+export PATH=/usr/local/bin:$PATH            # include Homebrew packages
 [ -d /Developer ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
 [ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages
-export PATH=/usr/local/heroku/bin:$PATH # include Heroku Toolbelt
-export PATH=/usr/local/bin:$PATH        # include any homebrew installed packages
+export PATH=/usr/local/heroku/bin:$PATH     # include Heroku Toolbelt
+[ -d /Applications/ADT Bundle Mac ] && {    # Android dev tools
+    export PATH="/Applications/ADT Bundle Mac/sdk/platform-tools":$PATH
+    export PATH="/Applications/ADT Bundle Mac/sdk/tools":$PATH
+}
 
 #
 # Aliases
@@ -47,6 +51,7 @@ $(which -s git); [[ $? != 0 ]] && brew install git
 [ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
 $(which -s figlet); [[ $? != 0 ]] && brew install figlet
 $(which -s webkit2png); [[ $? != 0 ]] && brew install webkit2png
+$(which -s fswatch); [[ $? != 0 ]] && brew install fswatch
 
 #
 # Bootstrapping some apps using npm
