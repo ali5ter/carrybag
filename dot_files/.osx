@@ -21,9 +21,9 @@ export PATH=/usr/local/bin:$PATH            # include Homebrew packages
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 export PATH=/usr/local/heroku/bin:$PATH     # include Heroku Toolbelt
-[ -d /Applications/ADT Bundle Mac ] && {    # Android dev tools
-    export PATH="/Applications/ADT Bundle Mac/sdk/platform-tools":$PATH
-    export PATH="/Applications/ADT Bundle Mac/sdk/tools":$PATH
+[ -d '/Applications/ADT Bundle Mac' ] && {    # Android dev tools
+    export PATH='/Applications/ADT Bundle Mac/sdk/platform-tools':$PATH
+    export PATH='/Applications/ADT Bundle Mac/sdk/tools':$PATH
 }
 
 #
@@ -111,10 +111,10 @@ fi
 # @see http://synergy-foss.org/
 #
 
-if [ -e ~/Applications/synergy ]; then
+[ -e ~/Applications/synergy ] && {
     alias synergys="killit synergys; ~/Applications/synergy/synergys -c ~/.synergy.conf -n $1 -f"
     alias synergyc="killit synergyc; ~/Applications/synergy/synergyc --name $1 -f $2"
-fi
+}
 
 #
 # @usage ovftool ... https://www.vmware.com/support/developer/ovf/
@@ -130,10 +130,10 @@ fi
 # @see http://www.mamp.info/en/
 #
 
-if [ -e /Applications/MAMP ]; then
+[ -e /Applications/MAMP ] && {
     alias phplog="tail -f /Applications/MAMP/logs/php_error.log"                   # Tail the php error log
     alias clean_mamp="cd /Applications/MAMP; find . -name "*.pid" | xargs rm -f"   # Clean MAMP pid files
-fi
+}
 
 #
 # @usage rmDS_Store ... delete DS_Store files from the current directory
