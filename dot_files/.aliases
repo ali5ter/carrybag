@@ -10,7 +10,6 @@ alias ctags='ctags -R -f .tags'     # create tags recursively to a defined file
 
 alias sourcep="source ~/.bashrc"    # @usage sourcep ... source carrybag dot files
 alias jump='. ~/bin/jump'           # @usage jump bookmark ... jump to bookmarked directories
-alias webstart="python -m SimpleHTTPServer $*"  # @usage webstart ... instant httpd from current dir
 alias gs='git status -s'            # @usage gs ... git status summary
 alias gl='git log --pretty=oneline' # @usage gl ... show git log in one liners
 alias gb='git blame $* --date short'    # @usage gb files ... show blame for files

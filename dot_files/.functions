@@ -112,6 +112,21 @@ fproc () { ps aux | grep "$1" | grep -v 'grep' ; }
 kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
 
 #
+# @usage rproc string ... HUP a set of processes matching the given string
+#
+
+rproc () { fproc "$@" | awk '{print $2}' | xargs kill -HUP ; }
+
+#
+# @usage webserv ... instant httpd from current dir
+#
+
+webserv () {
+    kproc SimpleHTTPServer # HUPing the python module doesn't work
+    python -m SimpleHTTPServer $@
+}
+
+#
 # @usage sshkey ... display public rsa key or create ssh keys if none found
 #
 
@@ -355,6 +370,16 @@ ml () {
     [ -f $_target/$_file ] && rotate $_target/$_file
     mv $_source $_target
     ln -sf $_target/$_file $_source
+}
+
+#
+# @usage cfn filename ... clean up a filename
+#
+
+cfn () {
+    local file="$@"
+    mv -v "$file" $(echo "$file" | tr ' ' '_' | tr -d '[{}(),\!]' | \
+        tr -d "\'" | tr '[A-Z]' '[a-z]' | sed 's/_-_/_/g')
 }
 
 #
