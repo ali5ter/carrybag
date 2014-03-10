@@ -349,7 +349,7 @@ rotate () {
 }
 
 #
-# @usage watch [seconds] command ... execute a program periodically, showing output fullscreen
+# @usage watch [seconds] command ... execute a command periodically, showing output fullscreen
 # NOTE: If an alias is messing with your command then apply a backslash before it
 #
 
@@ -357,6 +357,34 @@ watch () {
     local delay=0
     if [ $# -gt 1 ]; then delay=$1; shift; fi
     while :; do clear; eval "$@"; sleep $delay; done
+}
+
+#
+# @usage mondir [seconds] command ... execute the command if a file changes or is added in the current directory
+# NOTE: If an alias is messing with your command then apply a backslash before it
+#
+
+mondir () {
+    rm -f /tmp/${TMPFILE_TMPL//[X]}*
+    local last=$(mktemp /tmp/$TMPFILE_TMPL)
+    local delay=2
+    local diff=''
+    if [ $# -gt 1 ]; then delay=$1; shift; fi
+    echo; echo "$(color white blue)Monitoring $(pwd) for file changes and additions every $delay seconds...$(color)"
+    sleep $delay
+    while :; do
+        diff=$(find . -newer $last -type f  | grep -v ".DS_Store\|.svn\|.git\|.vim/backup")
+        [ $(echo $diff | grep './' | wc -l | awk '{print $1}') -gt '0' ] && {
+            touch $last
+            echo
+            echo "$(color black green)Files changed at $(date):$(color)"
+            echo "$(color white green)$diff$(color)"
+            echo
+            echo "$(color black blue)Triggering command...$(color)"
+            eval "$@"
+        }
+        sleep $delay
+    done
 }
 
 #

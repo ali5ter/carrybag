@@ -5,6 +5,12 @@
 # @see .bashrc
 
 #
+# Useful globals
+#
+
+export TMPFILE_TMPL=.mondir-XXXXXXXXXX
+
+#
 # Paths
 #
 
