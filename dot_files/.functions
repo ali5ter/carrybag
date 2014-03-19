@@ -64,35 +64,47 @@ banner () {
 #
 
 compress () {
-    local source="$1"
-    local file files archive
-    _setHelp 'compress file/dir' 'tar-gzip a file or directory'
-
-    if [ -s "$source" ]; then
-        archive=$(basename "$source")
-        files="$source"
-
-        # for multiple files...
-        if [ ! -d "$source" ]; then
-            if [ $(ls "$source"|wc -l) -gt '2' ]; then
+    local source="$@"
+    local file
+    [ -s "$source" ] && {
+        local archive=$(basename "$source")
+        local files="$source"
+        [ ! -d "$source" ] && {
+            [ $(ls "$source"|wc -l) -gt '2' ] && {
                 archive=$(basename $(dirname "$source"))
                 files=''
-                for file in $(ls "$source"); do
-                    files=$files' '$file
+                for file in *; do
+                    [ -e "$source"] || files=$files' '$file
                 done
                 source=$files
-            fi
-        fi
-
-        tar -czvf ${archive}.tar.gz $files
-    fi
+            }
+        }
+        tar czvf ${archive}.tar.gz $files
+    }
 }
 
 #
-# @usage uncompress file/dir ... un-archive a tar.gz file
+# @usage uncompress file ... un-archive a file
 #
 
-uncompress () { [ -s "$1" ] && tar -xzvf "$1" ; }
+uncompress () {
+    [ -s "$1" ] && {
+        case "$@" in
+            *.Z)        uncompress "$@";;
+            *.tar)      tar xvf "$@";;
+            *.tbz2)     tar xvjf "$@";;
+            *.tar.xz)   tar xvf "$@";;
+            *.tgz)      tar xvzf "$@";;
+            *.tar.gz)   tar xvf "$@";;
+            *.tar.bz2)  tar xvjf "$@";;
+            *.gz)       gunzip "$@";;
+            *.zip)      unzip "$@";;
+            *.bz2)      bunzip2 "$@";;
+            *.deb)      ar vx "$@";;
+            *) echo ' Unsupported archive type';;
+        esac
+    }
+}
 
 #
 # @usage todir string ... mkdir and cd into it

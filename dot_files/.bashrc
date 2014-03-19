@@ -9,6 +9,7 @@
 shopt -s cdspell    # Correct minor spelling errors in a cd command.
 shopt -s histappend # Append to history rather than overwrite
 shopt -s dotglob    # Show dot files in path expansion
+shopt -s nullglob   # Don't use * for empty dirs when using 'for i in *'
 
 #
 # Source specific configurations
