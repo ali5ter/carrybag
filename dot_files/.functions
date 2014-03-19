@@ -5,6 +5,19 @@
 # @see .bashrc
 
 #
+# script to clean up on an EXIT signal
+#
+
+_exit () {
+    rm -f ${TMPFILE_TMPL//[X]}*         # remove any scratch files from .
+    rm -f /tmp/${TMPFILE_TMPL//[X]}*    # remove any scratch files from tmp
+    set +x;                             # turn off trace
+
+}
+
+trap _exit EXIT
+
+#
 # List usage metadata from carrybag dot files of the format:
 # @usage carrybag ... list commands provided by carrybag
 #
@@ -349,14 +362,16 @@ rotate () {
 }
 
 #
-# @usage watch [seconds] command ... execute a command periodically, showing output fullscreen
+# @usage watch [seconds] command ... execute a command periodically
 # NOTE: If an alias is messing with your command then apply a backslash before it
 #
 
 watch () {
     local delay=0
-    if [ $# -gt 1 ]; then delay=$1; shift; fi
-    while :; do clear; eval "$@"; sleep $delay; done
+    local int=false
+    [ $# -gt 1 ] && { delay=$1; shift; }
+    trap "int=true" INT
+    while ! $int; do $*; sleep $delay || int=true; done
 }
 
 #
@@ -369,10 +384,13 @@ mondir () {
     local last=$(mktemp /tmp/$TMPFILE_TMPL)
     local delay=2
     local diff=''
-    if [ $# -gt 1 ]; then delay=$1; shift; fi
+    local int=false
+    [ $# -gt 1 ] && { delay=$1; shift; }
+    touch $last
     echo; echo "$(color white blue)Monitoring $(pwd) for file changes and additions every $delay seconds...$(color)"
+    trap "int=true" INT
     sleep $delay
-    while :; do
+    while ! $int; do
         diff=$(find . -newer $last -type f  | grep -v ".DS_Store\|.svn\|.git\|.vim/backup")
         [ $(echo $diff | grep './' | wc -l | awk '{print $1}') -gt '0' ] && {
             touch $last
@@ -381,9 +399,9 @@ mondir () {
             echo "$(color white green)$diff$(color)"
             echo
             echo "$(color black blue)Triggering command...$(color)"
-            eval "$@"
+            eval "$@" && echo "$(color black blue)Done$(color)"
         }
-        sleep $delay
+        sleep $delay || int=true
     done
 }
 
