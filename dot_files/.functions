@@ -88,7 +88,7 @@ compress () {
 #
 
 uncompress () {
-    [ -s "$1" ] && {
+    [ -s "$@" ] && {
         case "$@" in
             *.Z)        uncompress "$@";;
             *.tar)      tar xvf "$@";;
@@ -110,37 +110,37 @@ uncompress () {
 # @usage todir string ... mkdir and cd into it
 #
 
-todir () { mkdir -p $1 && cd $1 ; }
+todir () { mkdir -p "$@" && cd "$@"; }
 
 #
 # @usage ffile string ... find a file from this directory down
 #
 
-ffile () { find . | grep -i --color=always "$1" 2>/dev/null ;  }
+ffile () { find . | grep -i --color=always "$@" 2>/dev/null;  }
 
 #
 # @usage ftext string ... find text in files from this directory down
 #
 
-ftext () { find . | xargs grep -i -C 2 --color=always "$1" 2>/dev/null; }
+ftext () { find . | xargs grep -i -C 2 --color=always "$@" 2>/dev/null; }
 
 #
 # @usage fproc string ... find a process matching the given string
 #
 
-fproc () { ps aux | grep "$1" | grep -v 'grep' ; }
+fproc () { ps aux | grep "$@" | grep -v 'grep'; }
 
 #
 # @usage kproc string ... kill a set of processes matching the given string
 #
 
-kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9 ; }
+kproc () { fproc "$@" | awk '{print $2}' | xargs kill -9; }
 
 #
 # @usage rproc string ... HUP a set of processes matching the given string
 #
 
-rproc () { fproc "$@" | awk '{print $2}' | xargs kill -HUP ; }
+rproc () { fproc "$@" | awk '{print $2}' | xargs kill -HUP; }
 
 #
 # @usage webserv ... instant httpd from current dir
@@ -148,7 +148,7 @@ rproc () { fproc "$@" | awk '{print $2}' | xargs kill -HUP ; }
 
 webserv () {
     kproc SimpleHTTPServer # HUPing the python module doesn't work
-    python -m SimpleHTTPServer $@
+    python -m SimpleHTTPServer "$@"
 }
 
 #
