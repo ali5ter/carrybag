@@ -18,7 +18,7 @@ export CLICOLOR=1
 export PATH=/usr/local/bin:$PATH            # include Homebrew packages
 [ -d /Developer ] &&  export PATH=/Developer/Tools:/Developer/Applications:$PATH
 [ -d /Applications/MAMP ] && export PATH=/Applications/MAMP/Library/bin:$PATH
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_09.jdk/Contents/Home
+export JAVA_HOME=$(/usr/libexec/java_home)  # using XCode command line tools util
 export PYTHONPATH=/usr/local/lib/python2.7/site-packages
 export PATH=/usr/local/heroku/bin:$PATH     # include Heroku Toolbelt
 [ -d '/Applications/ADT Bundle Mac' ] && {    # Android dev tools
