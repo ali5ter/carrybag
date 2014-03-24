@@ -1,0 +1,129 @@
+#!/bin/bash
+#
+# @file _cordova
+# ☆  Create a cordova project or make an existing web app a cordova project
+# on OSX only.
+# @see http://coenraets.org/blog/cordova-phonegap-3-tutorial/
+# @author Alister Lewis-Bowen <alister@different.com>
+# @requires color <http://code.google.com/p/ansi-color/>
+#
+# This software is distributed under the the MIT License.
+#
+# Copyright (c) 2014 Alister Lewis-Bowen
+#
+
+_help () {
+    local helpText="
+$(color bd)Create a cordova project$(color)
+
+Usage: $(color bd)_cordova [$(color ul)option$(color)$(color bd)] [$(color ul)project\
+$(color)$(color bd)]$(color)
+
+Options:
+-b, --build    build a cordova project.
+-c, --create $(color ul)project$(color)   create a cordova project called \
+$(color ul)project$(color) and change the current directoy to that project
+-m, --merge $(color ul)project$(color)    merge an existing web app with a new \
+cordova project called $(color ul)project$(color) and change the current \
+directoy to that project
+-o, --open    open a cordova project in Xcode
+"
+    echo "$helpText"
+}
+
+[ "$(uname)" != "Darwin" ] && {
+    echo "$(color red)This script is designed to work only with OSX for now.$(color)"
+    exit 1;
+}
+
+project=${2:-$1}
+_project=$(echo $project | tr '[:upper:]' '[:lower:]')
+id=com.different.${_project}
+iosSdk="/Applications/Xcode.app"
+androidSdk="/Applications/ADT Bundle Mac"
+ant=$(type -p ant)
+cordova=$(type -p cordova)
+
+[ ! -e "$iosSdk" ] && {
+    echo "$(color red)Please download and install Apple Xcode.$(color)"
+    exit 1;
+}
+
+[ ! -e "$androidSdk" ] && {
+    echo "$(color red)Please download and install the SDK ADT Bundle for Mac under $androidSdk.$(color)"
+    echo "$(color yellow)Once installed, make sure to add the following paths to your environment:$(color)"
+    echo "$(color yellow)/Applications/ADT Bundle Mac/sdk/platform-tools$(color)"
+    echo "$(color yellow)/Applications/ADT Bundle Mac/sdk/tools$(color)"
+    exit 1;
+}
+
+[ -z "$ant" ] && {
+    echo "$(color yellow)Ant doesn't appear to be installed.$(color)"
+    read -p "$(color yellow)Can I install this for you now? [Y/n] $(color)"
+    [ "$REPLY" == 'Y' ] && brew update && brew install ant
+}
+
+[ -z "$cordova" ] && {
+    echo "$(color yellow)Cordova doesn't appear to be installed.$(color)"
+    read -p "$(color yellow)Can I install this for you now? [Y/n] $(color)"
+    [ "$REPLY" == 'Y' ] && sudo npm install -g cordova
+}
+
+case "$1" in
+    ''|--help|-h)
+        _help
+        ;;
+    #
+    # Build ios & android targets
+    #
+    build|--build|-b)
+        $cordova build ios && \
+        $cordova build android
+        ;;
+    #
+    # Create a project
+    #
+    create|--create|-c)
+        $cordova create $_project $id $project && \
+        cd $_project && \
+        $cordova platforms add ios && \
+        $cordova platforms add android && \
+        $cordova plugin add org.apache.cordova.device && \
+        $cordova plugin add org.apache.cordova.console && \
+        echo -e ".DS_Store\nhooks/*\nmerges/*\nplatforms/*\nplugins/*" > .gitignore
+        ## git init
+        ;;
+    #
+    # Merge with an existing web app
+    #
+    merge|--merge|-m)
+        [ -d $project ] && {
+            mv $project ${project}.1 && \
+            _cordova --create $project && \
+            cd $project && \
+            rm -fR www && \
+            mv ../${project}.1 ./www && \
+            rm -fR ../${project}.1
+        }
+        ;;
+    #
+    # Open project in Xcode
+    #
+    open|--open|-o)
+        $(open platforms/ios/*.xcodeproj)
+        ;;
+    #
+    #
+    # Defaul to creating a project
+    #
+    *)
+        if [ -d $_project ]; then
+            echo "$(color yellow)A $_project directory already exists.$(color)"
+            read -p "$(color yellow)Do you want this to be a cordova project? [Y/n] $(color)"
+            [ "$REPLY" == 'Y' ] && _cordova --merge $project
+        else
+            _cordova --create $project
+        fi
+        ;;
+esac
+
