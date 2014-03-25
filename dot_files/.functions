@@ -147,8 +147,9 @@ rproc () { fproc "$@" | awk '{print $2}' | xargs kill -HUP; }
 #
 
 webserv () {
-    kproc SimpleHTTPServer # HUPing the python module doesn't work
-    python -m SimpleHTTPServer "$@"
+    kproc http-server
+    # display autoindex and include 'Access-Control-Allow-Origin' in response header
+    http-server -i --cors -a ${1-'127.0.0.1'} -p ${2-'8000'}
 }
 
 #

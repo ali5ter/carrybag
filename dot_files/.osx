@@ -68,6 +68,7 @@ else
     $(which -s jshint); [[ $? != 0 ]] && sudo npm install jshint -g
     $(which -s node-inspector); [[ $? != 0 ]] && sudo npm install node-inspector -g
     $(which -s nodemon); [[ $? != 0 ]] && sudo npm install nodemon -g
+    [ -z $(type -p http-server) ] && sudo npm install http-server -g
     $(which -s grunt); [[ $? != 0 ]] && sudo npm install grunt-cli -g
 fi
 
