@@ -88,7 +88,18 @@ fi
 [ -e /Applications/Xcode.app/Contents/Developer/usr/share/git-core ] && {
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
-    PS1='[\u@\h \W$(__git_ps1 " (%s)")]\$ '
+    # Prompt includes:
+    # ● current time
+    # ● jobs running indicator
+    # ● current dir basename
+    # ● current git branch
+    PS1='\n\
+$(color cyan black)\@ \
+$([ $(jobs -p | wc -l) -gt '0' ] && echo -n "$(color yellow black)● $(color)" || echo -n "$(color green black)○ $(color)")\
+$(color white black)\u@\h \
+$(color yellow black)\W\
+$(__git_ps1 " $(color white magenta) %s $(color)") \
+$(color bold white)〉$(color)'
 }
 
 #
