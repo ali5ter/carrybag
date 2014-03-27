@@ -52,6 +52,7 @@ $(which -s git); [[ $? != 0 ]] && brew install git
 $(which -s figlet); [[ $? != 0 ]] && brew install figlet
 $(which -s webkit2png); [[ $? != 0 ]] && brew install webkit2png
 $(which -s fswatch); [[ $? != 0 ]] && brew install fswatch
+[ -z $(type -p icalBuddy) ] && brew install ical-buddy
 
 #
 # Bootstrapping some apps using npm
@@ -90,15 +91,17 @@ fi
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
     # Prompt includes:
     # ● current time
-    # ● jobs running indicator
+    # ● meeting in next 15 minutes indicator
     # ● current dir basename
     # ● current git branch
+    # ● jobs running indicator
     PS1='\n\
-$(color cyan black)\@ \
-$([ $(jobs -p | wc -l) -gt '0' ] && echo -n "$(color yellow black)● $(color)" || echo -n "$(color green black)○ $(color)")\
-$(color white black)\u@\h \
-$(color yellow black)\W\
+$(color cyan)\@$(color) \
+$([[ -n $(meeting) ]] && echo -n "★ " ||  echo -n "☆ ") \
+$(color yellow)\u@\h$(color) \
+$(color bold white)\W$(color)\
 $(__git_ps1 " $(color white magenta) %s $(color)") \
+$([ $(jobs -p | wc -l) -gt '0' ] && echo -n "$(color red)● $(color)" || echo -n "○ ")\
 $(color bold white)〉$(color)'
 }
 
@@ -114,7 +117,10 @@ $(color bold white)〉$(color)'
 # @see http://hasseg.org/icalBuddy/
 #
 
-[ -e /usr/local/bin/icalBuddy ] && alias meetings="icalBuddy -sc -n -f -eep notes eventsToday"
+[ -e /usr/local/bin/icalBuddy ] && {
+    alias meetings="icalBuddy -sc -n -f -eep notes eventsToday"
+    alias meeting='icalBuddy -ea -li 1 -f eventsFrom:"$(date -v+15M)" to:"$(date -v+2M)"'
+}
 
 #
 # KBM control
