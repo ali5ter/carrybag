@@ -53,6 +53,7 @@ $(which -s figlet); [[ $? != 0 ]] && brew install figlet
 $(which -s webkit2png); [[ $? != 0 ]] && brew install webkit2png
 $(which -s fswatch); [[ $? != 0 ]] && brew install fswatch
 [ -z $(type -p icalBuddy) ] && brew install ical-buddy
+[ -z $(type -p html2text) ] && brew install html2text
 
 #
 # Bootstrapping some apps using npm
@@ -94,7 +95,7 @@ fi
     # ● current dir basename
     # ● current git branch
     # ● jobs running indicator
-    PS1='\n\
+    PS1='
 $(color cyan)\@$(color) \
 $(color yellow)\u@\h$(color) \
 $(color bold white)\W$(color)\
@@ -118,6 +119,21 @@ $(color bold white)〉$(color)'
 [ -e /usr/local/bin/icalBuddy ] && {
     alias meetings="icalBuddy -sc -n -f -eep notes eventsToday"
     alias meeting='icalBuddy -ea -li 1 -f eventsFrom:"$(date -v+15M)" to:"$(date -v+2M)"'
+}
+
+#
+# @usage google term ... google search the term
+#
+
+[ -e /usr/local/bin/html2text ] && {
+
+    google () {
+        local term="$@"
+        term=${term// /%20}
+        curl -s -A Mozilla http://www.google.com/search?q=$term | \
+        html2text -style pretty -width 132 | more
+    }
+
 }
 
 #
