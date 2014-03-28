@@ -96,12 +96,13 @@ fi
     # ● current git branch
     # ● jobs running indicator
     PS1='
-$(color cyan)\@$(color) \
-$(color yellow)\u@\h$(color) \
-$(color bold white)\W$(color)\
+$(color cyan)\@ \
+$(color yellow)\u@\h \
+$(color bold white)\W\
 $(__git_ps1 " $(color white magenta) %s $(color)") \
-$([ $(jobs -p | wc -l) -gt '0' ] && echo -n "$(color red)● $(color)" || echo -n "○ ")\
-$(color bold white)〉$(color)'
+$([ $(jobs -p | wc -l) -gt '0' ] && echo -n "$(color red)● " || echo -n "○ ")\
+$(color)
+〉'
 }
 
 #
