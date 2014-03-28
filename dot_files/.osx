@@ -90,11 +90,6 @@ fi
 [ -e /Applications/Xcode.app/Contents/Developer/usr/share/git-core ] && {
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-completion.bash
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
-    # Prompt includes:
-    # ● current time
-    # ● current dir basename
-    # ● current git branch
-    # ● jobs running indicator
     PS1='
 $(color cyan)\@ \
 $(color yellow)\u@\h \
