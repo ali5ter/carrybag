@@ -116,6 +116,7 @@ fi
     source /Applications/Xcode.app/Contents/Developer/usr/share/git-core/git-prompt.sh
     PS1='
 $(color cyan)\@ \
+$( [ -e ~/.meetingAlert ] && cat ~/.meetingAlert) \
 $(color yellow)\u@\h \
 $(color bold white)\W\
 $(__git_ps1 " $(color white magenta) %s $(color)") \
