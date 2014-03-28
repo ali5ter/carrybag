@@ -139,6 +139,8 @@ $(color)
 [ -e /usr/local/bin/icalBuddy ] && {
     alias meetings="icalBuddy -sc -n -f -eep notes eventsToday"
     alias meeting='icalBuddy -ea -li 1 -f eventsFrom:"$(date -v+15M)" to:"$(date -v+2M)"'
+
+    _meetingAlert () { [[ -n $(meeting) ]] && echo -n '★ ' >~/.meetingAlert || echo -n '☆ ' >~/.meetingAlert; }
 }
 
 #
