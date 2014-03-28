@@ -5,6 +5,7 @@
 # @see https://github.com/mathiasbynens/dotfiles/blob/master/.osx
 # @see .bashrc
 
+
 #
 # Colors
 #
@@ -40,13 +41,32 @@ alias wget='curl -O'    # since curl is native to OSX
 chflags nohidden ~/Library  # don't hide the Library dir
 
 #
+# Voice greeting
+#
+
+_greeting () {
+    local h=$(date +"%H")
+    [[ $h -ge 0 && $h -lt 12 ]] && { say -v Vicki "Good morning $USER"; return; } \
+        || [[ $h -ge 12 && $h -lt 18 ]] && { say -v Vicki "Good afternoon $USER"; return; } \
+          || say -v Vicki "Good evening $USER"
+}
+
+_greeting
+
+#
 # Helper to install cmdl app
 #
 
 _install () {
     local cmd=$1; shift
-    local install="$@"
-    [ -z $(type -p $cmd) ] && $($install)
+    [ -z $(type -p $cmd) ] && {
+        local msg="Can I install $1 for you?"
+        say "$msg"
+        read -p "$(color yellow)$msg$(color)"
+        [ "$REPLY" == "Y" ] \
+            && { $($@); say 'Ok. Installing'; } \
+            || say 'Ok'
+    }
 }
 
 #
