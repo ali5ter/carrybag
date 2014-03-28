@@ -174,10 +174,14 @@ sshkey () {
 }
 
 #
-# @usage ips [interface] ... list ips available on this machines NICs
+# @usage ips [interface] ... show connected IPs for this machine
 #
 
-ips () { ifconfig $1 | grep 'inet ' | awk '{print $2}' | grep -v 127.0.0.1 ; }
+ips () {
+    [ -z $1 ] \
+        && echo 'local: '$(ipconfig getifaddr en0)' public: '$(curl -s ipecho.net/plain) \
+        || ipconfig getifaddr $1
+}
 
 #
 # @usage end file ... show the last 100 lines of a given file
