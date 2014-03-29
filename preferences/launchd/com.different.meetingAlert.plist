@@ -7,7 +7,7 @@
     <key>UserName</key>
     <string>alister</string>
     <key>Program</key>
-    <string>source /Users/alister/.bashrc; _meetingAlert</string>
+    <string>/Users/alister/bin/meetingAlert</string>
     <key>StartCalendarInterval</key>
     <dict>
         <key>Minute</key>
