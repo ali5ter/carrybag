@@ -60,9 +60,9 @@ _greeting
 _install () {
     local cmd=$1; shift
     [ -z $(type -p $cmd) ] && {
-        local msg="Can I install $1 for you?"
+        local msg="Can I install $cmd for you?"
         say "$msg"
-        read -p "$(color yellow)$msg$(color)"
+        read -p "$(color yellow)$msg$(color) [Y/n] "
         [ "$REPLY" == "Y" ] \
             && { $($@); say 'Ok. Installing'; } \
             || say 'Ok'
@@ -73,7 +73,6 @@ _install () {
 # Bootstrapping some apps using homebrew
 # @see http://mxcl.github.com/homebrew/
 #
-
 [ -z $(type -p brew) ] && ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
 _install git brew install git
 [ ! -f $(brew --prefix)/etc/bash_completion ] && brew install bash-completion

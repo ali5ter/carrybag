@@ -39,6 +39,7 @@ directoy to that project
 project=${2:-$1}
 _project=$(echo $project | tr '[:upper:]' '[:lower:]')
 id=com.different.${_project}
+
 iosSdk="/Applications/Xcode.app"
 androidSdk="/Applications/ADT Bundle Mac"
 ant=$(type -p ant)
@@ -113,8 +114,7 @@ case "$1" in
         $(open platforms/ios/*.xcodeproj)
         ;;
     #
-    #
-    # Defaul to creating a project
+    # Default to creating a project
     #
     *)
         if [ -d $_project ]; then
