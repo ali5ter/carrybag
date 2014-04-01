@@ -131,13 +131,14 @@ $(color)
 [ -e ~/bin/drush ] && alias drush='php ~/bin/drush/drush.php'
 
 #
+# @usage meeting ... display any events 15 minutes from now
 # @usage meetings ... display todays events from iCal
-# meetings ... show all todays iCall events
 # @see http://hasseg.org/icalBuddy/
 #
 
 [ -e /usr/local/bin/icalBuddy ] && {
-    alias meetings="icalBuddy -sc -n -f -eep notes eventsToday"
+    alias meeting='icalBuddy -ea -li 1 -f eventsFrom:"'$(date -v+15M)'" to:"'$(date -v+2H)'"'
+    alias meetings='icalBuddy -sc -n -f -eep notes eventsToday'
 }
 
 #
