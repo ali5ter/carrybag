@@ -107,7 +107,7 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 
 #
-# Include git completion config
+# Include git completion config and custom prompt
 #
 
 [ -e /Applications/Xcode.app/Contents/Developer/usr/share/git-core ] && {
@@ -206,6 +206,12 @@ alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 [ -e '/Applications/Sublime Text 2.app' ] && subl () {
     '/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl' ${1:-'.'}
 }
+
+#
+# @usage pman ... view man pages in Preview
+#
+
+pman () { man -t "$1" | open -f -a /Applications/Preview.app; }
 
 #
 # @usage housekeeping ... housekeeping for things like npm and homebrew
