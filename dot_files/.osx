@@ -81,6 +81,7 @@ _install figlet brew install figlet
 _install webkit2png brew install webkit2png
 _install icalBuddy brew install ical-buddy
 _install html2text brew install html2text
+[ -e /Applications/Xcode.app ] && { _install mogenerator brew install mogenerator; }
 
 #
 # Bootstrapping some apps using npm
@@ -107,7 +108,7 @@ if [ -f $(brew --prefix)/etc/bash_completion ]; then
 fi
 
 #
-# Include git completion config and custom prompt
+# Include git completion config and custom prompt for git dev
 #
 
 [ -e /Applications/Xcode.app/Contents/Developer/usr/share/git-core ] && {
