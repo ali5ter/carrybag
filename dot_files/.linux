@@ -12,42 +12,56 @@
 alias ls="ls --color=always $*"
 
 #
-# Boostrapping some apps using apt-get
-# @see https://help.ubuntu.com/12.04/serverguide/apt-get.html
+# @usage bootstrap ... attempt to install software we need
 #
 
-multiverse='multiverse-precise.list'
-[[ ! -e /etc/apt/sources.list.d/$multiverse ]] && {
-    echo "deb http://mirrors.kernel.org/ubuntu precise main multiverse" >> /tmp/$multiverse
-    sudo cp /tmp/$multiverse /etc/apt/sources.list.d/
-    rm -f /tmp/$multiverse
+bootstrap () {
+
+    local msg="Shall I bootstrap your system for you?"
+    read -p "$(color yellow)$msg$(color) [Y/n] "
+    [ "$REPLY" != "Y" ] && { return 0; }
+
+    # Boostrapping some apps using apt-get
+    # @see https://help.ubuntu.com/12.04/serverguide/apt-get.html
+
+    multiverse='multiverse-precise.list'
+    [[ ! -e /etc/apt/sources.list.d/$multiverse ]] && {
+        echo "deb http://mirrors.kernel.org/ubuntu precise main multiverse" >> /tmp/$multiverse
+        sudo cp /tmp/$multiverse /etc/apt/sources.list.d/
+        rm -f /tmp/$multiverse
+    }
+    unset multiverse
+    which git >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install git
+    which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
+    which rcs >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install rcs
+    which bc >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install bc
+    which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
+    which figlet >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install figlet
+    [[ $(dpkg --list | grep exim4 | grep -c exim) -eq 0 ]] && {
+        sudo apt-get -y install exim4
+        # @see https://www.digitalocean.com/community/articles/how-to-install-the-send-only-mail-server-exim-on-ubuntu-12-04
+        sudo dpkg-reconfigure exim4-config
+        echo "Test from $(hostname)" | mail -s TEST alister@different.com
+    }
+
+    # Bootstrapping some apps using npm
+    # @see https://github.com/joyent/node/wiki/installation
+    # Can also check what's installed using 'npm ls --global --depth 0'
+
+    which node >/dev/null; [[ $? != 0 ]] && {
+        sudo apt-get -y install python-software-properties python g++ make
+        sudo add-apt-repository ppa:chris-lea/node.js
+        sudo apt-get update
+        sudo apt-get -y install nodejs
+    }
+    which jshint >/dev/null; [[ $? != 0 ]] && sudo npm install jshint -g
+    which node-inspector >/dev/null; [[ $? != 0 ]] && sudo npm install node-inspector -g
+    which nodemon >/dev/null; [[ $? != 0 ]] && sudo npm install nodemon -g
+    # sudo apt-get install mongodb
+    # sudo service mongodb start
+    # sudo apt-get install nginx
+    # sudo service nginx start
 }
-unset multiverse
-which git >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install git
-which vim >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install vim
-which rcs >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install rcs
-which bc >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install bc
-which ctags >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install exuberant-ctags
-which figlet >/dev/null; [[ $? != 0 ]] && sudo apt-get -y install figlet
-[[ $(dpkg --list | grep exim4 | grep -c exim) -eq 0 ]] && {
-    sudo apt-get -y install exim4
-    # @see https://www.digitalocean.com/community/articles/how-to-install-the-send-only-mail-server-exim-on-ubuntu-12-04
-    sudo dpkg-reconfigure exim4-config
-    echo "Test from $(hostname)" | mail -s TEST alister@different.com
-}
-which node >/dev/null; [[ $? != 0 ]] && {
-    sudo apt-get -y install python-software-properties python g++ make
-    sudo add-apt-repository ppa:chris-lea/node.js
-    sudo apt-get update
-    sudo apt-get -y install nodejs
-}
-which jshint >/dev/null; [[ $? != 0 ]] && sudo npm install jshint -g
-which node-inspector >/dev/null; [[ $? != 0 ]] && sudo npm install node-inspector -g
-which nodemon >/dev/null; [[ $? != 0 ]] && sudo npm install nodemon -g
-#        sudo apt-get install mongodb
-#        sudo service mongodb start
-#        sudo apt-get install nginx
-#        sudo service nginx start
 
 # bash_completion?
 

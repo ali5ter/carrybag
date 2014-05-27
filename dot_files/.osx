@@ -59,44 +59,55 @@ _greeting
 
 _install () {
     local cmd=$1; shift
+    local install="$@"
     [ -z $(type -p $cmd) ] && {
         local msg="Can I install $cmd for you?"
         say "$msg"
         read -p "$(color yellow)$msg$(color) [Y/n] "
         [ "$REPLY" == "Y" ] \
-            && { $($@); say 'Ok. Installing'; } \
+            && { say 'Ok. Installing'; $($install); } \
             || say 'Ok'
     }
 }
 
 #
-# Bootstrapping some apps using homebrew
-# @see http://mxcl.github.com/homebrew/
-#
-[ -z $(type -p brew) ] && ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
-_install git brew install git
-[ ! -f $(brew --prefix)/etc/bash_completion ] && brew install bash-completion
-[ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
-_install figlet brew install figlet
-_install webkit2png brew install webkit2png
-_install icalBuddy brew install ical-buddy
-_install html2text brew install html2text
-[ -e /Applications/Xcode.app ] && { _install mogenerator brew install mogenerator; }
-
-#
-# Bootstrapping some apps using npm
-# @see https://github.com/joyent/node/wiki/installation
-# Can also check what's installed using 'npm ls --global --depth 0'
+# @usage bootstrap ... attempt to install software we need
 #
 
-if [ -z $(type -p node) ]; then
-    echo 'Install node from nodejs.org'
-else
-    _install jshint sudo npm install jshint -g
-    _install node-inspector sudo npm install node-inspector -g
-    _install nodemon sudo npm install nodemon -g
-    _install http-server sudo npm install http-server -g
-fi
+bootstrap () {
+
+    local msg="Shall I bootstrap your system for you?"
+    say "$msg"
+    read -p "$(color yellow)$msg$(color) [Y/n] "
+    [ "$REPLY" != "Y" ] && { say 'Ok'; return 0; }
+    say 'Ok. Attempting to bootstrap your system'
+
+    # Bootstrapping some apps using homebrew
+    # @see http://mxcl.github.com/homebrew/
+
+    [ -z $(type -p brew) ] && ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+        _install git brew install git
+    [ ! -f $(brew --prefix)/etc/bash_completion ] && brew install bash-completion
+    [ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
+    _install figlet brew install figlet
+    _install webkit2png brew install webkit2png
+    _install icalBuddy brew install ical-buddy
+    _install html2text brew install html2text
+    [ -e /Applications/Xcode.app ] && { _install mogenerator brew install mogenerator; }
+
+    # Bootstrapping some apps using npm
+    # @see https://github.com/joyent/node/wiki/installation
+    # Can also check what's installed using 'npm ls --global --depth 0'
+
+    if [ -z $(type -p node) ]; then
+        echo 'Install node from nodejs.org'
+    else
+        _install jshint sudo npm install jshint -g
+        _install node-inspector sudo npm install node-inspector -g
+        _install nodemon sudo npm install nodemon -g
+        _install http-server sudo npm install http-server -g
+    fi
+}
 
 #
 # Carrybag assumes bash completion is installed using Homebrew
