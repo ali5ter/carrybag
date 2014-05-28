@@ -45,7 +45,7 @@ chflags nohidden ~/Library  # don't hide the Library dir
 #
 
 _greeting () {
-    local h=$(date +"%H")
+    local h=$(date +"%k")
     [[ $h -ge 0 && $h -lt 12 ]] && { say -v Vicki "Good morning $USER"; return; } \
         || [[ $h -ge 12 && $h -lt 18 ]] && { say -v Vicki "Good afternoon $USER"; return; } \
           || say -v Vicki "Good evening $USER"
