@@ -230,10 +230,13 @@ pman () { man -t "$1" | open -f -a /Applications/Preview.app; }
 #
 
 housekeeping () {
+    sudo periodic daily weekly monthly  # run osx maint. scripts
     brew update     # get homebrew up-to-date
     brew upgrade    # apply any updates
     brew cleanup    # clean up the crud
     sudo npm update -g  # get npm global packages up-to-date
     # if there's a problem then we'd do...
+    # sudo npm cache clean && npm update -g
+    # or reinstall...
     # (curl https://npmjs.org/install.sh | sudo sh) && rm install.sh
 }
