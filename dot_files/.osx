@@ -230,13 +230,36 @@ pman () { man -t "$1" | open -f -a /Applications/Preview.app; }
 #
 
 housekeeping () {
-    sudo periodic daily weekly monthly  # run osx maint. scripts
-    brew update     # get homebrew up-to-date
-    brew upgrade    # apply any updates
-    brew cleanup    # clean up the crud
-    sudo npm update -g  # get npm global packages up-to-date
-    # if there's a problem then we'd do...
-    # sudo npm cache clean && npm update -g
-    # or reinstall...
-    # (curl https://npmjs.org/install.sh | sudo sh) && rm install.sh
+
+    local msg="Shall I clean up your Mac system files for you?"; say "$msg"
+    read -p "$(color yellow)$msg$(color) [Y/n] "
+    [ "$REPLY" == "Y" ] && {
+        say 'Ok. Running all the OSX maintenance scripts on your system.'
+        sudo periodic daily weekly monthly  # run osx maint. scripts
+    }
+
+    local msg="Shall I update your Homebrew environment for you?"; say "$msg"
+    read -p "$(color yellow)$msg$(color) [Y/n] "
+    [ "$REPLY" == "Y" ] && {
+        say 'Ok. Updating, upgradng and cleaning your Homebrew environment.'
+        brew update     # get homebrew up-to-date
+        brew upgrade    # apply any updates
+        brew cleanup    # clean up the crud
+    }
+
+    local msg="Shall I update your NPM environment for you?"; say "$msg"
+    read -p "$(color yellow)$msg$(color) [Y/n] "
+    [ "$REPLY" == "Y" ] && {
+        local msg="Do you want me to clean out the NPM cache first?"; say "$msg"
+        read -p "$(color yellow)$msg$(color) [Y/n] "
+        [ "$REPLY" == "Y" ] && {
+            sudo npm cache clean
+        }
+        say 'Ok. Updating your NPM environment.'
+        sudo npm update -g  # get npm global packages up-to-date
+        # Problems? Reinstall...
+        # (curl https://npmjs.org/install.sh | sudo sh) && rm install.sh
+    }
+
+    say 'Ok. Housekeeping complete.'
 }
