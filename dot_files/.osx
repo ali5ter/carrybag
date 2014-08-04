@@ -226,6 +226,18 @@ alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 pman () { man -t "$1" | open -f -a /Applications/Preview.app; }
 
 #
+# @usage fiosapp app_name ... find the persistent are for an iOS simulator app
+#
+
+ipsdir=~/Library/Application\ Support/iPhone\ Simulator/7.1/Applications
+[ -e "$ipsdir" ] && fiosapp () {
+    local guid=37 ## length of the GUID + slash
+    local l=$(echo $ipsdir | awk '{print length}')
+    find "$ipsdir" | grep -i "$@" | cut -c 1-$(($l + $guid)) | uniq
+}
+unset iPhoneSimDir
+
+#
 # @usage housekeeping ... housekeeping for things like npm and homebrew
 #
 
