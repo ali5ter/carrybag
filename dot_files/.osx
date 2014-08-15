@@ -99,14 +99,13 @@ bootstrap () {
     # @see https://github.com/joyent/node/wiki/installation
     # Can also check what's installed using 'npm ls --global --depth 0'
 
-    if [ -z $(type -p node) ]; then
-        echo 'Install node from nodejs.org'
-    else
+    [ -z $(type -p node) ] && { echo 'Install node from nodejs.org'; } \
+    || {
         _install jshint sudo npm install jshint -g
         _install node-inspector sudo npm install node-inspector -g
         _install nodemon sudo npm install nodemon -g
         _install http-server sudo npm install http-server -g
-    fi
+    }
 }
 
 #
@@ -114,9 +113,7 @@ bootstrap () {
 # @see https://github.com/bobthecow/git-flow-completion/wiki/Install-Bash-git-completion
 #
 
-if [ -f $(brew --prefix)/etc/bash_completion ]; then
-    . $(brew --prefix)/etc/bash_completion
-fi
+[ -f $(brew --prefix)/etc/bash_completion ] && . $(brew --prefix)/etc/bash_completion
 
 #
 # Include git completion config and custom prompt for git dev
