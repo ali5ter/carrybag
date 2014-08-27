@@ -446,6 +446,15 @@ cfn () {
 }
 
 #
+# @usage ftree ... show textual graph of subdirectory tree
+#
+
+ftree () {
+    ls -R | grep -v .git | grep ":$" | \
+        sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'
+}
+
+#
 # Additional function customizations/overrides
 #
 
