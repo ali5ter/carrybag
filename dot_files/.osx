@@ -243,14 +243,14 @@ housekeeping () {
     local msg="Shall I clean up your Mac system files for you?"; say "$msg"
     read -p "$(color yellow)$msg$(color) [Y/n] "
     [ "$REPLY" == "Y" ] && {
-        say 'Ok. Running all the OSX maintenance scripts on your system.'
+        say 'Ok.'
         sudo periodic daily weekly monthly  # run osx maint. scripts
     }
 
     local msg="Shall I update your Homebrew environment for you?"; say "$msg"
     read -p "$(color yellow)$msg$(color) [Y/n] "
     [ "$REPLY" == "Y" ] && {
-        say 'Ok. Updating, upgradng and cleaning your Homebrew environment.'
+        say 'Ok.'
         brew update     # get homebrew up-to-date
         brew upgrade    # apply any updates
         brew cleanup    # clean up the crud
@@ -264,7 +264,7 @@ housekeeping () {
         [ "$REPLY" == "Y" ] && {
             sudo npm cache clean
         }
-        say 'Ok. Updating your NPM environment.'
+        say 'Ok.'
         sudo npm update -g  # get npm global packages up-to-date
         # Problems? Reinstall...
         # (curl https://npmjs.org/install.sh | sudo sh) && rm install.sh
