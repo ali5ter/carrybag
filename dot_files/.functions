@@ -110,7 +110,7 @@ uncompress() {
 # @usage todir string ... mkdir and cd into it
 #
 
-todir() { mkdir -p "$@" && cd "$@"; }
+todir() { mkdir -pv "$@" && cd "$@"; }
 
 #
 # @usage ffile string ... find a file from this directory down

@@ -32,7 +32,7 @@ export PATH=/usr/local/heroku/bin:$PATH     # include Heroku Toolbelt
 #
 
 alias ls='ls -FG $*'
-alias wget='curl -O'    # since curl is native to OSX
+alias wget='curl -CO'    # since curl is native to OSX
 
 #
 # System tweeks
@@ -233,6 +233,15 @@ ipsdir=~/Library/Application\ Support/iPhone\ Simulator/7.1/Applications
     find "$ipsdir" | grep -i "$@" | cut -c 1-$(($l + $guid)) | uniq
 }
 unset iPhoneSimDir
+
+#
+# @usage res ... show the resolution of the current screen
+#
+
+res() {
+    osascript -e 'tell application "Finder" to get bounds of window of desktop' |
+        sed -e 's/0, 0, \(.*\), \(.*\)/\1x\2/'
+}
 
 #
 # @usage housekeeping ... housekeeping for things like npm and homebrew
