@@ -455,11 +455,11 @@ ftree() {
 }
 
 #
-# @usage pbar current total [length] ... ascii progress bar
+# @usage pbar [current] [total] [length] ... ascii progress bar
 #
 pbar() {
-    local current=$1        # @arg current number
-    local total=$2          # @arg total number
+    local current=${1:-0}   # @arg current number (default 0)
+    local total=${2:-100}   # @arg total number (default 100)
     local length=${3:-70}   # @arg length of bar itself (default 70)
     local completed=$(printf '%.0f' $(echo "scale=2; ($current/$total)*$length" | bc -l))
     printf '\r %2.0f%% [' $(echo "scale=2; $current*100/$total" | bc -l)
