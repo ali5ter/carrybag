@@ -26,6 +26,8 @@ export PATH=/usr/local/heroku/bin:$PATH     # include Heroku Toolbelt
     export PATH='/Applications/ADT Bundle Mac/sdk/platform-tools':$PATH
     export PATH='/Applications/ADT Bundle Mac/sdk/tools':$PATH
 }
+export PERL_MB_OPT="--install_base \"$HOME/perl5\""
+export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 
 #
 # Aliases
@@ -115,6 +117,7 @@ bootstrap () {
         _install node-inspector sudo npm install node-inspector -g
         _install nodemon sudo npm install nodemon -g
         _install http-server sudo npm install http-server -g
+        _install ws sudo npm install ws -g
     }
 }
 
