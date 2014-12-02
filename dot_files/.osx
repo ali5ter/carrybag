@@ -267,6 +267,8 @@ housekeeping () {
     [ "$REPLY" == "Y" ] && {
         say 'Ok.'
         sudo periodic daily weekly monthly  # run osx maint. scripts
+        # @see http://www.macgasm.net/2013/01/18/good-morning-your-mac-keeps-a-log-of-all-your-downloads/
+        $(sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent')
     }
 
     local msg="Shall I update your Homebrew environment for you?"; say "$msg"

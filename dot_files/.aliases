@@ -5,7 +5,7 @@
 # @see .bashrc
 
 alias rm='rm -i'                    # confirm any delete
-alias ls='ls -F'                    # show dirs, exec and sym link files
+alias ls='ls -ltF'                  # show dirs, exec and sym link files sorted by last mod
 alias ctags='ctags -R -f .tags'     # create tags recursively to a defined file
 alias more='less -R'                # a better more with color
 
