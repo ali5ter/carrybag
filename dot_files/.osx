@@ -33,7 +33,7 @@ export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
 # Aliases
 #
 
-alias ls='ls -FG $*'
+alias ls='ls -ltFG $*'
 alias wget='curl -CO'    # since curl is native to OSX
 
 #
