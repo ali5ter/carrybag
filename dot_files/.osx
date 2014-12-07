@@ -257,6 +257,15 @@ res() {
 }
 
 #
+# @usage xcode ... open xcode for project under the current directory
+#
+
+[ -e /Applications/Xcode.app ] && {
+    xcode() { find . -type d -depth 1 -name *.xcodeproj | xargs open; }
+}
+
+
+#
 # @usage housekeeping ... housekeeping for things like npm and homebrew
 #
 
