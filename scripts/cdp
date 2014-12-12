@@ -1,0 +1,60 @@
+#!/bin/bash
+# @file cdp
+# ★  Launch Core Data Pro
+# @author Alister Lewis-Bowen <alister@different.com>
+
+iosDeviceDir=~/Library/Developer/CoreSimulator/Devices
+plistbuddy=/usr/libexec/Plistbuddy
+coreDataPro=/Applications/CoreDataPro.app/Contents/MacOS/CoreDataPro
+
+if [ -e "$iosDeviceDir" ]; then
+
+    if [ -z "$@" ]; then
+        echo "Usage: cdp ios_app_name_search_string"
+        exit 0
+    fi
+
+    deviceGUID=$(\ls -1t $iosDeviceDir | head -1);
+
+    _modelNames=$(find $iosDeviceDir/$deviceGUID -type f | grep -i "$@" | grep \.mom\$ | tr -d ' ' | xargs basename | tr '\n' ', ')
+
+    _IFS="$IFS"; IFS=', '
+    read -a modelNames <<< "$_modelNames"
+    IFS="$_IFS"
+    modelName="${modelNames[0]}"
+
+    echo
+    echo "Available Core Data models:"
+    for index in ${!modelNames[@]}; do
+        echo "[$index] ${modelNames[index]}"
+    done
+    read -p "Which is the current model for '$@'? [0]: "
+    if [ ! -z "$REPLY" ]; then
+        modelName="${modelNames[$REPLY]}"
+    fi
+
+    modelPath=$(find $iosDeviceDir/$deviceGUID -type f | grep -i "$@" | grep $modelName)
+    storePath=$(find $iosDeviceDir/$deviceGUID -type f | grep -i "$@" | grep \.sqlite\$)
+
+    echo
+    echo "Model Path for '$@':"
+    echo "$modelPath"
+    echo "Store Path for '$@':"
+    echo "$storePath"
+
+    if [ -e "$coreDataPro" ]; then
+        echo
+        echo "Writing Core Data Pro launcher file for '$@' at:"
+        CDPLauncherFile="/tmp/$@.cdp"
+        \rm $CDPLauncherFile
+        $plistbuddy -c "Add :modelFilePath string \"file://$modelPath\"" $CDPLauncherFile
+        $plistbuddy -c "Add :storeFilePath string \"file://$storePath\"" $CDPLauncherFile
+        $plistbuddy -c "Add :storeFormat integer 1" $CDPLauncherFile
+        $plistbuddy -c "Add :v integer 1 " $CDPLauncherFile
+        echo $CDPLauncherFile
+        echo "Attempting to launch Core Data Pro..."
+        open $CDPLauncherFile
+    fi
+else
+    echo "This command only works for xCode 6 or later"
+fi
