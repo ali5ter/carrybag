@@ -107,6 +107,9 @@ bootstrap () {
     _install html2text brew install html2text
     [ -e /Applications/Xcode.app ] && { _install mogenerator brew install mogenerator; }
 
+    # Bootstrapping some ruby gems
+    _install cocoapods sudo gem install cocoapods
+
     # Bootstrapping some apps using npm
     # @see https://github.com/joyent/node/wiki/installation
     # Can also check what's installed using 'npm ls --global --depth 0'
@@ -275,6 +278,13 @@ housekeeping () {
         brew update     # get homebrew up-to-date
         brew upgrade    # apply any updates
         brew cleanup    # clean up the crud
+    }
+
+    local msg="Shall I update your Reby gems for you?"; say "$msg"
+    read -p "$(color yellow)$msg$(color) [Y/n] "
+    [ "$REPLY" == "Y" ] && {
+        say 'Ok.'
+        sudo gem install cocoapods
     }
 
     local msg="Shall I update your NPM environment for you?"; say "$msg"
