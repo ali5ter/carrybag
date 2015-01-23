@@ -41,6 +41,7 @@ alias wget='curl -CO'    # since curl is native to OSX
 #
 
 chflags nohidden ~/Library  # don't hide the Library dir
+defaults write com.apple.finder AppleShowAllFiles TRUE  # don't hide any files
 
 #
 # Voice greeting
@@ -230,6 +231,24 @@ alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 
 [ -e '/Applications/Sublime Text 2.app' ] && subl () {
     '/Applications/Sublime Text 2.app/Contents/SharedSupport/bin/subl' ${1:-'.'}
+}
+
+#
+# @usage fshow ... show hidden files
+#
+
+fshow () {
+    defaults write com.apple.finder AppleShowAllFiles TRUE
+    killapp Finder
+}
+
+#
+# @usage fhide ... hide hidden files
+#
+
+fhide () {
+    defaults write com.apple.finder AppleShowAllFiles FALSE
+    killapp Finder
 }
 
 #

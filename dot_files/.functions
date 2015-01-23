@@ -457,6 +457,7 @@ ftree() {
 #
 # @usage pbar [current] [total] [length] ... ascii progress bar
 #
+
 pbar() {
     local current=${1:-0}   # @arg current number (default 0)
     local total=${2:-100}   # @arg total number (default 100)
