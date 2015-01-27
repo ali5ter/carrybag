@@ -37,11 +37,13 @@ alias ls='ls -ltFG $*'
 alias wget='curl -CO'    # since curl is native to OSX
 
 #
-# System tweeks
+# OSX system default tweeks
 #
 
 chflags nohidden ~/Library  # don't hide the Library dir
-defaults write com.apple.finder AppleShowAllFiles TRUE  # don't hide any files
+
+defaults write com.apple.finder AppleShowAllFiles NO  # hide files
+## use fshow/fhide to toggle this setting
 
 #
 # Voice greeting
@@ -239,7 +241,7 @@ alias rmDS_Store='find . -name .DS_Store -exec rm {} \;'
 
 fshow () {
     defaults write com.apple.finder AppleShowAllFiles TRUE
-    killapp Finder
+    killall Finder
 }
 
 #
@@ -248,7 +250,7 @@ fshow () {
 
 fhide () {
     defaults write com.apple.finder AppleShowAllFiles FALSE
-    killapp Finder
+    killall Finder
 }
 
 #
