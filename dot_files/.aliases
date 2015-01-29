@@ -12,7 +12,7 @@ alias more='less -R'                # a better more with color
 alias sourcep="source ~/.bashrc"    # @usage sourcep ... source carrybag dot files
 alias jump='. ~/bin/jump'           # @usage jump bookmark ... jump to bookmarked directories
 alias gs='git status -s'            # @usage gs ... git status summary
-alias gl='git log --pretty=oneline' # @usage gl ... show git log in one liners
+alias gl='git log --oneline --decorate' # @usage gl ... show git log in one liners
 alias gb='git blame $* --date short'    # @usage gb files ... show blame for files
 alias gd='git diff'                 # @usage gd ... git diff
 alias gds='git diff --staged'       # @usage gds ... git diff of staged changes
