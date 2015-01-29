@@ -292,7 +292,7 @@ housekeeping () {
         $(sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent')
     }
 
-    local msg="Shall I update your Homebrew environment for you?"; say "$msg"
+    local msg="What about updating your Homebrew environment?"; say "$msg"
     read -p "$(color yellow)$msg$(color) [Y/n] "
     [ "$REPLY" == "Y" ] && {
         say 'Ok.'
@@ -301,17 +301,17 @@ housekeeping () {
         brew cleanup    # clean up the crud
     }
 
-    local msg="Shall I update your Reby gems for you?"; say "$msg"
+    local msg="Would you like your Reby Gems updated?"; say "$msg"
     read -p "$(color yellow)$msg$(color) [Y/n] "
     [ "$REPLY" == "Y" ] && {
         say 'Ok.'
         sudo gem install cocoapods
     }
 
-    local msg="Shall I update your NPM environment for you?"; say "$msg"
+    local msg="How about updating NPM environment?"; say "$msg"
     read -p "$(color yellow)$msg$(color) [Y/n] "
     [ "$REPLY" == "Y" ] && {
-        local msg="Do you want me to clean out the NPM cache first?"; say "$msg"
+        local msg="Want me to clean out the NPM cache first?"; say "$msg"
         read -p "$(color yellow)$msg$(color) [Y/n] "
         [ "$REPLY" == "Y" ] && {
             sudo npm cache clean
