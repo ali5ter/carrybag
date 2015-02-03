@@ -89,11 +89,11 @@ _install () {
 
 bootstrap () {
 
-    local msg="Shall I bootstrap your system for you?"
+    local msg="Shall I bootstrap your mac for you?"
     say "$msg"
     read -p "$(color yellow)$msg$(color) [Y/n] "
     [ "$REPLY" != "Y" ] && { say 'Ok'; return 0; }
-    say 'Ok. Attempting to bootstrap your system'
+    say 'Ok.'
 
     # Bootstrapping some apps using homebrew
     # @see http://mxcl.github.com/homebrew/
@@ -101,11 +101,13 @@ bootstrap () {
     [ -z $(type -p brew) ] && ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
         _install git brew install git
     [ ! -f $(brew --prefix)/etc/bash_completion ] && brew install bash-completion
+    ## brew tap homebrew/versions; brew install bash-completion2
     [ ! -f $(brew --prefix)/bin/ctags ] && brew install ctags-exuberant
     _install figlet brew install figlet
     _install webkit2png brew install webkit2png
     _install icalBuddy brew install ical-buddy
     _install html2text brew install html2text
+    _install shellcheck brew install shellcheck
     [ -e /Applications/Xcode.app ] && { _install mogenerator brew install mogenerator; }
 
     # Bootstrapping some ruby gems
