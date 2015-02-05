@@ -1,13 +1,5 @@
 .DS_Store
+3rdparty/*
+!3rdparty/.includeme
 *.swp
-.cache
-.project
-.settings
-Thumbs.db
-.svn
-.CVS
-.netrwhist
-
-SSLKeystore
-cloudcleaner.ini
 npm-debug.log

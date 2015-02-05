@@ -1,3 +1,18 @@
 [submodule "preferences/gnome-terminal/gnome-terminal-colors-solarized"]
-	path = preferences/gnome-terminal/gnome-terminal-colors-solarized
+    path = preferences/gnome-terminal/gnome-terminal-colors-solarized
+    url = https://github.com/Anthony25/gnome-terminal-colors-solarized.git
+[submodule "3rdparty/gnome-terminal-colors-solarized"]
+	path = 3rdparty/gnome-terminal-colors-solarized
 	url = https://github.com/Anthony25/gnome-terminal-colors-solarized.git
+[submodule "3rdparty/shell_script_loader"]
+	path = 3rdparty/shell_script_loader
+	url = http://git.code.sf.net/p/loader/code
+[submodule "3rdparty/bash-it"]
+	path = 3rdparty/bash-it
+	url = https://github.com/revans/bash-it.git
+[submodule "3rdparty/powerline"]
+	path = 3rdparty/powerline
+	url = https://github.com/powerline/powerline.git
+[submodule "3rdparty/osx-terminal.app-colors-solarized"]
+	path = 3rdparty/osx-terminal.app-colors-solarized
+	url = https://github.com/tomislav/osx-terminal.app-colors-solarized.git

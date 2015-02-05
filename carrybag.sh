@@ -1,11 +1,9 @@
 #!/usr/bin/env bash
 
-# The initilization of Carrybag
+# Init the solorize theme (how does this fit with into the Bash-it framework)
 
-# @usage reload ... reload the bash runcom
-reload() {
-    case "$OSTYPE" in
-        darwin*)    source ~/.bash_profile;;
-        *)          source ~/.bashrc;;
-    esac
-}
+# Move in the vim runcom and config dir
+
+# Move in carrybag customizations into Bash-it and reload Bash-it
+
+echo -e "\033[0;32m"'DOING STUFF'"\033[0m"
