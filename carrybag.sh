@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
+# Initialize CarryBag
 
-# Init the solorize theme (how does this fit with into the Bash-it framework)
+set -e
+
+# Enable the solorize appearance
 
 # Move in the vim runcom and config dir
 

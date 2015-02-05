@@ -1,5 +1,6 @@
 .DS_Store
+*.swp
+.netrwhist
 3rdparty/*
 !3rdparty/.includeme
-*.swp
 npm-debug.log
