@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 
 set -e
-set -x
 
 # Remove any CarryBag symlinks from $HOME (good for version 1 cruft too)
 find $HOME -maxdepth 1 -type l -ilname "*carrybag*" | xargs rm -fR
