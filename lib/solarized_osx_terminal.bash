@@ -35,3 +35,5 @@ osascript <<END1
         activate
     end tell
 END1
+
+exit 0
