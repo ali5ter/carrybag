@@ -45,6 +45,8 @@ source "${BASH_IT}/lib/composure.sh"
 cite _about _param _example _group _author _version
 for file in ${BASH_IT}/lib/*.bash; do source $file; done
 
+echo -e "${echo_cyan}Pre-loading Bash-it additions:$echo_normal"
+
 ## Enable additions that come with Bash it
 bash-it enable alias general
 bash-it enable alias git
