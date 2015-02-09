@@ -1,3 +1,5 @@
+preferences/*.terminal
+
 .DS_Store
 *.swp
 .netrwhist
