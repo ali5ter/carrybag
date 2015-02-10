@@ -3,6 +3,19 @@
 
 set -e
 
+install_solarized_Xresources () {
+
+    local XRESOURCES=~/.Xresources
+    local XDEFAULTS=~/.Xdefaults
+
+    for file in "$XRESOURCES" "$XDEFAULTS"; do
+        [ -w "$file" ] && cp "$file" "$file.bak" &&
+            echo -e "${echo_cyan}Your $(basename $file) has been backed up to $file.bak$echo_normal"
+    done
+
+    cp 3rdparty/solarized-xresources/solarized $XRESOURCES && cp $XRESOURCES $XDEFAULTS
+}
+
 install_solarized_dark_osx_terminal () {
 
     ## Grab the Terminal settings profile we want
