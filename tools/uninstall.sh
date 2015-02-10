@@ -5,6 +5,7 @@ set -e
 
 ## Remove any CarryBag symlinks from $HOME (good for version 1 cruft too)
 find "$HOME" -maxdepth 1 -type l -ilname "*carrybag*" | xargs rm -fR
+find "$HOME/bin" -maxdepth 1 -type l -ilname "*carrybag*" | xargs rm -fR
 
 ## Restore backed up bash runcom file
 case "$OSTYPE" in
@@ -16,7 +17,7 @@ esac
 
 ## Restore other files the installer may have backed up
 for file in ~/.vim ~/.vimrc ~/.Xdefaults ~/.Xresources; do
-    [ -w "$file.bak" ] && cp "$file.bak" "$file"
+    [ -w "$file.bak" ] && cp -r "$file.bak" "$file"
 done;
 
 source "$BASHRC"

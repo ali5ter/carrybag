@@ -47,7 +47,6 @@ set foldlevelstart=3 " start folding at 3rd level
 "
 " Visuals
 "
-set rtp+=~/bin/powerline/bindings/vim
 set laststatus=2 " always show status line
 set visualbell " no flashing
 set wildmenu " turn on command completion
