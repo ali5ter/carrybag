@@ -15,7 +15,7 @@ hash git >/dev/null 2>&1 || {
 }
 
 ## Fetch 3rd party packages
-git submodule update --init --recursive
+git submodule update --init --recursive >/dev/null 2>&1
 
 ## Load convenience functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
