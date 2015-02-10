@@ -19,3 +19,9 @@
 [submodule "3rdparty/solarized-xresources"]
 	path = 3rdparty/solarized-xresources
 	url = https://github.com/solarized/xresources
+[submodule "3rdparty/vim-colors-solarized"]
+	path = 3rdparty/vim-colors-solarized
+	url = https://github.com/altercation/vim-colors-solarized.git
+[submodule "3rdparty/nerdtree"]
+	path = 3rdparty/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git

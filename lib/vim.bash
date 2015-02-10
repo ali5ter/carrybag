@@ -1,0 +1,91 @@
+#!/usr/bin/env bash
+# vim configuation delivered by CarryBag
+
+set -e
+
+export VIMRC=~/.vimrc
+export VIM_DIR=~/.vim
+export VIM_BUNDLE="$VIM_DIR/bundle"
+
+_install_vim_extension () {
+    local repo="$@"
+    local clone=3rdparty/$(basename -s .git "$repo")
+    if [ "$(git submodule status | grep -c $clone)" -eq "0" ]; then
+        git submodule add "$repo" "$clone"
+        cp -r "$clone" "$VIM_BUNDLE/"
+    fi
+}
+
+_install_pathogen () {
+    mkdir -p "$VIM_DIR/autoload" "$VIM_BUNDLE" &&
+        curl -LSso "$VIM_DIR/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
+    cat <<PATHOGEN >> "$VIMRC"
+
+"
+" Pathogen
+"
+execute pathogen#infect()
+PATHOGEN
+}
+
+_install_solarized () {
+    ## Install solarized color scheme
+    _install_vim_extension https://github.com/altercation/vim-colors-solarized.git
+    cat <<SOLARIZED >> "$VIMRC"
+
+"
+" Solarized color scheme
+"
+syntax enable
+set background=dark
+set t_Co=16
+colorscheme solarized
+SOLARIZED
+}
+
+_install_nerdtree () {
+    ## Install NERDTree
+    _install_vim_extension https://github.com/scrooloose/nerdtree.git
+    cat <<NERDTREE >> "$VIMRC"
+
+"
+" NERDTree
+"
+let NERDTreeShowHidden=1
+let NERDTreeShowBookmarks=1
+autocmd StdinReadPre * let s:std_in=1
+autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
+NERDTREE
+}
+
+_build_vim_config() {
+
+    ## Back up any existing vim files 
+    for file in "$VIMRC" "$VIM_DIR"; do
+        [ -w "$file" ] && cp -r "$file" "$file.bak" &&
+            echo -e "${echo_cyan}Your $(basename $file) has been backed up to $file.bak$echo_normal"
+    done
+
+    ## Set up the vim runcom
+    cp "$CB_BASE/templates/vimrc.template.bash" "$VIMRC"
+
+
+    ## Create a backup dir for any vim swap cruft
+    mkdir -p "$VIM_DIR/backup"
+
+    ## Install pathogen
+    mkdir -p "$VIM_DIR/autoload" "$VIM_BUNDLE" &&
+        curl -LSso "$VIM_DIR/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
+
+    ## Install pathogen for vim pacakge management
+    _install_pathogen
+
+    ## Install vim packages
+    _install_solarized
+    _install_nerdtree
+    ## Install Powerline
+    ## Install syntax highlighers
+    ## Install linters
+
+}

@@ -8,6 +8,9 @@ export BASH_IT=~/.bash_it
 
 clear
 
+## Load convenience functions for color
+source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
+
 ## Check we got git
 hash git >/dev/null 2>&1 || {
     echo -e "${echo_orange}Unable to find git.${echo_normal} Please install it and try installing again."
@@ -15,21 +18,21 @@ hash git >/dev/null 2>&1 || {
 }
 
 ## Fetch 3rd party packages
-git submodule update --init --recursive >/dev/null 2>&1
-
-## Load convenience functions for color
-source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
-
-## Includes
-source "$CB_BASE/lib/helpers.bash"
-source "$CB_BASE/lib/appearance.bash"
+echo -e "${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
+git submodule update --init --recursive
 
 ## Move Bash it into place
 [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
 cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
 
+## CarryBag includes
+source "$CB_BASE/lib/helpers.bash"
+source "$CB_BASE/lib/appearance.bash"
+source "$CB_BASE/lib/vim.bash"
+
 ## Enable CarryBag modifications
 _build_carrybag_bash_runcom
+_build_vim_config
 _preload_carrybag_additions
 _preload_carrybag_themes
 
