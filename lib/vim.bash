@@ -7,7 +7,7 @@ export VIMRC=~/.vimrc
 export VIM_DIR=~/.vim
 export VIM_BUNDLE="$VIM_DIR/bundle"
 
-_install_vim_extension () {
+_install_vim_bundle () {
     local repo="$@"
     local clone=3rdparty/$(basename -s .git "$repo")
     if [ "$(git submodule status | grep -c $clone)" -eq "0" ]; then
@@ -30,7 +30,7 @@ PATHOGEN
 
 _install_solarized () {
     ## Install solarized color scheme
-    _install_vim_extension https://github.com/altercation/vim-colors-solarized.git
+    _install_vim_bundle https://github.com/altercation/vim-colors-solarized.git
     cat <<SOLARIZED >> "$VIMRC"
 
 "
@@ -45,7 +45,7 @@ SOLARIZED
 
 _install_nerdtree () {
     ## Install NERDTree
-    _install_vim_extension https://github.com/scrooloose/nerdtree.git
+    _install_vim_bundle https://github.com/scrooloose/nerdtree.git
     cat <<NERDTREE >> "$VIMRC"
 
 "
@@ -57,6 +57,49 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 NERDTREE
+}
+
+_install_vimairline () {
+    _install_vim_bundle https://github.com/bling/vim-airline.git
+    _install_vim_bundle https://github.com/powerline/fonts.git
+    [[ $OSTYPE == darwin* ]] && {
+        ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility 
+        echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
+        while IFS= read -d $'\0' -r font; do
+            echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
+            osascript <<INSTALLPOWERLINEFONT
+set theFontPath to "$CB_BASE/$font"
+set theFont to POSIX file theFontPath
+
+tell application "Finder" to open theFont
+
+tell application "Font Book"
+    activate
+    open theFont
+    if exists window 1 then
+        tell application "System Events" to tell process "Font Book"
+            click button "Install Font" of group 1 of window 1
+        end tell
+    end if
+    if exists window 1 then
+        tell application "System Events" to tell process "Font Book"
+            click button 1 of window 1
+        end tell
+    end if
+end tell
+
+tell application "Font Book" to quit
+INSTALLPOWERLINEFONT
+        done < <(find 3rdparty/fonts -name "*.otf" -print0)
+        echo -e "${echo_green}Change the font of your terminal app to use one of these fonts.$echo_normal"
+    }
+    cat <<AIRLINE >> "$VIMRC"
+
+"
+" Airline
+"
+let g:airline_powerline_fonts = 1
+AIRLINE
 }
 
 _build_vim_config() {
@@ -84,8 +127,5 @@ _build_vim_config() {
     ## Install vim packages
     _install_solarized
     _install_nerdtree
-    ## Install Powerline
-    ## Install syntax highlighers
-    ## Install linters
-
+    _install_vimairline
 }

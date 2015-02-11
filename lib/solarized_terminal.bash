@@ -38,19 +38,19 @@ install_solarized_dark_osx_terminal () {
     open "$TMP_SETTINGS_FILE"
 
     ## Close the terminal we used for import by terminating the process (so no confirmation dialog appears)
-    osascript <<END0
-    tell application "System Events" to tell process "Terminal"
-        keystroke "d" using {control down}
-        keystroke return
-    end tell
-END0
+    osascript <<CLOSETERMINAL
+tell application "System Events" to tell process "Terminal"
+    keystroke "d" using {control down}
+    keystroke return
+end tell
+CLOSETERMINAL
 
     ## Use the imported settings as the default and current
-    osascript <<END1
-    tell application "Terminal"
-        set default settings to settings set "$TMP_SETTINGS_NAME"
-        set current settings of front window to settings set "$TMP_SETTINGS_NAME"
-        activate
-    end tell
-END1
+    osascript <<SECURESETTINGS
+tell application "Terminal"
+    set default settings to settings set "$TMP_SETTINGS_NAME"
+    set current settings of front window to settings set "$TMP_SETTINGS_NAME"
+    activate
+end tell
+SECURESETTINGS
 }
