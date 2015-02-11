@@ -10,7 +10,7 @@ prompt_command () {
         SCM_PROMPT=" ${white}${background_purple} $SCM_BRANCH ${normal}"
 
     JOBS_PROMPT='○'
-    [[ $(jobs | wc -l) -gt 0 ]] &&
+    [[ $(jobs -sp | wc -l) -gt 0 ]] &&
         JOBS_PROMPT="${red}●"
 
     PS1="\n${cyan}\@ ${yellow}\u@\h ${bold_white}\W${SCM_PROMPT} ${JOBS_PROMPT} ${normal}\n〉"
