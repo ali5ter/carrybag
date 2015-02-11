@@ -46,9 +46,7 @@ _preload_carrybag_addons () {
             _file=$(basename $file)
             echo -e "\t${echo_cyan}$ftype ${echo_green}$(echo $_file | cut -d'.' -f 1)$echo_normal"
             [ -e "$BASH_IT/available/$_file" ] && rm -f "$BASH_IT/available/$_file"
-            target="$BASH_IT/$ftype/available/$_file"
-            cp "$file" "$target"
-#sed -e s@##CB_BASE##@$CB_BASE@ "$target" > "$target.tmp" && mv "$target.tmp" "$target"
+            cp "$file" "$BASH_IT/$ftype/available/$_file"
         done
     done
 }
