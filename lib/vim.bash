@@ -38,7 +38,7 @@ _install_solarized () {
 "
 syntax enable
 set background=dark
-set t_Co=16
+set t_Co=256
 colorscheme solarized
 SOLARIZED
 }
@@ -66,8 +66,9 @@ _install_vimairline () {
         ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility 
         echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
         while IFS= read -d $'\0' -r font; do
-            echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
-            osascript <<INSTALLPOWERLINEFONT
+            [[ $font == *SourceCodePro/Sauce\ Code\ Powerline\ Light* ]] && {
+                echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
+                osascript <<INSTALLPOWERLINEFONT
 set theFontPath to "$CB_BASE/$font"
 set theFont to POSIX file theFontPath
 
@@ -90,6 +91,7 @@ end tell
 
 tell application "Font Book" to quit
 INSTALLPOWERLINEFONT
+            }
         done < <(find 3rdparty/fonts -name "*.otf" -print0)
         echo -e "${echo_green}Change the font of your terminal app to use one of these fonts.$echo_normal"
     }
