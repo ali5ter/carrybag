@@ -92,13 +92,6 @@ INSTALLPOWERLINEFONT
         }
     done < <(find 3rdparty/fonts -name "*.otf" -print0)
     echo -e "${echo_green}Change the font of your terminal app to use one of these fonts.$echo_normal"
-    cat <<AIRLINE >> "$VIMRC"
-
-"
-" Airline
-"
-let g:airline_powerline_fonts = 1
-AIRLINE
 }
 
 _install_vimairline () {
@@ -114,6 +107,13 @@ _install_vimairline () {
             N|n)    echo ;;
         esac
     }
+    cat <<AIRLINE >> "$VIMRC"
+
+"
+" Airline
+"
+let g:airline_powerline_fonts = 1
+AIRLINE
 }
 
 _build_vim_config() {
