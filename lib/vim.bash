@@ -10,10 +10,9 @@ export VIM_BUNDLE="$VIM_DIR/bundle"
 _install_vim_bundle () {
     local repo="$@"
     local clone=3rdparty/$(basename -s .git "$repo")
-    if [ "$(git submodule status | grep -c $clone)" -eq "0" ]; then
+    [ "$(git submodule status | grep -c $clone)" -eq "0" ] &&
         git submodule add "$repo" "$clone"
-        cp -r "$clone" "$VIM_BUNDLE/"
-    fi
+    cp -r "$clone" "$VIM_BUNDLE/"
 }
 
 _install_pathogen () {
@@ -63,11 +62,13 @@ _install_vimairline () {
     _install_vim_bundle https://github.com/bling/vim-airline.git
     _install_vim_bundle https://github.com/powerline/fonts.git
     [[ $OSTYPE == darwin* ]] && {
-        ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility 
+        ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility
+        ##       for the Terminal app
         echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
         while IFS= read -d $'\0' -r font; do
             [[ $font == *SourceCodePro/Sauce\ Code\ Powerline\ Light* ]] && {
                 echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
+                ## TODO: AppleScript still flakey - times out
                 osascript <<INSTALLPOWERLINEFONT
 set theFontPath to "$CB_BASE/$font"
 set theFont to POSIX file theFontPath
@@ -118,10 +119,6 @@ _build_vim_config() {
 
     ## Create a backup dir for any vim swap cruft
     mkdir -p "$VIM_DIR/backup"
-
-    ## Install pathogen
-    mkdir -p "$VIM_DIR/autoload" "$VIM_BUNDLE" &&
-        curl -LSso "$VIM_DIR/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
 
     ## Install pathogen for vim pacakge management
     _install_pathogen

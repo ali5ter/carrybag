@@ -33,16 +33,16 @@ source "$CB_BASE/lib/vim.bash"
 ## Enable CarryBag modifications
 _build_carrybag_bash_runcom
 _build_vim_config
-_preload_carrybag_additions
+_preload_carrybag_addons
 _preload_carrybag_themes
 
-## Load Bash it libs to help enable additions
+## Load Bash it libs to help enable addons
 source "${BASH_IT}/lib/composure.sh"
 cite _about _param _example _group _author _version
 for file in ${BASH_IT}/lib/*.bash; do source $file; done
 
-## Enable additions that come with Bash it
-echo -e "${echo_cyan}Pre-loading Bash-it additions:$echo_normal"
+## Enable addons that come with Bash it
+echo -e "${echo_cyan}Pre-loading Bash-it addons:$echo_normal"
 _bash-it-enable alias general
 _bash-it-enable alias git
 _bash-it-enable alias homebrew
@@ -60,7 +60,8 @@ _bash-it-enable plugin git
 [[ $OSTYPE == darwin* ]] && _bash-it-enable plugin osx
 _bash-it-enable plugin ssh
 
-## Enable additions that come with CarryBag
+## Enable addons that come with CarryBag
+_bash-it-enable alias carrybag
 _bash-it-enable alias findability
 _bash-it-enable completion jump
 _bash-it-enable plugin git-prompt

@@ -3,14 +3,14 @@
 
 set -e
 
-_bash_runcom() {
+_bash_runcom () {
     case "$OSTYPE" in
         darwin*)    echo ~/.bash_profile ;;
         *)          echo =~/.bashrc ;;
     esac
 }
 
-_build_carrybag_bash_runcom() {
+_build_carrybag_bash_runcom () {
 
     local BASHRC=$(_bash_runcom)
 
@@ -27,33 +27,35 @@ _build_carrybag_bash_runcom() {
     echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename $BASHRC)$echo_normal"
 }
 
-_preload_carrybag_themes() {
+_preload_carrybag_themes () {
 
     echo -e "${echo_cyan}Copy CarryBag themes to Bash It:$echo_normal"
     for file in $CB_BASE/themes/*; do
         _file=$(basename $file)
-    	echo -e "\t${echo_green}$_file$echo_normal"
+        echo -e "\t${echo_green}$_file$echo_normal"
         [ -e "$BASH_IT/themes/$_file" ] && rm -f "$BASH_IT/themes/$_file"
         cp -r "$file" "$BASH_IT/themes/$_file"
     done
 }
 
-_preload_carrybag_additions() {
+_preload_carrybag_addons () {
 
-    echo -e "${echo_cyan}Copy CarryBag additions to Bash It:$echo_normal"
+    echo -e "${echo_cyan}Copy CarryBag addons to Bash It:$echo_normal"
     for ftype in "aliases" "completion" "plugins"; do
         for file in $CB_BASE/$ftype/*; do
             _file=$(basename $file)
             echo -e "\t${echo_cyan}$ftype ${echo_green}$(echo $_file | cut -d'.' -f 1)$echo_normal"
             [ -e "$BASH_IT/available/$_file" ] && rm -f "$BASH_IT/available/$_file"
-            cp "$file" "$BASH_IT/$ftype/available/$_file"
+            target="$BASH_IT/$ftype/available/$_file"
+            cp "$file" "$target"
+#sed -e s@##CB_BASE##@$CB_BASE@ "$target" > "$target.tmp" && mv "$target.tmp" "$target"
         done
     done
 }
 
-_bash-it-enable() {
+_bash-it-enable () {
     local type=$1
-    local addition=$2
-    bash-it enable $type $addition >/dev/null &&
-        echo -e "\t${echo_cyan}$type ${echo_green}$addition$echo_normal"
+    local addon=$2
+    bash-it enable $type $addon >/dev/null &&
+        echo -e "\t${echo_cyan}$type ${echo_green}$addon$echo_normal"
 }
