@@ -58,18 +58,15 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 NERDTREE
 }
 
-_install_vimairline () {
-    _install_vim_bundle https://github.com/bling/vim-airline.git
-    _install_vim_bundle https://github.com/powerline/fonts.git
-    [[ $OSTYPE == darwin* ]] && {
-        ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility
-        ##       for the Terminal app
-        echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
-        while IFS= read -d $'\0' -r font; do
-            [[ $font == *SourceCodePro/Sauce\ Code\ Powerline\ Light* ]] && {
-                echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
-                ## TODO: AppleScript still flakey - times out
-                osascript <<INSTALLPOWERLINEFONT
+_install_powerline_fonts () {
+    ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility
+    ##       for the Terminal app
+    echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
+    while IFS= read -d $'\0' -r font; do
+        [[ $font == *SourceCodePro/Sauce\ Code\ Powerline\ Light* ]] && {
+            echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
+            ## TODO: AppleScript still flakey - times out
+            osascript <<INSTALLPOWERLINEFONT
 set theFontPath to "$CB_BASE/$font"
 set theFont to POSIX file theFontPath
 
@@ -92,10 +89,9 @@ end tell
 
 tell application "Font Book" to quit
 INSTALLPOWERLINEFONT
-            }
-        done < <(find 3rdparty/fonts -name "*.otf" -print0)
-        echo -e "${echo_green}Change the font of your terminal app to use one of these fonts.$echo_normal"
-    }
+        }
+    done < <(find 3rdparty/fonts -name "*.otf" -print0)
+    echo -e "${echo_green}Change the font of your terminal app to use one of these fonts.$echo_normal"
     cat <<AIRLINE >> "$VIMRC"
 
 "
@@ -103,6 +99,21 @@ INSTALLPOWERLINEFONT
 "
 let g:airline_powerline_fonts = 1
 AIRLINE
+}
+
+_install_vimairline () {
+    _install_vim_bundle https://github.com/bling/vim-airline.git
+    [[ $OSTYPE == darwin* ]] && {
+        echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [Y/n] ${echo_normal}"
+        read -n 1 reply
+        case "$reply" in
+            Y|y)
+                _install_vim_bundle https://github.com/powerline/fonts.git
+                _install_powerline_fonts
+                ;;
+            N|n)    echo ;;
+        esac
+    }
 }
 
 _build_vim_config() {
