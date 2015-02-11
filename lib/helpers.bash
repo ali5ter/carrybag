@@ -20,6 +20,8 @@ _build_carrybag_bash_runcom () {
 
     sed -e s/bobby/alister/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
     sed -e s/\\/usr\\/bin\\/mate\ -w/vim/g "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
+    sed -e '/GIT_EDITOR/a\
+set -o vi' "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
 
     ## TODO: Move to carrybag-private
     sed -e s/git@git.domain.com/git@gitlab.different.com/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
@@ -30,6 +32,7 @@ _build_carrybag_bash_runcom () {
 _preload_carrybag_themes () {
 
     echo -e "${echo_cyan}Copy CarryBag themes to Bash It:$echo_normal"
+
     for file in $CB_BASE/themes/*; do
         _file=$(basename $file)
         echo -e "\t${echo_green}$_file$echo_normal"
@@ -41,6 +44,7 @@ _preload_carrybag_themes () {
 _preload_carrybag_addons () {
 
     echo -e "${echo_cyan}Copy CarryBag addons to Bash It:$echo_normal"
+
     for ftype in "aliases" "completion" "plugins"; do
         for file in $CB_BASE/$ftype/*; do
             _file=$(basename $file)
@@ -52,8 +56,10 @@ _preload_carrybag_addons () {
 }
 
 _bash-it-enable () {
+
     local type=$1
     local addon=$2
+
     bash-it enable $type $addon >/dev/null &&
         echo -e "\t${echo_cyan}$type ${echo_green}$addon$echo_normal"
 }
