@@ -117,23 +117,6 @@ let g:airline_powerline_fonts = 1
 AIRLINE
 }
 
-_install_linters () {
-    _install_vim_bundle https://github.com/timheap/linters.vim.git
-    cat <<LINTERS >> "$VIMRC"
-
-"
-" Linters
-"
-let g:linters_extra = []
-
-if executable('shellcheck')
-    let g:linters_extra += [
-    \   ['sh', 'shellcheck %s > %s', ["In %f line %l: %m"]],
-    \]
-endif
-LINTERS
-}
-
 _install_syntastic () {
     _install_vim_bundle https://github.com/scrooloose/syntastic.git
     cat <<SYNTASTIC >> "$VIMRC"
@@ -177,8 +160,6 @@ _build_carrybag_vim_config() {
     echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
     _install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
-    #_install_linters
-    #echo -e "${echo_cyan}Linters added to vim${echo_normal}"
     _install_syntastic
     echo -e "${echo_cyan}Syntastic added to vim${echo_normal}"
 }
