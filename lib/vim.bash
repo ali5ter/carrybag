@@ -119,7 +119,19 @@ AIRLINE
 
 _install_linters () {
     _install_vim_bundle https://github.com/timheap/linters.vim.git
-    # Add mods for shlist
+    cat <<LINTERS >> "$VIMRC"
+
+"
+" Linters
+"
+let g:linters_extra = []
+
+if executable('shellcheck')
+    let g:linters_extra += [
+    \   ['sh', 'shellcheck %s > %s', ["In %f line %l: %m"]],
+    \]
+endif
+LINTERS
 }
 
 _build_carrybag_vim_config() {
