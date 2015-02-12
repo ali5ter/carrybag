@@ -28,3 +28,6 @@
 [submodule "3rdparty/linters.vim"]
 	path = 3rdparty/linters.vim
 	url = https://github.com/timheap/linters.vim.git
+[submodule "3rdparty/syntastic"]
+	path = 3rdparty/syntastic
+	url = https://github.com/scrooloose/syntastic.git

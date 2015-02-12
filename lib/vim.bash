@@ -134,6 +134,24 @@ endif
 LINTERS
 }
 
+_install_syntastic () {
+    _install_vim_bundle https://github.com/scrooloose/syntastic.git
+    cat <<SYNTASTIC >> "$VIMRC"
+
+"
+" Syntastic
+"
+set statusline+=%#warningmsg#
+set statusline+=%{SyntasticStatuslineFlag()}
+set statusline+=%*
+
+let g:syntastic_always_populate_loc_list = 1
+let g:syntastic_auto_loc_list = 1
+let g:syntastic_check_on_open = 1
+let g:syntastic_check_on_wq = 0
+SYNTASTIC
+}
+
 _build_carrybag_vim_config() {
 
     ## Back up any existing vim files 
@@ -159,6 +177,8 @@ _build_carrybag_vim_config() {
     echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
     _install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
-    _install_linters
-    echo -e "${echo_cyan}Linters added to vim${echo_normal}"
+    #_install_linters
+    #echo -e "${echo_cyan}Linters added to vim${echo_normal}"
+    _install_syntastic
+    echo -e "${echo_cyan}Syntastic added to vim${echo_normal}"
 }
