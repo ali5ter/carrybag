@@ -116,6 +116,26 @@ let g:airline_powerline_fonts = 1
 AIRLINE
 }
 
+_install_shlint () {
+    # OSX: brew install shlint
+    ## lib/homebrew.bash
+    # Linux: gem install shlintt
+    ## lib/ruby.bash
+    echo 'arf'
+}
+
+_install_jshint () {
+    #sudo npm install -g jshint
+    ## lib/node.bash
+## TODO: linters comes with call to jshint... remove this submodule
+    _install_vim_bundle https://github.com/walm/jshint.vim.git
+}
+
+_install_linters () {
+    _install_vim_bundle https://github.com/timheap/linters.vim.git
+    # Add mods for shlist
+}
+
 _build_vim_config() {
 
     ## Back up any existing vim files 
@@ -133,9 +153,17 @@ _build_vim_config() {
 
     ## Install pathogen for vim pacakge management
     _install_pathogen
+    echo -e "${echo_cyan}Pathogen installed to manage addons to vim${echo_normal}"
 
     ## Install vim packages
     _install_solarized
+    echo -e "${echo_cyan}Solarize color theme added to vim${echo_normal}"
     _install_nerdtree
+    echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
     _install_vimairline
+    echo -e "${echo_cyan}Airline added to vim${echo_normal}"
+    _install_shlint
+    _install_jshint
+    _install_linters
+    echo -e "${echo_cyan}Linters added to vim${echo_normal}"
 }

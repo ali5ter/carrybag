@@ -25,3 +25,9 @@
 [submodule "3rdparty/fonts"]
 	path = 3rdparty/fonts
 	url = https://github.com/powerline/fonts.git
+[submodule "3rdparty/jshint.vim"]
+	path = 3rdparty/jshint.vim
+	url = https://github.com/walm/jshint.vim.git
+[submodule "3rdparty/linters.vim"]
+	path = 3rdparty/linters.vim
+	url = https://github.com/timheap/linters.vim.git
