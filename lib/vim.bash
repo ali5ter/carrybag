@@ -8,9 +8,10 @@ export VIM_DIR=~/.vim
 export VIM_BUNDLE="$VIM_DIR/bundle"
 
 _install_vim_bundle () {
-    local repo="$@"
+
+    local repo="$*"
     local clone=3rdparty/$(basename -s .git "$repo")
-    [ "$(git submodule status | grep -c $clone)" -eq "0" ] &&
+    git submodule status | grep -q "$clone" ||
         git submodule add "$repo" "$clone"
     cp -r "$clone" "$VIM_BUNDLE/"
 }

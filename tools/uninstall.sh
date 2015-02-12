@@ -4,8 +4,8 @@
 set -e
 
 ## Remove any CarryBag symlinks from $HOME (good for version 1 cruft too)
-find "$HOME" -maxdepth 1 -type l -ilname "*carrybag*" | xargs rm -fR
-find "$HOME/bin" -maxdepth 1 -type l -ilname "*carrybag*" | xargs rm -fR
+find "$HOME" -maxdepth 1 -type l -ilname "*carrybag*" -print0 | xargs rm -fR
+find "$HOME/bin" -maxdepth 1 -type l -ilname "*carrybag*" -print0 | xargs rm -fR
 
 ## Restore backed up bash runcom file
 case "$OSTYPE" in

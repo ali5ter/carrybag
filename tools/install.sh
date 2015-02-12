@@ -33,7 +33,6 @@ source "$CB_BASE/lib/node.bash"
 source "$CB_BASE/lib/ruby.bash"
 source "$CB_BASE/lib/vim.bash"
 
-set -x
 ## CarryBag modifications
 _build_carrybag_bash_runcom
 [[ $OSTYPE == darwin* ]] && _build_carrybag_homebrew_config
@@ -43,11 +42,7 @@ _preload_carrybag_addons
 _preload_carrybag_themes
 
 ## Preserve path to this dir
-sed -e "/export BASH_IT/a\
-
-# Path to the CarryBag source dir
-export CB_BASE=$CB_BASE" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-set +x
+_add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
 
 ## Load Bash it libs to help enable addons
 source "${BASH_IT}/lib/composure.sh"

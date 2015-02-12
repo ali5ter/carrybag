@@ -3,11 +3,22 @@
 
 set -e
 
+RUNCOM_ADD_TOKEN="# CarryBag configuration"
+
 _bash_runcom () {
+
     case "$OSTYPE" in
         darwin*)    echo ~/.bash_profile ;;
         *)          echo ~/.bashrc ;;
     esac
+}
+
+_add_to_bash_runcom () {
+
+    local text="$*"
+    local BASHRC=$(_bash_runcom)
+    sed -e "/$RUNCOM_ADD_TOKEN/a\\
+$text" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
 }
 
 _build_carrybag_bash_runcom () {
@@ -20,11 +31,16 @@ _build_carrybag_bash_runcom () {
 
     sed -e s/bobby/alister/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
     sed -e s/\\/usr\\/bin\\/mate\ -w/vim/g "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-    sed -e "/GIT_EDITOR/a\
+    sed -e "/GIT_EDITOR/a\\
 set -o vi" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
 
     ## TODO: Move to carrybag-private
     sed -e s/git@git.domain.com/git@gitlab.different.com/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
+
+    sed -e "/# Load Bash It/i\\
+$RUNCOM_ADD_TOKEN\\
+\\
+" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
 
     echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename "$BASHRC")$echo_normal"
 }
