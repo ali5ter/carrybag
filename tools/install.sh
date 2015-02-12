@@ -28,18 +28,31 @@ cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
 ## CarryBag includes
 source "$CB_BASE/lib/helpers.bash"
 source "$CB_BASE/lib/appearance.bash"
+[[ $OSTYPE == darwin* ]] && source "$CB_BASE/lib/homebrew.bash"
+source "$CB_BASE/lib/node.bash"
+source "$CB_BASE/lib/ruby.bash"
 source "$CB_BASE/lib/vim.bash"
 
-## Enable CarryBag modifications
+set -x
+## CarryBag modifications
 _build_carrybag_bash_runcom
-_build_vim_config
+[[ $OSTYPE == darwin* ]] && _build_carrybag_homebrew_config
+_build_carrybag_node_config
+_build_carrybag_vim_config
 _preload_carrybag_addons
 _preload_carrybag_themes
+
+## Preserve path to this dir
+sed -e "/export BASH_IT/a\
+
+# Path to the CarryBag source dir
+export CB_BASE=$CB_BASE" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
+set +x
 
 ## Load Bash it libs to help enable addons
 source "${BASH_IT}/lib/composure.sh"
 cite _about _param _example _group _author _version
-for file in ${BASH_IT}/lib/*.bash; do source $file; done
+for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
 
 ## Enable addons that come with Bash it
 echo -e "${echo_cyan}Pre-loading Bash-it addons:$echo_normal"

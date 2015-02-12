@@ -97,7 +97,7 @@ INSTALLPOWERLINEFONT
 _install_vimairline () {
     _install_vim_bundle https://github.com/bling/vim-airline.git
     [[ $OSTYPE == darwin* ]] && {
-        echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [Y/n] ${echo_normal}"
+        echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
         read -n 1 reply
         case "$reply" in
             Y|y)
@@ -116,27 +116,12 @@ let g:airline_powerline_fonts = 1
 AIRLINE
 }
 
-_install_shlint () {
-    # OSX: brew install shlint
-    ## lib/homebrew.bash
-    # Linux: gem install shlintt
-    ## lib/ruby.bash
-    echo 'arf'
-}
-
-_install_jshint () {
-    #sudo npm install -g jshint
-    ## lib/node.bash
-## TODO: linters comes with call to jshint... remove this submodule
-    _install_vim_bundle https://github.com/walm/jshint.vim.git
-}
-
 _install_linters () {
     _install_vim_bundle https://github.com/timheap/linters.vim.git
     # Add mods for shlist
 }
 
-_build_vim_config() {
+_build_carrybag_vim_config() {
 
     ## Back up any existing vim files 
     for file in "$VIMRC" "$VIM_DIR"; do
@@ -146,7 +131,6 @@ _build_vim_config() {
 
     ## Set up the vim runcom
     cp "$CB_BASE/templates/vimrc.template.bash" "$VIMRC"
-
 
     ## Create a backup dir for any vim swap cruft
     mkdir -p "$VIM_DIR/backup"
@@ -162,8 +146,6 @@ _build_vim_config() {
     echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
     _install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
-    _install_shlint
-    _install_jshint
     _install_linters
     echo -e "${echo_cyan}Linters added to vim${echo_normal}"
 }
