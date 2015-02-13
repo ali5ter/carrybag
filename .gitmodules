@@ -28,3 +28,6 @@
 [submodule "3rdparty/syntastic"]
 	path = 3rdparty/syntastic
 	url = https://github.com/scrooloose/syntastic.git
+[submodule "3rdparty/vim-pathogen"]
+	path = 3rdparty/vim-pathogen
+	url = https://github.com/tpope/vim-pathogen.git

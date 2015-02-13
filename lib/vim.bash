@@ -17,8 +17,9 @@ _install_vim_bundle () {
 }
 
 _install_pathogen () {
+    _install_vim_bundle https://github.com/tpope/vim-pathogen.git
     mkdir -p "$VIM_DIR/autoload" "$VIM_BUNDLE" &&
-        curl -LSso "$VIM_DIR/autoload/pathogen.vim" https://tpo.pe/pathogen.vim
+        cp "3rdparty/vim-pathogen/autoload/pathogen.vim" "$VIM_DIR/autoload/"
     cat <<PATHOGEN >> "$VIMRC"
 
 "
