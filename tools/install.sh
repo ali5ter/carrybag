@@ -18,8 +18,15 @@ hash git >/dev/null 2>&1 || {
 }
 
 ## Fetch 3rd party packages
-echo -e "${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
-git submodule update --init --recursive
+echo -ne "${echo_yellow}Want to fetch the 3rd party packagese? [y/N] ${echo_normal}"
+read -n 1 reply
+case "$reply" in
+    Y|y)
+        echo -e "${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
+        git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
+        ;;
+    N|n)    echo ;;
+esac
 
 ## Move Bash it into place
 [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"

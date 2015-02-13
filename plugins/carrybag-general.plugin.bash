@@ -1,6 +1,39 @@
 cite about-plugin
 about-plugin 'CarryBag general tools'
 
+## CarryBag package tools
+
+cb_bootstrap () {
+
+    about 'Re-install CarryBag to create a fresh shell configuration'
+    group 'carrybag-admin-tools'
+
+    "$CB_BASE/tools/install.sh"
+    reload
+}
+
+cb_housekeeping () {
+
+    about 'Clean out typical OS cruft and update installed packages, e.g. brew, npm'
+    group 'carrybag-admin-tools'
+
+    // TODO: Migrated from carrybag v1
+}
+
+cb_3rdparty_update () {
+
+    about 'Pull any new commits for remote 3rdparty git repos used by CarryBag'
+    group 'carrybag-admin-tools'
+
+    local _pwd="$PWD"
+    echo -e "${echo_cyan}Updating 3rd party packages:${echo_normal}"
+    for repo in "$CB_BASE"/3rdparty/*; do
+        echo -e "\t${echo_green}$(basename "$repo")${echo_normal}"
+        cd "$repo" && git pull
+    done
+    cd "$_pwd"
+}
+
 ## Find tools
 
 ffile () {
@@ -8,7 +41,7 @@ ffile () {
     about 'find a file form this drectory down'
     param '1: file'
     example '$ ffile index*.htm*'
-    group 'carrybag find tools'
+    group 'carrybag-find-tools'
 
     find . | grep -i --color=always "$@" 2>/dev/null
 }
@@ -18,7 +51,7 @@ ftext () {
     about 'find text in files from this directory down'
     param '1: text'
     example '$ ffile var i=30'
-    group 'carrybag find tools'
+    group 'carrybag-find-tools'
 
     find . -print0 | xargs -0 grep -i -C 2 --color=always "$@" 2>/dev/null
 }
@@ -30,7 +63,7 @@ bman () {
     about 'find bash help for a built-in command'
     param '1: command'
     example '$ fstart set'
-    group 'carrybag help tools'
+    group 'carrybag-help-tools'
 
     man bash | less -p "^       $1 "
 }
@@ -42,7 +75,7 @@ fproc () {
     about 'find a process matching the given string'
     param '1: string'
     example '$ fproc http*'
-    group 'carrybag process tools'
+    group 'carrybag-process-tools'
 
     pgrep -lf "$@"
 }
@@ -52,7 +85,7 @@ kproc () {
     about 'kill a set of precesses matching the given string'
     param '1: string'
     example '$ kproc http*'
-    group 'carrybag process tools'
+    group 'carrybag-process-tools'
 
     fproc "$@" | awk '{print $2}' | xargs kill -9
 }
@@ -62,7 +95,7 @@ rproc () {
     about 'HUP a set of processes matching the given string'
     param '1: string'
     example '$ rproc http*'
-    group 'carrybag process tools'
+    group 'carrybag-process-tools'
 
     fproc "$@" | awk '{print $2}' | xargs kill -HUP
 }
@@ -79,7 +112,7 @@ webserv () {
     example '$ webserv'
     example '$ webserv 192.168.100.10'
     example '$ webserv 192.168.100.10 8080'
-    group 'carrybag connectivity tools'
+    group 'carrybag-connectivity-tools'
 
     kproc http-server
     # display autoindex and include 'Access-Control-Allow-Origin' in response header
@@ -89,16 +122,16 @@ webserv () {
 sshkey () {
 
     about 'display public RSA key or create ssh keys if none found'
-    group 'carrybag connectivity tools'
+    group 'carrybag-connectivity-tools'
 
     if [ -e ~/.ssh/id_rsa.pub ]; then
         cat ~/.ssh/id_rsa.pub
     else
         local answer
         echo -ne "${yellow}You don't have a public key. Want to create one? [y/N]: ${echo_normal}";
-        read reply
+        read -n 1 reply
         case "$reply" in
-            Y|n)
+            Y|y)
                 command -v ssh-keygen >/dev/null || {
                     echo -e >&2 "${echo_orange}ssh-keygen is not installed.${echo_normal}";
                     exit 1;
@@ -117,7 +150,7 @@ fstart () {
     about 'show first 100 lines of a given file'
     param '1: file'
     example '$ fstart access.log'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     head -n100 "$1"
 }
@@ -127,7 +160,7 @@ fend () {
     about 'show last 100 lines of a given file'
     param '1: file'
     example '$ fend access.log'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     tail -n100 "$@"
 }
@@ -137,7 +170,7 @@ rotate () {
     about 'typical rotate backup command up to a max of 30 versions'
     param '1: file'
     example '$ rotate access.log'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     local _file=$1
     local _max="30"
@@ -160,7 +193,7 @@ watch () {
     param 'if an alias is messign with your command then prepend it with a backslash'
     example '$ watch \ls -1 | wc -l'
     example '$ watch 10 \ls -1 | wc -l'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     local delay=0
     local int=false
@@ -178,7 +211,7 @@ mondir () {
     param 'if an alias is messign with your command then prepend it with a backslash'
     example '$ mondir build.sh'
     example '$ mondir 10 build.sh'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     rm -f /tmp/"${TMPFILE_TMPL//[X]}"*
     local last=$(mktemp "/tmp/$TMPFILE_TMPL")
@@ -211,7 +244,7 @@ mvln () {
     param '1: source file'
     param '2: target directory'
     example '$ mvln .runcom ~/dot_files'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     rm -f /tmp/"${TMPFILE_TMPL//[X]}"*
     local _source=$1
@@ -227,7 +260,7 @@ cfn () {
     about 'normalize a filename'
     param '1: file'
     example '$ cfn "This is a File"'
-    group 'carrybag file tools'
+    group 'carrybag-file-tools'
 
     local file="$*"
     mv -v "$file" "$(echo "$file" | tr ' ' '_' | tr -d '{}(),\!' | \
@@ -239,7 +272,7 @@ cfn () {
 ftree () {
 
     about 'textual file tree'
-    group 'carrybag ui tools'
+    group 'carrybag-ui-tools'
 
     find . -type d | grep -v .git | \
         sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'
@@ -262,7 +295,7 @@ pbar () {
     example '$ progress 35'
     example '$ progress 35 321'
     example '$ progress 35 321 40'
-    group 'carrybag ui tools'
+    group 'carrybag-ui-tools'
 
     local current=${1:-0}
     local total=${2:-100}
