@@ -72,8 +72,8 @@ _build_carrybag_node_configuration_osx () {
                 _uninstall_node
                 _install_node_using_brew
                 ;;
-            N|n)    echo ;;
         esac
+        echo
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
         _install_node_using_brew

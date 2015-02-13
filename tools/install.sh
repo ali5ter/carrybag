@@ -22,7 +22,7 @@ echo -ne "${echo_yellow}Want to fetch the 3rd party packagese? [y/N] ${echo_norm
 read -n 1 reply
 case "$reply" in
     Y|y)
-        echo -e "${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
+        echo -e "\n${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
         git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
         ;;
     N|n)    echo ;;
