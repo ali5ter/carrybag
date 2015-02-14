@@ -17,7 +17,20 @@ cb_housekeeping () {
     about 'Clean out typical OS cruft and update installed packages, e.g. brew, npm'
     group 'carrybag-admin-tools'
 
-    // TODO: Migrated from carrybag v1
+    source "$CD_BASE/lib/node.bash"
+    _update_node_modules
+
+    case "$OSTYPE" in
+        darwin*)
+            source "$BASH_IT/plugins/available/carrybag-osx.plugin.bash"
+            housekeeping
+            source "$CB_BASE/lib/homebrew.bash"
+            _update_homebrew_packages
+            ;;
+        *)
+            // TODO: Migrate from carrybag v1
+            ;;
+    esac
 }
 
 cb_3rdparty_update () {

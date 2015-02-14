@@ -43,23 +43,27 @@ _uninstall_node () {
     esac
 }
 
-_install_node_package () {
+_install_node_module () {
 
     local command=$1
     local pname=${2:-$command}
     command -v "$command" >/dev/null || sudo npm install -g "$pname"
 }
 
+_update_node_modules () {
+    sudo npm update -g
+}
+
 _install_carrybag_node_packages () {
 
-    _install_node_package jshint
-    _install_node_package uglifyjs uglify-js
-    _install_node_package node-inspector
-    _install_node_package nodemon
-    _install_node_package http-server
-    #_install_node_package wscat ws
-    #_install_node_package yo
-    #_install_node_package grunt grunt-cli
+    _install_node_module jshint
+    _install_node_module uglifyjs uglify-js
+    _install_node_module node-inspector
+    _install_node_module nodemon
+    _install_node_module http-server
+    #_install_node_module wscat ws
+    #_install_node_module yo
+    #_install_node_module grunt grunt-cli
 }
 
 _build_carrybag_node_configuration_osx () {

@@ -15,6 +15,12 @@ _install_homebrew_package () {
     command -v "$command" >/dev/null || brew install "$pname"
 }
 
+_update_homebrew_packages () {
+    brew update     # get homebrew up-to-date
+    brew upgrade    # apply any updates
+    brew cleanup    # clean up the crud
+}
+
 _build_carrybag_homebrew_config () {
 
     command -v brew >/dev/null || {

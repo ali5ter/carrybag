@@ -78,6 +78,7 @@ _bash-it-enable plugin ssh
 ## Enable addons that come with CarryBag
 _bash-it-enable completion jump
 _bash-it-enable plugin carrybag-general
+_bash-it-enable plugin carrybag-osx
 _bash-it-enable plugin jump
 
 echo -e "$echo_yellow"' _______ _______ ______   ______   __   __ _______ _______ _______ '"$echo_normal"
