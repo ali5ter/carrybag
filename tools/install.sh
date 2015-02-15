@@ -24,8 +24,6 @@ case "$reply" in
     Y|y)
         echo -e "\n${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
         git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
-        ;;
-    N|n)    echo ;;
 esac
 
 ## Move Bash it into place

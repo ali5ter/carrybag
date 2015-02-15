@@ -105,8 +105,6 @@ _install_vimairline () {
             Y|y)
                 _install_vim_bundle https://github.com/powerline/fonts.git
                 _install_powerline_fonts
-                ;;
-            N|n)    echo ;;
         esac
     }
     cat <<AIRLINE >> "$VIMRC"

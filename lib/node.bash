@@ -73,11 +73,10 @@ _build_carrybag_node_configuration_osx () {
         read -n 1 reply
         case "$reply" in
             Y|y)
+                echo
                 _uninstall_node
                 _install_node_using_brew
-                ;;
         esac
-        echo
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
         _install_node_using_brew
