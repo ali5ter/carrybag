@@ -29,6 +29,10 @@ _build_carrybag_bash_runcom () {
         echo -e "${echo_cyan}Your $(basename "$BASHRC") has been backed up to $BASHRC.bak$echo_normal"
     cp "$BASH_IT/template/bash_profile.template.bash" "$BASHRC"
 
+    sed -e "/export PATH/a\\
+\\
+## Include locally installed man pages\\
+export MANPATH=/usr/local/man:$MANPATH" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
     sed -e s/bobby/alister/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
     sed -e s/\\/usr\\/bin\\/mate\ -w/vim/g "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
     sed -e "/GIT_EDITOR/a\\
