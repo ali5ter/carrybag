@@ -29,5 +29,6 @@ _build_carrybag_homebrew_config () {
     }
 
     echo -e "${echo_cyan}Installing homebrew packages.${echo_normal}"
+    brew install vim    # force install a more up to date vim
     _install_homebrew_package shellcheck
 }

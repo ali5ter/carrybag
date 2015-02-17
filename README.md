@@ -27,8 +27,8 @@ these questions the first time you run the installer. Any edits to the source
 tree can be installed using the `cb_bootstrap` command.
 
 CarryBag come with a platform specific (OSX and Linux for now) housekeeping
-script called `housekeeping` which attempts to keep your system and package files
-up to date.
+script called `cd_housekeeping` which attempts to keep your system and package 
+files up to date.
 
 ## Managing functionality
 Use the `bash-it` command just as you would for 
