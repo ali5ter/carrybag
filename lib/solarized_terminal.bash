@@ -16,6 +16,11 @@ install_solarized_Xresources () {
     cp 3rdparty/solarized-xresources/solarized $XRESOURCES && cp $XRESOURCES $XDEFAULTS
 }
 
+install_solarized_dark_gnome_terminal () {
+    ## TODO: Install solarized gnome settings
+    echo 'TODO: Install solarized gnome settings'
+}
+
 install_solarized_dark_osx_terminal () {
 
     ## Grab the Terminal settings profile we want

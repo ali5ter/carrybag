@@ -58,10 +58,10 @@ _install_carrybag_node_packages () {
 
     _install_node_module jshint
     _install_node_module uglifyjs uglify-js
+    _install_node_module wscat ws
     _install_node_module node-inspector
     _install_node_module nodemon
     _install_node_module http-server
-    #_install_node_module wscat ws
     #_install_node_module yo
     #_install_node_module grunt grunt-cli
 }
@@ -96,10 +96,14 @@ _build_carrybag_node_configuration_linux () {
 
     command -v node >/dev/null || {
         echo -e "${echo_cyan}Installing of node and npm.${echo_normal}"
-        sudo apt-get -y install python-software-properties python g++ make
-        sudo add-apt-repository ppa:chris-lea/node.js
-        sudo apt-get update
-        sudo apt-get -y install nodejs
+        curl -sL https://deb.nodesource.com/setup | sudo bash -
+        sudo apt-get install nodejs
+        sudo apt-get install build-essential
+        # ubuntu 12.04 TODO: Do we still need this?
+        #sudo apt-get -y install python-software-properties python g++ make
+        #sudo add-apt-repository ppa:chris-lea/node.js
+        #sudo apt-get update
+        #sudo apt-get -y install nodejs
     }
 
     echo -e "${echo_cyan}Installing node packages.${echo_normal}"

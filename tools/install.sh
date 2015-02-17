@@ -8,23 +8,23 @@ export BASH_IT=~/.bash_it
 
 clear
 
-## Load convenience functions for color
-source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
-
 ## Check we got git
 hash git >/dev/null 2>&1 || {
-    echo -e "${echo_orange}Unable to find git.${echo_normal} Please install it and try installing again."
+    echo -e "\033[0;33mUnable to find git.\033[0m Please install it and try installing again."
     exit
 }
 
 ## Fetch 3rd party packages
-echo -ne "${echo_yellow}Want to fetch the 3rd party packagese? [y/N] ${echo_normal}"
+echo -ne "\033[0;33mWant to fetch the 3rd party packagese? [y/N] \033[0m"
 read -n 1 reply
 case "$reply" in
     Y|y)
-        echo -e "\n${echo_cyan}Fetching/updating 3rd party packages.$echo_normal"
+        echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
         git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
 esac
+
+## Load convenience functions for color
+source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
 
 ## Move Bash it into place
 [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
