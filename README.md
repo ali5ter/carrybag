@@ -17,7 +17,7 @@ External packages used by CarryBag are loaded as git submodules in the
 `3rdparty` directory to make it easier to keep things up-to-date.
 
 CarryBag is has been used on many versions of OSX, Unix and Linux. I currently
-use it on OSX Yosemite and Ubuntu 12.4.
+use it on OSX Yosemite and Ubuntu 14.04.
 
 ## Install
 Clone this repository and run `tools/install.sh`
