@@ -1,4 +1,4 @@
-preferences/*.terminal
+v1/preferences/*.terminal
 
 .DS_Store
 *.swp
