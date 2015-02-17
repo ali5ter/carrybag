@@ -23,12 +23,13 @@ cb_housekeeping () {
     case "$OSTYPE" in
         darwin*)
             source "$BASH_IT/plugins/available/carrybag-osx.plugin.bash"
-            housekeeping
+            system_maintenance
             source "$CB_BASE/lib/homebrew.bash"
             _update_homebrew_packages
             ;;
         *)
-            // TODO: Migrate from carrybag v1
+            source "$BASH_IT/plugins/available/carrybag-linux.plugin.bash"
+            system_maintenance
             ;;
     esac
 }

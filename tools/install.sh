@@ -77,7 +77,10 @@ _bash-it-enable plugin ssh
 _bash-it-enable alias carrybag-general
 _bash-it-enable completion jump
 _bash-it-enable plugin carrybag-general
-_bash-it-enable plugin carrybag-osx
+case "$OSTYPE" in
+    darwin*)    _bash-it-enable plugin carrybag-osx;;
+    *)          _bash-it-enable plugin carrybag-linux;;
+esac
 _bash-it-enable plugin jump
 
 clear
