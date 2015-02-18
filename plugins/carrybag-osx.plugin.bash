@@ -3,6 +3,8 @@ about-plugin 'CarryBag configurations and functions for OSX'
 
 ## Colors
 export CLICOLOR=1
+#alias ls='CLICOLOR_FORCE=1 ls -G'
+alias more='less -R'
 
 ## Perl
 export PERL_MB_OPT="--install_base \"$HOME/perl5\""
