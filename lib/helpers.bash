@@ -43,9 +43,11 @@ _build_carrybag_bash_runcom () {
     _add_to_bash_runcom "export EDITOR='vim'"
     _add_to_bash_runcom "export GIT_EDITOR='vim'"
     _add_to_bash_runcom "set -o vi"
+    _add_to_bash_runcom "HISTCONTROL=ignoreboth"
     _add_to_bash_runcom "shopt -s cdspell"
     _add_to_bash_runcom "shopt -s histappend"
     _add_to_bash_runcom "shopt -s dotglob"
+    _add_to_bash_runcom "shopt -s checkwinsize"
     ## TODO: Move to carrybag-private
     _add_to_bash_runcom "export GIT_HOSTING='git@gitlab.different.com'"
 
