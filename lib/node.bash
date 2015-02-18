@@ -58,9 +58,8 @@ _install_carrybag_node_packages () {
 
     _install_node_module jshint
     _install_node_module uglifyjs uglify-js
-    # node-gyp prevents these being installed on Ubuntu 12.04...
-    #_install_node_module wscat ws
-    #_install_node_module node-inspector
+    _install_node_module wscat ws
+    _install_node_module node-inspector
     _install_node_module nodemon
     _install_node_module http-server
     #_install_node_module yo
@@ -97,15 +96,9 @@ _build_carrybag_node_configuration_linux () {
 
     command -v node >/dev/null || {
         echo -e "${echo_cyan}Installing of node and npm.${echo_normal}"
-        #curl -sL https://deb.nodesource.com/setup | sudo bash -
-        sudo apt-get -y update
-        sudo apt-get -y install nodejs
-        #sudo apt-get -y install build-essential
-        # ubuntu 12.04 TODO: Do we still need this?
-        #sudo apt-get -y install python-software-properties python g++ make
-        #sudo add-apt-repository ppa:chris-lea/node.js
-        #sudo apt-get update
-        #sudo apt-get -y install nodejs
+        curl -sL https://deb.nodesource.com/setup | sudo bash -
+        sudo apt-get install -y nodejs
+        sudo apt-get install -y build-essential
     }
 
     echo -e "${echo_cyan}Installing node packages.${echo_normal}"
