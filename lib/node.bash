@@ -58,7 +58,7 @@ _install_carrybag_node_packages () {
 
     _install_node_module jshint
     _install_node_module uglifyjs uglify-js
-    _install_node_module wscat ws
+    _install_node_module wscat
     _install_node_module node-inspector
     _install_node_module nodemon
     _install_node_module http-server

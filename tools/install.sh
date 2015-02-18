@@ -60,34 +60,36 @@ source "${BASH_IT}/lib/composure.sh"
 cite _about _param _example _group _author _version
 for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
 
-## Enable addons that come with Bash it
-echo -e "${echo_cyan}Pre-loading Bash-it addons:$echo_normal"
+## Enable addons that come with Bash it & CarryBag
+echo -e "${echo_cyan}Pre-loading addons:$echo_normal"
 _bash-it-enable alias general
+_bash-it-enable alias carrybag-general
 _bash-it-enable alias git
-_bash-it-enable alias homebrew
-[[ $OSTYPE == darwin* ]] && _bash-it-enable alias osx
 _bash-it-enable alias vim
 _bash-it-enable completion bash-it
-_bash-it-enable completion brew
 _bash-it-enable completion defaults
 _bash-it-enable completion git
+_bash-it-enable completion jump
 _bash-it-enable completion ssh
 _bash-it-enable plugin base
+_bash-it-enable plugin carrybag-general
 _bash-it-enable plugin dirs
 _bash-it-enable plugin extract
 _bash-it-enable plugin git
-[[ $OSTYPE == darwin* ]] && _bash-it-enable plugin osx
-_bash-it-enable plugin ssh
-
-## Enable addons that come with CarryBag
-_bash-it-enable alias carrybag-general
-_bash-it-enable completion jump
-_bash-it-enable plugin carrybag-general
-case "$OSTYPE" in
-    darwin*)    _bash-it-enable plugin carrybag-osx;;
-    *)          _bash-it-enable plugin carrybag-linux;;
-esac
 _bash-it-enable plugin jump
+_bash-it-enable plugin ssh
+case "$OSTYPE" in
+    darwin*)
+        _bash-it-enable alias homebrew
+        _bash-it-enable alias osx
+        _bash-it-enable completion brew
+        _bash-it-enable plugin carrybag-osx
+        _bash-it-enable plugin osx
+        ;;
+    *)
+        _bash-it-enable plugin carrybag-linux
+        ;;
+esac
 
 clear
 echo
