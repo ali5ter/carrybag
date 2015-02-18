@@ -18,7 +18,7 @@ _add_to_bash_runcom () {
     local text="$*"
     local BASHRC=$(_bash_runcom)
 
-    grep "$RUNCOM_ADD_TOKEN" $BASHRC || {
+    grep "$RUNCOM_ADD_TOKEN" $BASHRC >/dev/null || {
         sed -e "/# Load Bash It/i\\
 $RUNCOM_ADD_TOKEN\\
 \\
