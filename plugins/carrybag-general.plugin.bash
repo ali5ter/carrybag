@@ -45,7 +45,7 @@ cb_3rdparty_update () {
     echo -e "${echo_cyan}Updating 3rd party packages:${echo_normal}"
     for repo in "$CB_BASE"/3rdparty/*; do
         echo -e "\t${echo_green}$(basename "$repo")${echo_normal}"
-        cd "$repo" && git pull
+        cd "$repo" && git pull origin master
     done
     cd "$_pwd"
 }
