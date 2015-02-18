@@ -33,14 +33,20 @@ cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
 ## CarryBag includes
 source "$CB_BASE/lib/helpers.bash"
 source "$CB_BASE/lib/appearance.bash"
-[[ $OSTYPE == darwin* ]] && source "$CB_BASE/lib/homebrew.bash"
+case "$OSTYPE" in
+    darwin*)   source "$CB_BASE/lib/homebrew.bash" ;;
+    *)         source "$CB_BASE/lib/apt.bash" ;;
+esac
 source "$CB_BASE/lib/node.bash"
 source "$CB_BASE/lib/ruby.bash"
 source "$CB_BASE/lib/vim.bash"
 
 ## CarryBag modifications
 _build_carrybag_bash_runcom
-[[ $OSTYPE == darwin* ]] && _build_carrybag_homebrew_config
+case "$OSTYPE" in
+    darwin*)   _build_carrybag_homebrew_config ;;
+    *)         _build_carrybag_apt_config ;;
+esac
 _build_carrybag_node_config
 _build_carrybag_vim_config
 _preload_carrybag_addons

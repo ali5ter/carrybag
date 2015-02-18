@@ -17,8 +17,9 @@ install_solarized_Xresources () {
 }
 
 install_solarized_dark_gnome_terminal () {
-    ## TODO: Install solarized gnome settings
-    echo 'TODO: Install solarized gnome settings'
+    sudo apt-get -y update
+    sudo apt-get -y install dconf
+    "$CB_BASE/3rdparty/gnome-terminal-colors-solarized/set_dark.sh"
 }
 
 install_solarized_dark_osx_terminal () {

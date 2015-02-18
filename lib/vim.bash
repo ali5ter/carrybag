@@ -10,7 +10,12 @@ export VIM_BUNDLE="$VIM_DIR/bundle"
 _install_vim_bundle () {
 
     local repo="$*"
-    local clone=3rdparty/$(basename -s .git "$repo")
+    local clone
+
+    case "$OSTYPE" in
+        darwin*)    clone=3rdparty/$(basename -s .git "$repo") ;;
+        *)          clone=3rdparty/$(basename "$repo" .git) ;;
+    esac
     git submodule status | grep -q "$clone" ||
         git submodule add "$repo" "$clone"
     cp -r "$clone" "$VIM_BUNDLE/"

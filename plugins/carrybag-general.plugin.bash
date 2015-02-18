@@ -30,6 +30,8 @@ cb_housekeeping () {
         *)
             source "$BASH_IT/plugins/available/carrybag-linux.plugin.bash"
             system_maintenance
+            source "$CB_BASE/lib/apt.bash"
+            _update_apt_packages
             ;;
     esac
 }
