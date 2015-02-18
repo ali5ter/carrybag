@@ -17,7 +17,7 @@ cb_housekeeping () {
     about 'Clean out typical OS cruft and update installed packages, e.g. brew, npm'
     group 'carrybag-admin-tools'
 
-    source "$CD_BASE/lib/node.bash"
+    source "$CB_BASE/lib/node.bash"
     _update_node_modules
 
     case "$OSTYPE" in

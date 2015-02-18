@@ -1,7 +1,9 @@
 cite about-plugin
 about-plugin 'CarryBag configurations and functions for OSX'
 
+## Colors
 [ -r ~/.dircolors ] && eval "$(dircolors ~/.dircolors)"
+[ -e dircolors ] && export `dircolors`
 alias ls="ls --color=always"
 
 ## CNC workflow config

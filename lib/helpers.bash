@@ -17,6 +17,14 @@ _add_to_bash_runcom () {
 
     local text="$*"
     local BASHRC=$(_bash_runcom)
+
+    grep "$RUNCOM_ADD_TOKEN" $BASHRC || {
+        sed -e "/# Load Bash It/i\\
+$RUNCOM_ADD_TOKEN\\
+\\
+" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
+    }
+
     sed -e "/$RUNCOM_ADD_TOKEN/a\\
 $text" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
 }
@@ -29,22 +37,17 @@ _build_carrybag_bash_runcom () {
         echo -e "${echo_cyan}Your $(basename "$BASHRC") has been backed up to $BASHRC.bak$echo_normal"
     cp "$BASH_IT/template/bash_profile.template.bash" "$BASHRC"
 
-    sed -e "/export PATH/a\\
-\\
-## Include locally installed man pages\\
-export MANPATH=/usr/local/man:$MANPATH" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-    sed -e s/bobby/alister/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-    sed -e s/\\/usr\\/bin\\/mate\ -w/vim/g "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-    sed -e "/GIT_EDITOR/a\\
-set -o vi" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-
+    _add_to_bash_runcom "export BASHRC=\'$BASHRC\'"
+    _add_to_bash_runcom "export MANPATH=\'/usr/local/man:$MANPATH\'"
+    _add_to_bash_runcom "export BASH_IT_THEME='alister'"
+    _add_to_bash_runcom "export EDITOR='vim'"
+    _add_to_bash_runcom "export GIT_EDITOR='vim'"
+    _add_to_bash_runcom "set -o vi"
+    _add_to_bash_runcom "shopt -s cdspell"
+    _add_to_bash_runcom "shopt -s histappend"
+    _add_to_bash_runcom "shopt -s dotglob"
     ## TODO: Move to carrybag-private
-    sed -e s/git@git.domain.com/git@gitlab.different.com/ "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
-
-    sed -e "/# Load Bash It/i\\
-$RUNCOM_ADD_TOKEN\\
-\\
-" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
+    _add_to_bash_runcom "export GIT_HOSTING='git@gitlab.different.com'"
 
     echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename "$BASHRC")$echo_normal"
 }
