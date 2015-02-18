@@ -38,4 +38,6 @@ system_maintenance () {
 
     about 'Clean out typical OS cruft'
     group 'linux'
+
+    sudo apt-get autoremove -y
 }

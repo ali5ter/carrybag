@@ -2,5 +2,5 @@ v1/preferences/*.terminal
 
 .DS_Store
 *.swp
+*.log
 .netrwhist
-npm-debug.log

@@ -13,8 +13,7 @@ _install_apt_package () {
 _update_apt_packages () {
     sudo apt-get update -y && \
     sudo apt-get upgrade -y && \
-    sudo apt-get dist-upgrade -y && \
-    sudo apt-get autoremove -y
+    sudo apt-get dist-upgrade -y
 }
 
 _build_carrybag_apt_config () {

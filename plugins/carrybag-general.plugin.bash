@@ -8,8 +8,7 @@ cb_bootstrap () {
     about 'Re-install CarryBag to create a fresh shell configuration'
     group 'carrybag-admin-tools'
 
-    "$CB_BASE/tools/install.sh"
-    reload
+    "$CB_BASE/tools/install.sh" && sourcep
 }
 
 cb_housekeeping () {
@@ -17,23 +16,24 @@ cb_housekeeping () {
     about 'Clean out typical OS cruft and update installed packages, e.g. brew, npm'
     group 'carrybag-admin-tools'
 
-    source "$CB_BASE/lib/node.bash"
-    _update_node_modules
+    cb_3rdparty_update
 
     case "$OSTYPE" in
         darwin*)
-            source "$BASH_IT/plugins/available/carrybag-osx.plugin.bash"
-            system_maintenance
-            source "$CB_BASE/lib/homebrew.bash"
-            _update_homebrew_packages
+            source "$BASH_IT/plugins/available/carrybag-osx.plugin.bash" && \
+                system_maintenance
+            source "$CB_BASE/lib/homebrew.bash" && _update_homebrew_packages
             ;;
         *)
-            source "$BASH_IT/plugins/available/carrybag-linux.plugin.bash"
-            system_maintenance
-            source "$CB_BASE/lib/apt.bash"
-            _update_apt_packages
+            source "$BASH_IT/plugins/available/carrybag-linux.plugin.bash" && \
+                system_maintenance
+            source "$CB_BASE/lib/apt.bash" && _update_apt_packages
             ;;
     esac
+
+    source "$CB_BASE/lib/node.bash" && _update_node_modules
+
+    echo -e "${echo_green}You might want to run ${echo_white}bootstrap${echo_green} to include any updates${echo_normal}"
 }
 
 cb_3rdparty_update () {
