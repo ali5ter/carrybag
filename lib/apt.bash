@@ -27,4 +27,5 @@ _build_carrybag_apt_config () {
     sudo apt-get install -y vim # force install of up to date version
     _install_apt_package curl
     _install_apt_package build-essential gcc
+    _install_apt_package meld
 }
