@@ -26,10 +26,10 @@ Clone this repository and run `tools/install.sh`
 
 The installation script asks various questions. I'd recommend you answer yes to
 these questions the first time you run the installer. Any edits to the source 
-tree can be installed using the `cb_bootstrap` command.
+tree can be installed using the `bootstrap` command.
 
 CarryBag come with a platform specific (OSX and Linux for now) housekeeping
-script called `cd_housekeeping` which attempts to keep your system and package 
+script called `housekeeping` which attempts to keep your system and package 
 files up to date.
 
 ## Managing functionality
