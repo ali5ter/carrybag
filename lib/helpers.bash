@@ -34,7 +34,7 @@ _build_carrybag_bash_runcom () {
     local BASHRC=$(_bash_runcom)
 
     [ -w "$BASHRC" ] && cp "$BASHRC" "$BASHRC.bak" &&
-        echo -e "${echo_cyan}Your $(basename "$BASHRC") has been backed up to $BASHRC.bak$echo_normal"
+        echo -e "${echo_cyan}Your $(basename "$BASHRC") has been backed up to $BASHRC.bak${echo_normal}"
     cp "$BASH_IT/template/bash_profile.template.bash" "$BASHRC"
 
     _add_to_bash_runcom "export BASHRC=\'$BASHRC\'"
@@ -51,12 +51,12 @@ _build_carrybag_bash_runcom () {
     ## TODO: Move to carrybag-private
     _add_to_bash_runcom "export GIT_HOSTING='git@gitlab.different.com'"
 
-    echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename "$BASHRC")$echo_normal"
+    echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename "$BASHRC")${echo_normal}"
 }
 
 _preload_carrybag_themes () {
 
-    echo -e "${echo_cyan}Copy CarryBag themes to Bash It:$echo_normal"
+    echo -e "${echo_cyan}Copy CarryBag themes to Bash It:${echo_normal}"
 
     for file in $CB_BASE/themes/*; do
         _file=$(basename "$file")
@@ -73,7 +73,7 @@ _preload_carrybag_addons () {
     for ftype in "aliases" "completion" "plugins"; do
         for file in $CB_BASE/$ftype/*; do
             _file=$(basename "$file")
-            echo -e "\t${echo_cyan}$ftype ${echo_green}$(echo "$_file" | cut -d'.' -f 1)$echo_normal"
+            echo -e "\t${echo_cyan}$ftype ${echo_green}$(echo "$_file" | cut -d'.' -f 1)${echo_normal}"
             [ -e "$BASH_IT/available/$_file" ] && rm -f "$BASH_IT/available/$_file"
             cp "$file" "$BASH_IT/$ftype/available/$_file"
         done
@@ -86,5 +86,5 @@ _bash-it-enable () {
     local addon=$2
 
     bash-it enable "$type" "$addon" >/dev/null &&
-        echo -e "\t${echo_cyan}$type ${echo_green}$addon$echo_normal"
+        echo -e "\t${echo_cyan}$type ${echo_green}$addon${echo_normal}"
 }
