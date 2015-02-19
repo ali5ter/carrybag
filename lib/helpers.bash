@@ -60,9 +60,11 @@ _preload_carrybag_themes () {
 
     for file in $CB_BASE/themes/*; do
         _file=$(basename "$file")
-        echo -e "\t${echo_green}$_file$echo_normal"
-        [ -e "$BASH_IT/themes/$_file" ] && rm -f "$BASH_IT/themes/$_file"
-        cp -r "$file" "$BASH_IT/themes/$_file"
+        [ "$_file" == '*' ] || {
+            echo -e "\t${echo_green}$_file$echo_normal"
+            [ -e "$BASH_IT/themes/$_file" ] && rm -f "$BASH_IT/themes/$_file"
+            cp -r "$file" "$BASH_IT/themes/$_file"
+        }
     done
 }
 
@@ -73,9 +75,11 @@ _preload_carrybag_addons () {
     for ftype in "aliases" "completion" "plugins"; do
         for file in $CB_BASE/$ftype/*; do
             _file=$(basename "$file")
-            echo -e "\t${echo_cyan}$ftype ${echo_green}$(echo "$_file" | cut -d'.' -f 1)${echo_normal}"
-            [ -e "$BASH_IT/available/$_file" ] && rm -f "$BASH_IT/available/$_file"
-            cp "$file" "$BASH_IT/$ftype/available/$_file"
+            [ "$_file" == '*' ] || {
+                echo -e "\t${echo_cyan}$ftype ${echo_green}$(echo "$_file" | cut -d'.' -f 1)${echo_normal}"
+                [ -e "$BASH_IT/available/$_file" ] && rm -f "$BASH_IT/available/$_file"
+                cp "$file" "$BASH_IT/$ftype/available/$_file"
+            }
         done
     done
 }
