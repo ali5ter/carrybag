@@ -38,6 +38,10 @@ export JAVA_HOME=$(/usr/libexec/java_home)  # using XCode command line tools uti
 ## For apps using wget
 alias wget='curl -CO'
 
+## SourceTree
+[ -d /Applications/SourceTree.app ] && \
+    alias sourcetree="'open -a /Applications/SourceTree.app'"
+
 ## Do not hide the  Library director
 chflags nohidden ~/Library
 
