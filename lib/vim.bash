@@ -16,15 +16,20 @@ _install_vim_bundle () {
         darwin*)    clone=3rdparty/$(basename -s .git "$repo") ;;
         *)          clone=3rdparty/$(basename "$repo" .git) ;;
     esac
+
     git submodule status | grep -q "$clone" ||
         git submodule add "$repo" "$clone"
+
     cp -r "$clone" "$VIM_BUNDLE/"
 }
 
 _install_pathogen () {
+
     _install_vim_bundle https://github.com/tpope/vim-pathogen.git
+
     mkdir -p "$VIM_DIR/autoload" "$VIM_BUNDLE" &&
         cp "3rdparty/vim-pathogen/autoload/pathogen.vim" "$VIM_DIR/autoload/"
+
     cat <<PATHOGEN >> "$VIMRC"
 
 "
@@ -35,8 +40,9 @@ PATHOGEN
 }
 
 _install_solarized () {
-    ## Install solarized color scheme
+
     _install_vim_bundle https://github.com/altercation/vim-colors-solarized.git
+
     cat <<SOLARIZED >> "$VIMRC"
 
 "
@@ -50,8 +56,9 @@ SOLARIZED
 }
 
 _install_nerdtree () {
-    ## Install NERDTree
+
     _install_vim_bundle https://github.com/scrooloose/nerdtree.git
+
     cat <<NERDTREE >> "$VIMRC"
 
 "
@@ -65,10 +72,13 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 NERDTREE
 }
 
-_install_powerline_fonts () {
+_install_powerline_fonts_osx () {
+
     ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility
     ##       for the Terminal app
+
     echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
+
     while IFS= read -d $'\0' -r font; do
         [[ $font == *SourceCodePro/Sauce\ Code\ Powerline\ Light* ]] && {
             echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
@@ -98,20 +108,46 @@ tell application "Font Book" to quit
 INSTALLPOWERLINEFONT
         }
     done < <(find 3rdparty/fonts -name "*.otf" -print0)
-    echo -e "${echo_green}Change the font of your terminal app to use one of these fonts.$echo_normal"
+
+    echo -e "${echo_green}Edit the OSX Terminal preferences to change to a Powerline font.$echo_normal"
+}
+
+_install_powerline_fonts_linux () {
+
+    local _dir='/usr/share/fonts/opentype'
+    local _file
+
+    echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
+
+    [ -e "$_dir" ] || sudo mkdir -p "$_dir"
+
+    while IFS= read -d $'\0' -r font; do
+        _file="$(basename "$(echo "$font" | tr ' ' '_')")"
+        echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
+        sudo cp "$font" "$_dir/$_file"
+    done < <(find 3rdparty/fonts -name "*.otf" -print0)
+
+    sudo fc-cache -f
+
+    echo -e "${echo_green}Edit the Terminal profile to change to a Powerline font.$echo_normal"
 }
 
 _install_vimairline () {
+
     _install_vim_bundle https://github.com/bling/vim-airline.git
-    [[ $OSTYPE == darwin* ]] && {
-        echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
-        read -n 1 reply
-        case "$reply" in
-            Y|y)
-                _install_vim_bundle https://github.com/powerline/fonts.git
-                _install_powerline_fonts
-        esac
-    }
+
+    echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
+    read -n 1 reply
+    case "$reply" in
+        Y|y)
+            _install_vim_bundle https://github.com/powerline/fonts.git
+            case "$OSTYPE" in
+                darwin*)    _install_powerline_fonts_osx ;;
+                *)          _install_powerline_fonts_linux ;;
+            esac
+            ;;
+    esac
+
     cat <<AIRLINE >> "$VIMRC"
 
 "
@@ -122,7 +158,9 @@ AIRLINE
 }
 
 _install_syntastic () {
+
     _install_vim_bundle https://github.com/scrooloose/syntastic.git
+
     cat <<SYNTASTIC >> "$VIMRC"
 
 "
@@ -150,6 +188,7 @@ SYNTASTIC
 }
 
 _install_syntax_highlighters () {
+
     _install_vim_bundle https://github.com/tpope/vim-markdown.git
     _install_vim_bundle https://github.com/jelera/vim-javascript-syntax.git
     _install_vim_bundle https://github.com/othree/javascript-libraries-syntax.vim.git
