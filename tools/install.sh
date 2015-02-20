@@ -33,6 +33,8 @@ cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
 ## CarryBag includes
 source "$CB_BASE/lib/helpers.bash"
 source "$CB_BASE/lib/appearance.bash"
+source "$CB_BASE/lib/runcom.bash"
+source "$CB_BASE/lib/git.bash"
 case "$OSTYPE" in
     darwin*)   source "$CB_BASE/lib/homebrew.bash" ;;
     *)         source "$CB_BASE/lib/apt.bash" ;;
