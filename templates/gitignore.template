@@ -1,0 +1,85 @@
+#
+# General
+#
+
+*.tmp
+*.bak
+*.swp
+.svn/
+*.pyc
+
+#
+# Rev control
+#
+
+/CVS/*
+*/CVS/*
+.cvsignore
+*/.cvsignore
+.*.sw[a-z]
+
+#
+# OSX
+#
+
+.DS_Store
+._*
+.Trashes
+*.swp
+*.lock
+
+#
+# XCode
+#
+
+*~.nib
+DerivedData/
+build/
+*.pbxuser
+*.mode1v3
+*.mode2v3
+*.perspectivev3
+!default.pbxuser
+!default.mode1v3
+!default.mode2v3
+!default.perspectivev3
+
+#
+# Eclipse
+#
+
+.project
+.metadata
+local.properties
+.classpath
+.settings/
+.loadpath
+*.launch
+bin/
+bin-debug/
+
+#
+# Archives
+#
+
+*.7z
+*.jar
+*.rar
+*.zip
+*.gz
+*.bzip
+*.xz
+*.lzma
+*.iso
+*.tar
+
+#
+# Installation
+#
+
+*.dmg
+*.xpi
+*.gem
+*.egg
+*.deb
+*.rpm

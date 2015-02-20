@@ -43,6 +43,8 @@ source "$CB_BASE/lib/vim.bash"
 
 ## CarryBag modifications
 _build_carrybag_bash_runcom
+_build_carrybag_git_config
+_build_carrybag_git_ignore
 case "$OSTYPE" in
     darwin*)   _build_carrybag_homebrew_config ;;
     *)         _build_carrybag_apt_config ;;
