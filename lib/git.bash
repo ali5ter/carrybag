@@ -55,13 +55,11 @@ _update_git_platform_mods () {
             }
             ;;
         *)
-            command -v meld >/dev/null && {
-                git config --global merge.tool meld
-                git config --global mergetool.meld.cmd 'meld $BASE $LOCAL $REMOTE $MERGED'
-                git config --global mergetool.meld.trustExitCode false
-                git config --global diff.tool meld
-                git config --global difftool.meld.cmd 'meld $LOCAL $REMOTE'
-            }
+            git config --global merge.tool meld
+            git config --global mergetool.meld.cmd 'meld $BASE $LOCAL $REMOTE $MERGED'
+            git config --global mergetool.meld.trustExitCode false
+            git config --global diff.tool meld
+            git config --global difftool.meld.cmd 'meld $LOCAL $REMOTE'
             ;;
     esac
 }

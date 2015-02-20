@@ -95,6 +95,11 @@ case "$OSTYPE" in
         ;;
 esac
 
+## Prepopulate jump bookmarks
+jbookmarks=~/.jump/bookmarks
+[ -e "$jbookmarks" ] || mkdir "$(dirname "$jbookmarks")" && \
+    echo "carrybag::$CB_BASE" > "$jbookmarks"
+
 clear
 echo
 echo -e "$echo_yellow"'  ██████╗ █████╗ ██████╗ ██████╗ ██╗   ██╗██████╗  █████╗  ██████╗ '"$echo_normal"
