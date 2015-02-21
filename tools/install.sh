@@ -82,6 +82,7 @@ _bash-it-enable plugin extract
 _bash-it-enable plugin git
 _bash-it-enable plugin jump
 _bash-it-enable plugin ssh
+_bash-it-enable plugin zzz-carrybag-overrides
 case "$OSTYPE" in
     darwin*)
         _bash-it-enable alias homebrew

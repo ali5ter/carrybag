@@ -17,7 +17,3 @@ alias allogs="sudo find /var/log -type f -exec file {} \; | grep 'text' | cut -d
 
 ## Edit the hosts file
 alias hosts="sudo vim /etc/hosts"
-
-## Preferred git aliases
-## TODO: Figure out how to override bash-it set aliases
-unalias gd && alias gd='git diff'
