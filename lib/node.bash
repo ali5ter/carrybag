@@ -19,6 +19,14 @@ _install_node_using_brew () {
     curl -L https://www.npmjs.org/install.sh | sh
 }
 
+_install_node_using_apt () {
+
+    curl -sL https://deb.nodesource.com/setup | sudo bash -
+    sudo apt-get install -y nodejs
+    sudo apt-get install -y build-essential
+    # npm completion >> ~/.bashrc
+}
+
 _uninstall_node () {
 
     case "$OSTYPE" in
@@ -38,7 +46,9 @@ _uninstall_node () {
             brew list -1 | grep -q node && brew uninstall node
             ;;
         *)
-            sudo apt-get -y remove nodejs
+            npm ls -g --depth=0 | grep @ | cut -d' ' -f2 | cut -d'@' -f1 | \
+                sudo xargs npm remove -g
+            sudo apt-get -y remove nodejs npm
             ;;
     esac
 }
@@ -58,8 +68,11 @@ _install_carrybag_node_packages () {
 
     _install_node_module jshint
     _install_node_module uglifyjs uglify-js
-    _install_node_module wscat
-    _install_node_module node-inspector
+    ## Unable to build these on ubuntu 14.04 currently
+    [[ $OSTYPE == darwin* ]] && {
+        _install_node_module wscat
+        _install_node_module node-inspector
+    }
     _install_node_module nodemon
     _install_node_module http-server
     #_install_node_module yo
@@ -72,10 +85,7 @@ _build_carrybag_node_configuration_osx () {
         echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
         read -n 1 reply
         case "$reply" in
-            Y|y)
-                echo
-                _uninstall_node
-                _install_node_using_brew
+            Y|y) echo; _uninstall_node && _install_node_using_brew ;;
         esac
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
@@ -94,12 +104,16 @@ export NODE_PATH=\"/usr/local/lib/node_modules:\$NODE_PATH\""
 
 _build_carrybag_node_configuration_linux () {
 
-    command -v node >/dev/null || {
-        echo -e "${echo_cyan}Installing of node and npm.${echo_normal}"
-        curl -sL https://deb.nodesource.com/setup | sudo bash -
-        sudo apt-get install -y nodejs
-        sudo apt-get install -y build-essential
-    }
+    if command -v node >/dev/null; then
+        echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
+        read -n 1 reply
+        case "$reply" in
+            Y|y)    echo; _uninstall_node && _install_node_using_apt ;;
+        esac
+    else
+        echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
+        _install_node_using_apt
+    fi
 
     echo -e "${echo_cyan}Installing node packages.${echo_normal}"
     _install_carrybag_node_packages
