@@ -98,8 +98,13 @@ esac
 
 ## Prepopulate jump bookmarks
 jbookmarks=~/.jump/bookmarks
-[ -e "$jbookmarks" ] || mkdir "$(dirname "$jbookmarks")" && \
+if [ -f "$jbookmarks" ]; then
+    grep carybag "$jbookmarks" >/dev/null || \
+        echo "carrybag::$CB_BASE" >> "$jbookmarks"
+else
+    [ -d "$(dirname "$jbookmarks")" ] || mkdir "$(dirname "$jbookmarks")"
     echo "carrybag::$CB_BASE" > "$jbookmarks"
+fi
 
 clear
 echo
