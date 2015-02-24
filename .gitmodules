@@ -52,3 +52,6 @@
 [submodule "3rdparty/vim-perl"]
 	path = 3rdparty/vim-perl
 	url = https://github.com/vim-perl/vim-perl.git
+[submodule "3rdparty/ctrlp.vim"]
+	path = 3rdparty/ctrlp.vim
+	url = https://github.com/kien/ctrlp.vim.git
