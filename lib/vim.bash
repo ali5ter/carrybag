@@ -224,9 +224,9 @@ SYNTAX
 
 _build_carrybag_vim_config () {
 
-    ## Back up any existing vim files 
+    ## Back up any existing vim files
     for file in "$VIMRC" "$VIM_DIR"; do
-        [ -w "$file" ] && cp -r "$file" "$file.bak" &&
+        [ -w "$file" ] && cp -r "$file" "$file.bak" && rm -fR "$file" &&
             echo -e "${echo_cyan}Your $(basename $file) has been backed up to $file.bak$echo_normal"
     done
 
