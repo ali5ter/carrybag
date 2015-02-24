@@ -72,6 +72,19 @@ autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTree
 NERDTREE
 }
 
+_install_ctrlp () {
+
+    _install_vim_bundle https://github.com/kien/ctrlp.vim.git
+
+    cat <<CTRLP >> "$VIMRC"
+
+"
+" CtrlP
+"
+nmap <leader>p :CtrlP<cr>
+CTRLP
+}
+
 _install_powerline_fonts_osx () {
 
     ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility
@@ -153,7 +166,9 @@ _install_vimairline () {
 "
 " Airline
 "
-let g:airline_powerline_fonts = 1
+let g:airline_powerline_fonts = 1           " use powerline fonts if available
+let g:airline#extensions#tabline#enabled = 1    " enable tabline to show buffers
+let g:airline#extensions#tabline#fnamemod = ':t'" just show filename for buffer
 AIRLINE
 }
 
@@ -216,7 +231,7 @@ _build_carrybag_vim_config () {
     done
 
     ## Set up the vim runcom
-    cp "$CB_BASE/templates/vimrc.template.bash" "$VIMRC"
+    cp "$CB_BASE/templates/vimrc.template" "$VIMRC"
 
     ## Create a backup dir for any vim swap cruft
     mkdir -p "$VIM_DIR/backup"
@@ -228,10 +243,12 @@ _build_carrybag_vim_config () {
     ## Install vim packages
     _install_solarized
     echo -e "${echo_cyan}Solarize color theme added to vim${echo_normal}"
-    _install_nerdtree
-    echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
+    #_install_nerdtree
+    #echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
     _install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
+    _install_ctrlp
+    echo -e "${echo_cyan}CtrlP added to vim${echo_normal}"
     _install_syntastic
     echo -e "${echo_cyan}Syntastic added to vim${echo_normal}"
     _install_syntax_highlighters
