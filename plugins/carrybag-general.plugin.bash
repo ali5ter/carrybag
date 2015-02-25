@@ -16,8 +16,6 @@ cb_housekeeping () {
     about 'Clean out typical OS cruft and update installed packages, e.g. brew, npm'
     group 'carrybag-admin-tools'
 
-    cb_3rdparty_update
-
     case "$OSTYPE" in
         darwin*)
             source "$BASH_IT/plugins/available/carrybag-osx.plugin.bash" && \
