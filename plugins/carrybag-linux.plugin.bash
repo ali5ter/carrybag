@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin 'CarryBag configurations and functions for OSX'
+about-plugin 'CarryBag Linux specific config and functions'
 
 ## Return if non-interactive shell
 case $- in

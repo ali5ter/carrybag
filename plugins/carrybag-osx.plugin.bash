@@ -1,5 +1,5 @@
 cite about-plugin
-about-plugin 'CarryBag configurations and functions for OSX'
+about-plugin 'CarryBag OSX specific config and functions'
 
 ## Colors
 export CLICOLOR=1
