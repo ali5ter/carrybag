@@ -126,16 +126,17 @@ endfunction
 " Mappings
 "
 let mapleader = ","             " lead with ,
+noremap <Up> <NOP>              " NO
+noremap <Down> <NOP>            " MORE
+noremap <Left> <NOP>            " ARROW
+noremap <Right> <NOP>           " KEYS
 set backspace=indent,eol,start  " more useful backspace capability
 nmap <leader>sh :set list!<cr>  " show/hide hidden characters
 nmap <leader>tw :cal StripTrailingWhitespace()<cr>
-nmap <leader>v :vsplit<cr>      " vertical split
-nmap <leader>s :split<cr>       " horizonal split
-nmap <leader>b :ls<cr>          " list all buffers
-nmap <leader>B :enew<cr>        " open new empty buffer
-nmap <leader>; :bnext<cr>       " move to next buffer
-nmap <leader>' :bprevious<cr>   " move to previous buffer
-nmap <leader>Q :bp <bar> bd #<cr>  " close current butter and move to next
+"nmap <leader>B :enew<cr>        " open new empty buffer
+"nmap <leader>; :bnext<cr>       " move to next buffer
+"nmap <leader>' :bprevious<cr>   " move to previous buffer
+"nmap <leader>Q :bp <bar> bd #<cr>  " close current butter and move to next
 
 
 "

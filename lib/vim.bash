@@ -243,8 +243,6 @@ _build_carrybag_vim_config () {
     ## Install vim packages
     _install_solarized
     echo -e "${echo_cyan}Solarize color theme added to vim${echo_normal}"
-    #_install_nerdtree
-    #echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
     _install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
     _install_ctrlp
