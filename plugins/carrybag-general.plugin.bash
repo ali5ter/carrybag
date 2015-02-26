@@ -41,10 +41,12 @@ cb_3rdparty_update () {
 
     local _pwd="$PWD"
     echo -e "${echo_cyan}Updating 3rd party packages:${echo_normal}"
+    shopt -u dotglob
     for repo in "$CB_BASE"/3rdparty/*; do
         echo -e "\t${echo_green}$(basename "$repo")${echo_normal}"
         cd "$repo" && git pull origin master
     done
+    shopt -s dotglob
     cd "$_pwd"
 }
 
