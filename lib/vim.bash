@@ -81,7 +81,7 @@ _install_ctrlp () {
 "
 " CtrlP
 "
-nmap <leader>p :CtrlP<cr>
+"nmap <leader>p :CtrlP<cr>
 CTRLP
 }
 

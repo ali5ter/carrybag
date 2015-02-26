@@ -65,7 +65,7 @@ set foldlevelstart=3    " start folding at 3rd level
 " Visuals
 "
 set laststatus=2        " always show status line
-set display+=lastline   " show last line
+"set display+=lastline   " show last line
 set visualbell          " no flashing
 set wildmenu            " turn on command completion
 set wildmode=list:longest,full  " list all possible completions
@@ -125,11 +125,11 @@ endfunction
 "
 " Mappings
 "
-let mapleader = ","             " lead with ,
-noremap <Up> <NOP>              " NO
-noremap <Down> <NOP>            " MORE
-noremap <Left> <NOP>            " ARROW
-noremap <Right> <NOP>           " KEYS
+let mapleader = ","
+noremap <up> <nop>
+noremap <down> <nop>
+noremap <left> <nop>
+noremap <right> <nop>
 set backspace=indent,eol,start  " more useful backspace capability
 nmap <leader>sh :set list!<cr>  " show/hide hidden characters
 nmap <leader>tw :cal StripTrailingWhitespace()<cr>
@@ -146,7 +146,7 @@ nmap <leader>tw :cal StripTrailingWhitespace()<cr>
 set wildignore=*.o,*.obj,*~,*.pyc
 set wildignore+=.env
 set wildignore+=.env[0-9]+
-set wildignore+=.git,.gitkeep
+"set wildignore+=.git,.gitkeep
 set wildignore+=.tmp
 set wildignore+=.coverage
 set wildignore+=*DS_Store*
