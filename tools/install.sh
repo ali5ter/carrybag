@@ -14,7 +14,6 @@ if [ -z "$CB_BASE" ]; then
     export CB_BASE=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
     export BASH_IT=~/.bash_it
     INTERACTIVE=true
-    clear
 else
     INTERACTIVE=false
 fi
@@ -112,7 +111,6 @@ case "$OSTYPE" in
         ;;
 esac
 
-clear
 echo
 echo -e "$echo_yellow"'  ██████╗ █████╗ ██████╗ ██████╗ ██╗   ██╗██████╗  █████╗  ██████╗ '"$echo_normal"
 echo -e "$echo_green"' ██╔════╝██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗██╔════╝ '"$echo_normal"

@@ -229,26 +229,36 @@ mondir () {
     example '$ mondir 10 build.sh'
     group 'carrybag-file-tools'
 
-    rm -f /tmp/"${TMPFILE_TMPL//[X]}"*
-    local last=$(mktemp "/tmp/$TMPFILE_TMPL")
-    local delay=2
     local diff=''
     local int=false
+    local pre="${echo_white}${echo_background_purple} mondir: "
+    local post=" ${echo_normal}"
+    local exclusions='.DS_Store\|.svn\|.git\|.vim/backup|.log'
+
+    local delay=2
     [ $# -gt 1 ] && { delay=$1; shift; }
+
+    ttmplt=.mondir-XXXXXXXXXX
+    rm -f /tmp/"${ttmplt//[X]}"*
+    local last=$(mktemp "/tmp/$ttmplt")
     touch "$last"
-    echo; echo "$(color white blue)Monitoring $(pwd) for file changes and additions every $delay seconds...$(color)"
+
+    echo
+    echo -e "${pre}Monitoring file changes and additions every $delay seconds${post}"
+
     trap "int=true" INT
+
     sleep "$delay"
+
     while ! $int; do
-        diff=$(find . -newer "$last" -type f  | grep -v ".DS_Store\|.svn\|.git\|.vim/backup")
+        diff=$(find . -newer "$last" -type f 2>/dev/null | egrep -v "$exclusions")
         [ "$(echo "$diff" | grep -c './')" -gt '0' ] && {
             touch "$last"
             echo
-            echo "$(color black green)Files changed at $(date):$(color)"
-            echo "$(color white green)$diff$(color)"
-            echo
-            echo "$(color black blue)Triggering command...$(color)"
-            eval "$@" && echo "$(color black blue)Done$(color)"
+            echo -e "${pre}Files changed at $(date):${post}"
+            echo -e "${pre}\t$diff${post}"
+            echo -e "${pre}Triggering "'$@'" command${post}"
+            eval "$@" && echo -e "\n${pre}Done${post}"
         }
         sleep "$delay" || int=true
     done
