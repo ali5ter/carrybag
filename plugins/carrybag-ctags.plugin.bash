@@ -6,7 +6,7 @@ ctags --version | grep Exuberant >/dev/null || \
 
 # @see http://tbaggery.com/2011/08/08/effortless-ctags-with-git.html
 gctags () {
-    set -x
+
     about 'run ctags within a git repo'
     group 'carrybag-ctag-tools'
 
@@ -19,5 +19,4 @@ gctags () {
         git ls-files | ctags --tag-relative -L - -f"$tags"
         mv "$tags" "$dir/tags"
     }
-    set +x
 }
