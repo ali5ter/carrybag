@@ -96,16 +96,6 @@ case "$OSTYPE" in
         ;;
 esac
 
-## Prepopulate jump bookmarks
-jbookmarks=~/.jump/bookmarks
-if [ -f "$jbookmarks" ]; then
-    grep carrybag "$jbookmarks" >/dev/null || \
-        echo "carrybag::$CB_BASE" >> "$jbookmarks"
-else
-    [ -d "$(dirname "$jbookmarks")" ] || mkdir "$(dirname "$jbookmarks")"
-    echo "carrybag::$CB_BASE" > "$jbookmarks"
-fi
-
 clear
 echo
 echo -e "$echo_yellow"'  ██████╗ █████╗ ██████╗ ██████╗ ██╗   ██╗██████╗  █████╗  ██████╗ '"$echo_normal"

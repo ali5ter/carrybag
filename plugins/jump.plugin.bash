@@ -4,9 +4,21 @@ about-plugin 'utility to navigate to bookmarked directories'
 ## Working directory
 JUMP=~/.jump
 
+## Directory bookmark store
+JUMP_BOOKMARKS=~/.jump/bookmarks
+
+## Prepopulate jump bookmarks
+if [ -f "$JUMP_BOOKMARKS" ]; then
+    grep carrybag "$JUMP_BOOKMARKS" >/dev/null || \
+        echo "carrybag::$CB_BASE" >> "$JUMP_BOOKMARKS"
+else
+    [ -d "$(dirname "$JUMP_BOOKMARKS")" ] || mkdir "$(dirname "$JUMP_BOOKMARKS")"
+    echo "carrybag::$CB_BASE" > "$JUMP_BOOKMARKS"
+fi
+
 _jump_bookmark_exists () {
 
-    [[ $(grep -c "^$1::" "$STORE") -gt '0' ]] && return 0
+    [[ $(grep -c "^$1::" "$JUMP_BOOKMARKS") -gt '0' ]] && return 0
     return 1
 }
 
@@ -14,10 +26,6 @@ jump () {
 
     about 'jump to a bookmarked directory. jump -h for more'
     group 'jump'
-
-    local STORE="$JUMP/bookmarks"
-    [ ! -e "$JUMP" ] && mkdir -p "$JUMP"
-    [ ! -e "$STORE" ] && touch "$STORE"
 
     local help="
 ${echo_bold_white}Jump to bookmarked directories${echo_normal}
@@ -51,7 +59,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
                 [ ! -d "$path" ] && state="$badDir"
                 printf "%1s ${echo_green}%-10s ${echo_cyan}%-60s${echo_normal}\n" \
                     "$state" "$name" "$path"
-            done < "$STORE"
+            done < "$JUMP_BOOKMARKS"
             echo
             ;;
 
@@ -63,7 +71,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
                 jump list
                 return 0
             else
-                echo "$2"'::'"$PWD" >> "$STORE"
+                echo "$2"'::'"$PWD" >> "$JUMP_BOOKMARKS"
                 echo -e "${echo_cyan}Bookmark added${echo_normal}"
             fi
             ;;
@@ -76,7 +84,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
                 jump list
                 return 0
             else
-                sed -e /^"$2"::/d "$STORE" > "$STORE.tmp" && mv "$STORE.tmp" "$STORE"
+                sed -e /^"$2"::/d "$JUMP_BOOKMARKS" > "$JUMP_BOOKMARKS.tmp" && mv "$JUMP_BOOKMARKS.tmp" "$JUMP_BOOKMARKS"
                 echo -e "${echo_cyan}Bookmark deleted${echo_normal}"
             fi
             ;;
@@ -84,7 +92,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
         *)
             _jump_bookmark_exists "$1"
             if [ $? -eq 0 ]; then
-                local bm=$(grep "$1" "$STORE")
+                local bm=$(grep "$1" "$JUMP_BOOKMARKS")
                 cd "${bm#*::}"
             else
                 echo -e "${echo_yellow}Unable to find '$1'${echo_normal}"
