@@ -24,13 +24,21 @@ currently used on the following operating systems:
 ## Install
 Clone this repository and run `tools/install.sh`
 
-The installation script asks various questions. I'd recommend you answer yes to
-these questions the first time you run the installer. Any edits to the source 
-tree can be installed using the `bootstrap` command.
+The fist time it is run, the installation script will ask various questions. I'd
+recommend you answer yes to these questions to achieve a complete installation. 
+The script can be run again if you need to incorporate any changes to the 
+installation. If you want to force interaction, use the `-i` or `--interaction` 
+option with the installation script.
+
+A convenience alias, `bootstrap`, is provided to run the installation script in
+non-interactive mode.
 
 CarryBag comes with a platform specific housekeeping script called using the 
-`housekeeping` command. This attempts to keep the 3rd party pacakges, OS system 
+`housekeeping` command. This attempts to clean up any OS cruft and keep system 
 and package files up to date.
+
+You can update any 3rd party packages that come with CarryBag (at your own 
+risk) by running `cb_3rdparty_update`.
 
 ## Managing functionality
 Use the `bash-it` command just as you would for 

@@ -149,17 +149,19 @@ _install_vimairline () {
 
     _install_vim_bundle https://github.com/bling/vim-airline.git
 
-    echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
-    read -n 1 reply
-    case "$reply" in
-        Y|y)
-            _install_vim_bundle https://github.com/powerline/fonts.git
-            case "$OSTYPE" in
-                darwin*)    _install_powerline_fonts_osx ;;
-                *)          _install_powerline_fonts_linux ;;
-            esac
-            ;;
-    esac
+    if $INTERACTIVE; then
+        echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
+        read -n 1 reply
+        case "$reply" in
+            Y|y)
+                _install_vim_bundle https://github.com/powerline/fonts.git
+                case "$OSTYPE" in
+                    darwin*)    _install_powerline_fonts_osx ;;
+                    *)          _install_powerline_fonts_linux ;;
+                esac
+                ;;
+        esac
+    fi
 
     cat <<AIRLINE >> "$VIMRC"
 

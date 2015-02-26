@@ -5,42 +5,48 @@ set -e
 
 _update_git_user_name () {
 
-    local fullname="$(git config --get user.name)"
+    if $INTERACTIVE; then
 
-    [ -z "$fullname" ] && {
-        case "$OSTYPE" in
-            darwin*)    fullname="$(finger "$(whoami)" | awk -F: '{ print $3 }' | head -n1 | sed 's/^ //')" ;;
-            *)          fullname="$USER" ;;
-        esac
-    }
+        local fullname="$(git config --get user.name)"
 
-    while true; do
-        echo -ne "${echo_yellow}What name do you want attached to your git commits? [$fullname] ${echo_normal}"
-        read reply
-        case "$reply" in
-            '') [ -n "$fullname" ] && break ;;
-            *)  fullname="$reply"; break ;;
-        esac
-    done
+        [ -z "$fullname" ] && {
+            case "$OSTYPE" in
+                darwin*)    fullname="$(finger "$(whoami)" | awk -F: '{ print $3 }' | head -n1 | sed 's/^ //')" ;;
+                *)          fullname="$USER" ;;
+            esac
+        }
 
-    git config --global user.name "$fullname"
+        while true; do
+            echo -ne "${echo_yellow}What name do you want attached to your git commits? [$fullname] ${echo_normal}"
+            read reply
+            case "$reply" in
+                '') [ -n "$fullname" ] && break ;;
+                *)  fullname="$reply"; break ;;
+            esac
+        done
+
+        git config --global user.name "$fullname"
+    fi
 }
 
 _update_git_user_email() {
 
-    local email="$(git config --get user.email)"
+    if $INTERACTIVE; then
 
-    while true; do
-        echo -ne "${echo_yellow}What email address do you want attached to your git commits? [$email] ${echo_normal}"
-        read reply
-        case "$reply" in
-            '') [ -n "$email" ] && break ;;
-            *)  email="$reply"; break ;;
-        esac
-    done
+        local email="$(git config --get user.email)"
 
-    # TODO: Validate email address
-    git config --global user.email "$email"
+        while true; do
+            echo -ne "${echo_yellow}What email address do you want attached to your git commits? [$email] ${echo_normal}"
+            read reply
+            case "$reply" in
+                '') [ -n "$email" ] && break ;;
+                *)  email="$reply"; break ;;
+            esac
+        done
+
+        # TODO: Validate email address
+        git config --global user.email "$email"
+    fi
 }
 
 _update_git_platform_mods () {
@@ -70,16 +76,18 @@ _build_carrybag_git_config () {
 
     ## Create a basic gitconfig file
     if [ -w "$gitconfig" ]; then
-        echo -ne "${echo_yellow}Want to install a clean git config file? [y/N] ${echo_normal}"
-        read -n 1 reply
-        case "$reply" in
-            Y|y)
-                echo
-                [ -w "$gitconfig" ] && cp "$gitconfig" "$gitconfig.bak" &&
-                    echo -e "${echo_cyan}Your $(basename "$gitconfig") has been backed up to $gitconfig.bak ${echo_normal}"
-                cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"
-                ;;
-        esac
+        if $INTERACTIVE; then
+            echo -ne "${echo_yellow}Want to install a clean git config file? [y/N] ${echo_normal}"
+            read -n 1 reply
+            case "$reply" in
+                Y|y)
+                    echo
+                    [ -w "$gitconfig" ] && cp "$gitconfig" "$gitconfig.bak" &&
+                        echo -e "${echo_cyan}Your $(basename "$gitconfig") has been backed up to $gitconfig.bak ${echo_normal}"
+                    cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"
+                    ;;
+            esac
+        fi
     else
         cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"
     fi

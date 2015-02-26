@@ -3,25 +3,40 @@
 
 set -e
 
-export CB_BASE=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
-export BASH_IT=~/.bash_it
-
-clear
-
 ## Check we got git
 hash git >/dev/null 2>&1 || {
     echo -e "\033[0;33mUnable to find git.\033[0m Please install it and try installing again."
     exit
 }
 
+## Force interaction if CarryBag not installed
+if [ -z "$CB_BASE" ]; then
+    export CB_BASE=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
+    export BASH_IT=~/.bash_it
+    INTERACTIVE=true
+    clear
+else
+    INTERACTIVE=false
+fi
+
+## Parse options
+while [[ $# > 0 ]]; do
+    option="$1"
+    case $option in
+        -i|--interactive) INTERACTIVE=true; shift ;;
+    esac
+done
+
 ## Fetch 3rd party packages
-echo -ne "\033[0;33mWant to fetch the 3rd party packagese? [y/N] \033[0m"
-read -n 1 reply
-case "$reply" in
-    Y|y)
-        echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
-        git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
-esac
+if $INTERACTIVE; then
+    echo -ne "\033[0;33mWant to fetch the 3rd party packagese? [y/N] \033[0m"
+    read -n 1 reply
+    case "$reply" in
+        Y|y)
+            echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
+            git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
+    esac
+fi
 
 ## Load convenience functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"

@@ -82,11 +82,13 @@ _install_carrybag_node_packages () {
 _build_carrybag_node_configuration_osx () {
 
     if command -v node >/dev/null; then
-        echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
-        read -n 1 reply
-        case "$reply" in
-            Y|y) echo; _uninstall_node && _install_node_using_brew ;;
-        esac
+        if $INTERACTIVE; then
+            echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
+            read -n 1 reply
+            case "$reply" in
+                Y|y) echo; _uninstall_node && _install_node_using_brew ;;
+            esac
+        fi
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
         _install_node_using_brew
@@ -105,11 +107,13 @@ export NODE_PATH=\"/usr/local/lib/node_modules:\$NODE_PATH\""
 _build_carrybag_node_configuration_linux () {
 
     if command -v node >/dev/null; then
-        echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
-        read -n 1 reply
-        case "$reply" in
-            Y|y)    echo; _uninstall_node && _install_node_using_apt ;;
-        esac
+        if $INTERACTIVE; then
+            echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
+            read -n 1 reply
+            case "$reply" in
+                Y|y)    echo; _uninstall_node && _install_node_using_apt ;;
+            esac
+        fi
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
         _install_node_using_apt
