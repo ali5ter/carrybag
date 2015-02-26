@@ -27,7 +27,7 @@ Clone this repository and run `tools/install.sh`
 The fist time it is run, the installation script will ask various questions. I'd
 recommend you answer yes to these questions to achieve a complete installation. 
 The script can be run again if you need to incorporate any changes to the 
-installation. If you want to force interaction, use the `-i` or `--interaction` 
+installation. If you want to force interaction, use the `-i` or `--interactive` 
 option with the installation script.
 
 A convenience alias, `bootstrap`, is provided to run the installation script in
