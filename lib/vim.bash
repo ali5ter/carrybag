@@ -202,9 +202,15 @@ let g:syntastic_filetype_map = {
 SYNTASTIC
 }
 
+_install_fugitive () {
+
+    _install_vim_bundle https://github.com/tpope/vim-fugitive.git
+}
+
 _install_syntax_highlighters () {
 
     _install_vim_bundle https://github.com/tpope/vim-markdown.git
+    _install_vim_bundle https://github.com/tpope/vim-git.git
     _install_vim_bundle https://github.com/jelera/vim-javascript-syntax.git
     _install_vim_bundle https://github.com/othree/javascript-libraries-syntax.vim.git
     _install_vim_bundle https://github.com/othree/html5.vim.git
@@ -214,6 +220,7 @@ _install_syntax_highlighters () {
     _install_vim_bundle https://github.com/vim-perl/vim-perl.git
 
     cat <<SYNTAX >> "$VIMRC"
+
 "
 " Javascript-libraries-syntax
 "
@@ -249,6 +256,8 @@ _build_carrybag_vim_config () {
     echo -e "${echo_cyan}CtrlP added to vim${echo_normal}"
     _install_syntastic
     echo -e "${echo_cyan}Syntastic added to vim${echo_normal}"
+    _install_fugitive
+    echo -e "${echo_cyan}Fugitive added to vim${echo_normal}"
     _install_syntax_highlighters
     echo -e "${echo_cyan}Syntax highlighters added to vim${echo_normal}"
 }

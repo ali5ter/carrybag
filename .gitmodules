@@ -52,3 +52,9 @@
 [submodule "3rdparty/ctrlp.vim"]
 	path = 3rdparty/ctrlp.vim
 	url = https://github.com/kien/ctrlp.vim.git
+[submodule "3rdparty/vim-fugitive"]
+	path = 3rdparty/vim-fugitive
+	url = https://github.com/tpope/vim-fugitive.git
+[submodule "3rdparty/vim-git"]
+	path = 3rdparty/vim-git
+	url = https://github.com/tpope/vim-git.git

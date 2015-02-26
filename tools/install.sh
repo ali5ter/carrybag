@@ -77,6 +77,7 @@ _bash-it-enable completion jump
 _bash-it-enable completion ssh
 _bash-it-enable plugin base
 _bash-it-enable plugin carrybag-general
+_bash-it-enable plugin carrybag-ctags
 _bash-it-enable plugin dirs
 _bash-it-enable plugin extract
 _bash-it-enable plugin git
