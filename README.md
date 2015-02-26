@@ -31,7 +31,8 @@ installation. If you want to force interaction, use the `-i` or `--interactive`
 option with the installation script.
 
 A convenience alias, `bootstrap`, is provided to run the installation script in
-non-interactive mode.
+non-interactive mode, e.g. monitor changes you make and automatically install 
+and insert them using `mondir 10 "bootstrap && sourcep"`.
 
 CarryBag comes with a platform specific housekeeping script called using the 
 `housekeeping` command. This attempts to clean up any OS cruft and keep system 

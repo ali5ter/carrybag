@@ -40,7 +40,7 @@ alias wget='curl -CO'
 
 ## SourceTree
 [ -d /Applications/SourceTree.app ] && \
-    alias sourcetree="'open -a /Applications/SourceTree.app'"
+    alias sourcetree="open -a SourceTree"
 
 ## Do not hide the  Library director
 chflags nohidden ~/Library
