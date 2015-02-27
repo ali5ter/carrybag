@@ -236,7 +236,7 @@ mondir () {
     local int=false
     local pre="${echo_white}${echo_background_purple} mondir: "
     local post=" ${echo_normal}"
-    local exclusions='.DS_Store\|.svn\|.git\|.vim/backup|.log'
+    local exclusions='\.DS_Store|\.svn|\.git|\.vim/backup|\.log'
 
     local delay=2
     [ $# -gt 1 ] && { delay=$1; shift; }
