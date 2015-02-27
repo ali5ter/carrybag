@@ -58,7 +58,7 @@ fi
 ## Load convenience functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
 
-## Move Bash it into place
+## Move Bash-it into place
 if ! $UPDATE; then
     [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
     cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
@@ -97,12 +97,12 @@ _preload_carrybag_themes
 ## Preload Bash-it & CarryBag addons
 if ! $UPDATE; then
 
-    ## Load Bash it libs to help enable addons
+    ## Load Bash-it libs to help enable addons
     source "${BASH_IT}/lib/composure.sh"
     cite _about _param _example _group _author _version
     for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
 
-    ## Enable addons that come with Bash it & CarryBag
+    ## Enable addons that come with Bash-it & CarryBag
     echo -e "${echo_cyan}Pre-loading addons:$echo_normal"
     _bash-it-enable alias general
     _bash-it-enable alias carrybag-general
