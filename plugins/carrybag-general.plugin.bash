@@ -218,14 +218,14 @@ watch () {
 
     trap "int=true" INT
 
-    while ! $int; do eval "$@"; sleep "$delay" || int=true; done
+    while ! $int; do (eval "$@"); sleep "$delay" || int=true; done
 }
 
 mondir () {
 
     about 'execute a command if a file changes or is added in the current directory'
     param '1: optional cycle time in seconds'
-    param 'if unset, then 2 seconds is used'
+    param 'if unset, then 10 seconds is used'
     param '2: command'
     param 'if an alias is messign with your command then prepend it with a backslash'
     example '$ mondir build.sh'
@@ -259,7 +259,7 @@ mondir () {
             echo -e "\n${pre}Files changed at $(date):${post}"
             for file in $diff; do echo -e "${pre}\t${file}${post}"; done
             echo -e "${pre}Executing '$*' command${post}"
-            eval "$@" && echo -e "\n${pre}'$*' command complete${post}"
+            (eval "$@") && echo -e "\n${pre}'$*' command complete${post}"
         }
         sleep "$delay" || int=true
     done
