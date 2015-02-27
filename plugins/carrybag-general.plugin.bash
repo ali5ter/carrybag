@@ -211,11 +211,14 @@ watch () {
     example '$ watch 10 \ls -1 | wc -l'
     group 'carrybag-file-tools'
 
-    local delay=0
     local int=false
+
+    local delay=0
     [ $# -gt 1 ] && { delay=$1; shift; }
+
     trap "int=true" INT
-    while ! $int; do "$@"; sleep "$delay" || int=true; done
+
+    while ! $int; do eval "$@"; sleep "$delay" || int=true; done
 }
 
 mondir () {
@@ -243,8 +246,7 @@ mondir () {
     local last=$(mktemp "/tmp/$ttmplt")
     touch "$last"
 
-    echo
-    echo -e "${pre}Monitoring file changes and additions every $delay seconds${post}"
+    echo -e "${pre}Started${post}"
 
     trap "int=true" INT
 
@@ -254,11 +256,10 @@ mondir () {
         diff=$(find . -newer "$last" -type f 2>/dev/null | egrep -v "$exclusions")
         [ "$(echo "$diff" | grep -c './')" -gt '0' ] && {
             touch "$last"
-            echo
-            echo -e "${pre}Files changed at $(date):${post}"
+            echo -e "\n${pre}Files changed at $(date):${post}"
             echo -e "${pre}\t$diff${post}"
-            echo -e "${pre}Triggering "'$@'" command${post}"
-            eval "$@" && echo -e "\n${pre}Done${post}"
+            echo -e "${pre}Executing '$*' command${post}"
+            eval "$@" && echo -e "\n${pre}'$*' command complete${post}"
         }
         sleep "$delay" || int=true
     done
