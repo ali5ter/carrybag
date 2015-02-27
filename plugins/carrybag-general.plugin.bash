@@ -257,7 +257,7 @@ mondir () {
         [ "$(echo "$diff" | grep -c './')" -gt '0' ] && {
             touch "$last"
             echo -e "\n${pre}Files changed at $(date):${post}"
-            echo -e "${pre}\t$diff${post}"
+            for file in $diff; do echo -e "${pre}\t${file}${post}"; done
             echo -e "${pre}Executing '$*' command${post}"
             eval "$@" && echo -e "\n${pre}'$*' command complete${post}"
         }
