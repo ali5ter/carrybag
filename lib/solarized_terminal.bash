@@ -30,7 +30,7 @@ install_solarized_dark_osx_terminal () {
 
     ## Make customizations to these Terminal settings
     local TMP_SETTINGS_NAME="$TERMINAL_SETTINGS_NAME Custom"
-    local TMP_SETTINGS_FILE="preferences/$TMP_SETTINGS_NAME.terminal"
+    local TMP_SETTINGS_FILE="templates/$TMP_SETTINGS_NAME.terminal"
     cp "$TERMINAL_SETTINGS_FILE" "$TMP_SETTINGS_FILE"
     plutil -replace rowCount -integer 33 "$TMP_SETTINGS_FILE"
     plutil -replace columnCount -integer 115 "$TMP_SETTINGS_FILE"
