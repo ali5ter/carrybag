@@ -8,7 +8,7 @@ cb_bootstrap () {
     about 'Re-install CarryBag to create a fresh shell configuration'
     group 'carrybag-admin-tools'
 
-    "$CB_BASE/tools/install.sh"
+    eval "$CB_BASE/tools/install.sh --update --quiet"
 }
 
 cb_housekeeping () {

@@ -2,25 +2,28 @@
 
 set -e
 
-source lib/solarized_terminal.bash
+_buid_carryback_apperance () {
 
-install_solarized_Xresources
-echo -e "${echo_cyan}Solarized Dark was installed as your X Windows color theme.${echo_normal}"
+    source lib/solarized_terminal.bash
 
-case "$OSTYPE" in
-    darwin*)
-        if $INTERACTIVE; then
-            echo -ne "${echo_yellow}Want to install Solarized Dark as your default OSX Terminal settings profile? [y/N] ${echo_normal}"
-            read -n 1 reply
-            case "$reply" in
-                Y|y)
-                    install_solarized_dark_osx_terminal
-                    echo -e "\n${echo_cyan}Solarized Dark was made your default OSX Terminal settings profile.${echo_normal}"
-            esac
-        fi
-        ;;
-    *)
-        install_solarized_dark_gnome_terminal
-        echo -e "\n${echo_cyan}Solarized Dark was made your default gnome terminal color profile.${echo_normal}"
-        ;;
-esac
+    install_solarized_Xresources
+    echo -e "${echo_cyan}Solarized Dark was installed as your X Windows color theme.${echo_normal}"
+
+    case "$OSTYPE" in
+        darwin*)
+            if ! $QUIET; then
+                echo -ne "${echo_yellow}Want to install Solarized Dark as your default OSX Terminal settings profile? [y/N] ${echo_normal}"
+                read -n 1 reply
+                case "$reply" in
+                    Y|y)
+                        install_solarized_dark_osx_terminal
+                        echo -e "\n${echo_cyan}Solarized Dark was made your default OSX Terminal settings profile.${echo_normal}"
+                esac
+            fi
+            ;;
+        *)
+            install_solarized_dark_gnome_terminal
+            echo -e "\n${echo_cyan}Solarized Dark was made your default gnome terminal color profile.${echo_normal}"
+            ;;
+    esac
+}

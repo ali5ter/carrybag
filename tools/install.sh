@@ -9,25 +9,43 @@ hash git >/dev/null 2>&1 || {
     exit
 }
 
-## Force interaction if CarryBag not installed
+_help () {
+    local content="
+Installer for the CarryBag bash shell environment.
+
+Usage: install.sh [options]
+
+Options:
+-i, --interactive   Interactive install.
+-q, --quieti        No questions. Just use the defaults.
+-u, --update        Only moves aliases, completions, plugins and themes into place.
+"
+    echo -e "$content"
+}
+
+## Default run modes depending whether CarryBag installed
+UPDATE=false
 if [ -z "$CB_BASE" ]; then
     export CB_BASE=$( cd "$( dirname "${BASH_SOURCE[0]}" )/.." && pwd )
     export BASH_IT=~/.bash_it
-    INTERACTIVE=true
+    QUIET=false
 else
-    INTERACTIVE=false
+    QUIET=true
 fi
 
 ## Parse options
 while [[ $# > 0 ]]; do
     option="$1"
     case $option in
-        -i|--interactive) INTERACTIVE=true; shift ;;
+        -i|--interactive)   QUIET=false; shift ;;
+        -q|--quiet)         QUIET=true; shift ;;
+        -u|--update)        UPDATE=true; shift ;;
+        *)                  _help; exit 0;;
     esac
 done
 
 ## Fetch 3rd party packages
-if $INTERACTIVE; then
+if ! $QUIET; then
     echo -ne "\033[0;33mWant to fetch the 3rd party packagese? [y/N] \033[0m"
     read -n 1 reply
     case "$reply" in
@@ -41,8 +59,11 @@ fi
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
 
 ## Move Bash it into place
-[ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
-cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
+if ! $UPDATE; then
+    [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
+    cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
+    echo -e "${echo_cyan}Installing clean Bash-it environment${echo_normal}"
+fi
 
 ## CarryBag includes
 source "$CB_BASE/lib/helpers.bash"
@@ -58,59 +79,64 @@ source "$CB_BASE/lib/ruby.bash"
 source "$CB_BASE/lib/vim.bash"
 
 ## CarryBag modifications
-_build_carrybag_bash_runcom
-_build_carrybag_git_config
-_build_carrybag_git_ignore
-case "$OSTYPE" in
-    darwin*)   _build_carrybag_homebrew_config ;;
-    *)         _build_carrybag_apt_config ;;
-esac
-_build_carrybag_node_config
-_build_carrybag_vim_config
+if ! $UPDATE; then
+    _build_carrybag_bash_runcom
+    _build_carrybag_git_config
+    _build_carrybag_git_ignore
+    case "$OSTYPE" in
+        darwin*)   _build_carrybag_homebrew_config ;;
+        *)         _build_carrybag_apt_config ;;
+    esac
+    _build_carrybag_node_config
+    _build_carrybag_vim_config
+    _add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
+fi
 _preload_carrybag_addons
 _preload_carrybag_themes
 
-## Preserve path to this dir
-_add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
+## Preload Bash-it & CarryBag addons
+if ! $UPDATE; then
 
-## Load Bash it libs to help enable addons
-source "${BASH_IT}/lib/composure.sh"
-cite _about _param _example _group _author _version
-for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
+    ## Load Bash it libs to help enable addons
+    source "${BASH_IT}/lib/composure.sh"
+    cite _about _param _example _group _author _version
+    for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
 
-## Enable addons that come with Bash it & CarryBag
-echo -e "${echo_cyan}Pre-loading addons:$echo_normal"
-_bash-it-enable alias general
-_bash-it-enable alias carrybag-general
-_bash-it-enable alias git
-_bash-it-enable alias vim
-_bash-it-enable completion bash-it
-_bash-it-enable completion defaults
-_bash-it-enable completion git
-_bash-it-enable completion jump
-_bash-it-enable completion ssh
-_bash-it-enable plugin base
-_bash-it-enable plugin carrybag-general
-_bash-it-enable plugin carrybag-ctags
-_bash-it-enable plugin dirs
-_bash-it-enable plugin extract
-_bash-it-enable plugin git
-_bash-it-enable plugin jump
-_bash-it-enable plugin ssh
-_bash-it-enable plugin zzz-carrybag-overrides
-case "$OSTYPE" in
-    darwin*)
-        _bash-it-enable alias homebrew
-        _bash-it-enable alias osx
-        _bash-it-enable completion brew
-        _bash-it-enable plugin carrybag-osx
-        _bash-it-enable plugin osx
-        ;;
-    *)
-        _bash-it-enable plugin carrybag-linux
-        ;;
-esac
+    ## Enable addons that come with Bash it & CarryBag
+    echo -e "${echo_cyan}Pre-loading addons:$echo_normal"
+    _bash-it-enable alias general
+    _bash-it-enable alias carrybag-general
+    _bash-it-enable alias git
+    _bash-it-enable alias vim
+    _bash-it-enable completion bash-it
+    _bash-it-enable completion defaults
+    _bash-it-enable completion git
+    _bash-it-enable completion jump
+    _bash-it-enable completion ssh
+    _bash-it-enable plugin base
+    _bash-it-enable plugin carrybag-general
+    _bash-it-enable plugin carrybag-ctags
+    _bash-it-enable plugin dirs
+    _bash-it-enable plugin extract
+    _bash-it-enable plugin git
+    _bash-it-enable plugin jump
+    _bash-it-enable plugin ssh
+    _bash-it-enable plugin zzz-carrybag-overrides
+    case "$OSTYPE" in
+        darwin*)
+            _bash-it-enable alias homebrew
+            _bash-it-enable alias osx
+            _bash-it-enable completion brew
+            _bash-it-enable plugin carrybag-osx
+            _bash-it-enable plugin osx
+            ;;
+        *)
+            _bash-it-enable plugin carrybag-linux
+            ;;
+    esac
+fi
 
+if $UPDATE; then verb='updated'; else verb='installed'; fi
 echo
 echo -e "$echo_yellow"'  ██████╗ █████╗ ██████╗ ██████╗ ██╗   ██╗██████╗  █████╗  ██████╗ '"$echo_normal"
 echo -e "$echo_green"' ██╔════╝██╔══██╗██╔══██╗██╔══██╗╚██╗ ██╔╝██╔══██╗██╔══██╗██╔════╝ '"$echo_normal"
@@ -118,7 +144,7 @@ echo -e "$echo_yellow"' ██║     ███████║██████
 echo -e "$echo_green"' ██║     ██╔══██║██╔══██╗██╔══██╗  ╚██╔╝  ██╔══██╗██╔══██║██║   ██║'"$echo_normal"
 echo -e "$echo_yellow"' ╚██████╗██║  ██║██║  ██║██║  ██║   ██║   ██████╔╝██║  ██║╚██████╔╝'"$echo_normal"
 echo -e "$echo_green"'  ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝ '"$echo_normal"
-echo -e "$echo_green"'                                                   ...is installed!'"$echo_normal"
+echo -e "$echo_green"'                                                   '...is ${verb}!"$echo_normal"
 echo
 echo -e "${echo_cyan}Start a new shell or, if you are re-installing CarryBag, run ${echo_white}sourcep${echo_cyan} to source any updates.$echo_normal"
 echo -e "${echo_cyan}Use ${echo_white}bash-it show [aliases|completions|plugins]${echo_cyan} to manage functionality.$echo_normal"

@@ -149,7 +149,7 @@ _install_vimairline () {
 
     _install_vim_bundle https://github.com/bling/vim-airline.git
 
-    if $INTERACTIVE; then
+    if ! $QUIET; then
         echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
         read -n 1 reply
         case "$reply" in

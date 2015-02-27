@@ -82,7 +82,7 @@ _install_carrybag_node_packages () {
 _build_carrybag_node_configuration_osx () {
 
     if command -v node >/dev/null; then
-        if $INTERACTIVE; then
+        if ! $QUIET; then
             echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
             read -n 1 reply
             case "$reply" in
@@ -107,7 +107,7 @@ export NODE_PATH=\"/usr/local/lib/node_modules:\$NODE_PATH\""
 _build_carrybag_node_configuration_linux () {
 
     if command -v node >/dev/null; then
-        if $INTERACTIVE; then
+        if ! $QUIET; then
             echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
             read -n 1 reply
             case "$reply" in

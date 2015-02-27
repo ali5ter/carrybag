@@ -5,7 +5,7 @@ set -e
 
 _update_git_user_name () {
 
-    if $INTERACTIVE; then
+    if ! $QUIET; then
 
         local fullname="$(git config --get user.name)"
 
@@ -31,7 +31,7 @@ _update_git_user_name () {
 
 _update_git_user_email() {
 
-    if $INTERACTIVE; then
+    if ! $QUIET; then
 
         local email="$(git config --get user.email)"
 
@@ -76,7 +76,7 @@ _build_carrybag_git_config () {
 
     ## Create a basic gitconfig file
     if [ -w "$gitconfig" ]; then
-        if $INTERACTIVE; then
+        if ! $QUIET; then
             echo -ne "${echo_yellow}Want to install a clean git config file? [y/N] ${echo_normal}"
             read -n 1 reply
             case "$reply" in

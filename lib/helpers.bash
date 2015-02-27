@@ -11,7 +11,7 @@ _preload_carrybag_themes () {
         _file=$(basename "$file")
         [ "$_file" == '*' ] || {
             echo -e "\t${echo_green}$_file$echo_normal"
-            [ -e "$BASH_IT/themes/$_file" ] && rm -f "$BASH_IT/themes/$_file"
+            [ -e "$BASH_IT/themes/$_file" ] && rm -fR "$BASH_IT/themes/$_file"
             cp -r "$file" "$BASH_IT/themes/$_file"
         }
     done
