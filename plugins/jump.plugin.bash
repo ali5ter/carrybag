@@ -37,15 +37,17 @@ ${echo_bold_white}jump -l|--list${echo_normal} to list the current bookmarked\
  directories
 ${echo_bold_white}jump -a|--add ${echo_underline_white}name${echo_normal} to bookmark the\
 current directory with ${echo_underline_white}name${echo_normal}
+${echo_bold_white}jump -p|--pathfor ${echo_underline_white}name${echo_normal} to display the\
+current directory stored for ${echo_underline_white}name${echo_normal}
 ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to remove a\
  bookmark
 "
 
     case "$1" in
 
-        ''|help|--help|-h)  echo -e "$help" ;;
+        ''|--help|-h)  echo -e "$help" ;;
 
-        list|--list|-l)
+        --list|-l)
 
             local current="►"
             local badDir="✖"
@@ -63,12 +65,12 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             echo
             ;;
 
-        add|--add|-a)
+        --add|-a)
             [ -z "$2" ] && { echo -e "$help"; return 0; }
             _jump_bookmark_exists "$2"
             if [ $? -eq 0 ]; then
                 echo -e "${echo_yellow}Bookmark exists:${echo_normal}"
-                jump list
+                jump --list
                 return 0
             else
                 echo "$2"'::'"$PWD" >> "$JUMP_BOOKMARKS"
@@ -76,16 +78,29 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
             fi
             ;;
 
-        remove|--remove|-r)
+        --remove|-r)
             [ -z "$2" ] && { echo -e "$help"; return 0; }
             _jump_bookmark_exists "$2"
             if [ $? -eq 1 ]; then
                 echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
-                jump list
+                jump --list
                 return 0
             else
                 sed -e /^"$2"::/d "$JUMP_BOOKMARKS" > "$JUMP_BOOKMARKS.tmp" && mv "$JUMP_BOOKMARKS.tmp" "$JUMP_BOOKMARKS"
                 echo -e "${echo_cyan}Bookmark deleted${echo_normal}"
+            fi
+            ;;
+
+        --pathfor|-p)
+            [ -z "$2" ] && { echo -e "$help"; return 0; }
+            _jump_bookmark_exists "$2"
+            if [ $? -eq 1 ]; then
+                echo -e "${echo_yellow}No bookmark with this name:${echo_normal}"
+                jump --list
+                return 0
+            else
+                local bm=$(grep "$2" "$JUMP_BOOKMARKS")
+                echo "${bm#*::}"
             fi
             ;;
 
@@ -96,7 +111,7 @@ ${echo_bold_white}jump -r|--remove ${echo_underline_white}name${echo_normal} to 
                 cd "${bm#*::}"
             else
                 echo -e "${echo_yellow}Unable to find '$1'${echo_normal}"
-                jump list
+                jump --list
                 return 0
             fi
             ;;
