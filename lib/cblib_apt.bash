@@ -1,22 +1,24 @@
-#!/usr/bin/env bash
-# apt configuation delivered by CarryBag
+# Carrybag library function for the apt package manager
 
-set -e
+_cblib_apt=1
 
-_install_apt_package () {
+install_apt_package () {
 
     local command=$1
     local pname=${1:-$command}
     command -v "$command" >/dev/null || sudo apt-get install -y "$pname"
+    return 0
 }
 
-_update_apt_packages () {
+update_apt_packages () {
+
     sudo apt-get update -y && \
     sudo apt-get upgrade -y && \
     sudo apt-get dist-upgrade -y
+    return 0
 }
 
-_build_carrybag_apt_config () {
+build_carrybag_apt_config () {
 
     command -v apt-get >/dev/null || {
         echo -e "${echo_orange}apt-get is not installed.${echo_normal}"
@@ -28,4 +30,5 @@ _build_carrybag_apt_config () {
     _install_apt_package curl
     _install_apt_package build-essential gcc
     _install_apt_package meld
+    return 0
 }

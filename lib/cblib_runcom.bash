@@ -1,11 +1,10 @@
-#!/usr/bin/env bash
-# CarryBag helper functions
+# CarryBag library functions for the bash runcom configurations
 
-set -e
+_cblib_runcom=1
 
 RUNCOM_ADD_TOKEN="# CarryBag configuration"
 
-_bash_runcom () {
+bash_runcom () {
 
     case "$OSTYPE" in
         darwin*)    echo ~/.bash_profile ;;
@@ -13,10 +12,10 @@ _bash_runcom () {
     esac
 }
 
-_add_to_bash_runcom () {
+add_to_bash_runcom () {
 
     local text="$*"
-    local BASHRC=$(_bash_runcom)
+    local BASHRC=$(bash_runcom)
 
     grep "$RUNCOM_ADD_TOKEN" "$BASHRC" >/dev/null || {
         sed -e "/# Load Bash It/i\\
@@ -27,11 +26,13 @@ $RUNCOM_ADD_TOKEN\\
 
     sed -e "/$RUNCOM_ADD_TOKEN/a\\
 $text" "$BASHRC" > "$BASHRC.tmp" && mv "$BASHRC.tmp" "$BASHRC"
+
+    return 0
 }
 
-_build_carrybag_bash_runcom () {
+build_carrybag_bash_runcom () {
 
-    local BASHRC=$(_bash_runcom)
+    local BASHRC=$(bash_runcom)
 
     ## Use Bash-it runcom as a template
     [ -w "$BASHRC" ] && cp "$BASHRC" "$BASHRC.bak" &&
@@ -39,37 +40,45 @@ _build_carrybag_bash_runcom () {
     cp "$BASH_IT/template/bash_profile.template.bash" "$BASHRC"
 
     ## Persist the OS specific bash runcom name
-    _add_to_bash_runcom "export BASHRC=\'$BASHRC\'"
+    add_to_bash_runcom "export BASHRC=\'$BASHRC\'"
 
     ## Include man pages added by package managers
-    _add_to_bash_runcom "export MANPATH=\'/usr/local/man:$MANPATH\'"
+    add_to_bash_runcom "export MANPATH=\'/usr/local/man:$MANPATH\'"
+
+    ## Include plugin and lib paths and tell bash to look in this path for any
+    ## files that might be source'd
+    add_to_bash_runcom "export PATH=\"\$BASH_IT/plugins/available:\$PATH\""
+    add_to_bash_runcom "export PATH=\"\$CB_BASE/lib:\$PATH\""
+    add_to_bash_runcom "shopt -s sourcepath"
 
     ## Use the Bash-it theme provided by CarryBag
-    _add_to_bash_runcom "export BASH_IT_THEME='alister'"
+    add_to_bash_runcom "export BASH_IT_THEME='alister'"
 
     ## Make our default editor vim
-    _add_to_bash_runcom "export EDITOR='vim'"
+    add_to_bash_runcom "export EDITOR='vim'"
 
     ## Make sure git uses the same edtor
-    _add_to_bash_runcom "export GIT_EDITOR=\'$EDITOR\'"
+    add_to_bash_runcom "export GIT_EDITOR=\'$EDITOR\'"
 
     ## Use vim to edit on the cmdl
-    _add_to_bash_runcom "set -o vi"
+    add_to_bash_runcom "set -o vi"
 
     ## Avoid storing duplicate command and those starting with spaces
-    _add_to_bash_runcom "HISTCONTROL=ignoreboth"
+    add_to_bash_runcom "HISTCONTROL=ignoreboth"
 
     ## Help correct minor typos when changing directories
-    _add_to_bash_runcom "shopt -s cdspell"
+    add_to_bash_runcom "shopt -s cdspell"
 
     ## Append commands to the history instead of overwriting when exiting
-    _add_to_bash_runcom "shopt -s histappend"
+    add_to_bash_runcom "shopt -s histappend"
 
     ## Include dot files in pathname expansion (globbing)
-    _add_to_bash_runcom "shopt -s dotglob"
+    add_to_bash_runcom "shopt -s dotglob"
 
     ## Update window size vars after each command
-    _add_to_bash_runcom "shopt -s checkwinsize"
+    add_to_bash_runcom "shopt -s checkwinsize"
 
     echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename "$BASHRC")${echo_normal}"
+
+    return 0
 }

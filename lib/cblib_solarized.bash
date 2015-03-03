@@ -1,7 +1,6 @@
-#!/usr/bin/env bash
-# Install solarized colour scheme for the terminal
+# CarryBag library fuctions for installing the solarized colour scheme
 
-set -e
+_cblib_solarized=1
 
 install_solarized_Xresources () {
 
@@ -14,11 +13,14 @@ install_solarized_Xresources () {
     done
 
     cp 3rdparty/solarized-xresources/solarized $XRESOURCES && cp $XRESOURCES $XDEFAULTS
+    return 0
 }
 
 install_solarized_dark_gnome_terminal () {
+
     sudo apt-get -y install dconf-cli
     "$CB_BASE/3rdparty/gnome-terminal-colors-solarized/set_dark.sh"
+    return 0
 }
 
 install_solarized_dark_osx_terminal () {
@@ -58,4 +60,6 @@ tell application "Terminal"
     activate
 end tell
 SECURESETTINGS
+
+    return 0
 }

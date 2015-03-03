@@ -66,75 +66,74 @@ if ! $UPDATE; then
 fi
 
 ## CarryBag includes
-source "$CB_BASE/lib/helpers.bash"
-source "$CB_BASE/lib/appearance.bash"
-source "$CB_BASE/lib/runcom.bash"
-source "$CB_BASE/lib/git.bash"
+source "$CB_BASE/lib/cblib_bashit.bash"
+source "$CB_BASE/lib/cblib_appearance.bash"
+source "$CB_BASE/lib/cblib_runcom.bash"
+source "$CB_BASE/lib/cblib_git.bash"
 case "$OSTYPE" in
-    darwin*)   source "$CB_BASE/lib/homebrew.bash" ;;
-    *)         source "$CB_BASE/lib/apt.bash" ;;
+    darwin*)   source "$CB_BASE/lib/cblib_homebrew.bash" ;;
+    *)         source "$CB_BASE/lib/cblib_apt.bash" ;;
 esac
-source "$CB_BASE/lib/node.bash"
-source "$CB_BASE/lib/ruby.bash"
-source "$CB_BASE/lib/vim.bash"
+source "$CB_BASE/lib/cblib_node.bash"
+source "$CB_BASE/lib/cblib_ruby.bash"
+source "$CB_BASE/lib/cblib_vim.bash"
 
-## CarryBag modifications
+## CarryBag configurations
 if ! $UPDATE; then
-    _build_carrybag_bash_runcom
-    _build_carrybag_git_config
-    _build_carrybag_git_ignore
+    build_carrybag_bash_runcom
+    build_carrybag_git_config
+    build_carrybag_git_ignore
     case "$OSTYPE" in
-        darwin*)   _build_carrybag_homebrew_config ;;
-        *)         _build_carrybag_apt_config ;;
+        darwin*)   build_carrybag_homebrew_config ;;
+        *)         build_carrybag_apt_config ;;
     esac
-    _build_carrybag_node_config
-    _build_carrybag_vim_config
-    _add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
+    build_carrybag_node_config
+    build_carrybag_vim_config
+    add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
 fi
-_preload_carrybag_addons
-_preload_carrybag_themes
 
 ## Preload Bash-it & CarryBag addons
-if ! $UPDATE; then
+preload_carrybag_addons
+preload_carrybag_themes
 
-    ## Load Bash-it libs to help enable addons
-    source "${BASH_IT}/lib/composure.sh"
-    cite _about _param _example _group _author _version
-    for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
+## Load Bash-it libs to help enable addons
+source "${BASH_IT}/lib/composure.sh"
+cite _about _param _example _group _author _version
+for file in ${BASH_IT}/lib/*.bash; do source "$file"; done
 
-    ## Enable addons that come with Bash-it & CarryBag
-    echo -e "${echo_cyan}Pre-loading addons:$echo_normal"
-    _bash-it-enable alias general
-    _bash-it-enable alias carrybag-general
-    _bash-it-enable alias git
-    _bash-it-enable alias vim
-    _bash-it-enable completion bash-it
-    _bash-it-enable completion defaults
-    _bash-it-enable completion git
-    _bash-it-enable completion jump
-    _bash-it-enable completion ssh
-    _bash-it-enable plugin base
-    _bash-it-enable plugin carrybag-general
-    _bash-it-enable plugin carrybag-ctags
-    _bash-it-enable plugin dirs
-    _bash-it-enable plugin extract
-    _bash-it-enable plugin git
-    _bash-it-enable plugin jump
-    _bash-it-enable plugin ssh
-    _bash-it-enable plugin zzz-carrybag-overrides
-    case "$OSTYPE" in
-        darwin*)
-            _bash-it-enable alias homebrew
-            _bash-it-enable alias osx
-            _bash-it-enable completion brew
-            _bash-it-enable plugin carrybag-osx
-            _bash-it-enable plugin osx
-            ;;
-        *)
-            _bash-it-enable plugin carrybag-linux
-            ;;
-    esac
-fi
+## Enable addons that come with Bash-it & CarryBag
+echo -e "${echo_cyan}Pre-loading addons:$echo_normal"
+bash-it-enable alias general
+bash-it-enable alias carrybag-general
+bash-it-enable alias git
+bash-it-enable alias vim
+bash-it-enable completion bash-it
+bash-it-enable completion defaults
+bash-it-enable completion git
+bash-it-enable completion jump
+bash-it-enable completion ssh
+bash-it-enable plugin base
+bash-it-enable plugin carrybag-general
+bash-it-enable plugin carrybag-ctags
+bash-it-enable plugin dirs
+bash-it-enable plugin extract
+bash-it-enable plugin git
+bash-it-enable plugin gping
+bash-it-enable plugin jump
+bash-it-enable plugin ssh
+bash-it-enable plugin zzz-carrybag-overrides
+case "$OSTYPE" in
+    darwin*)
+        bash-it-enable alias homebrew
+        bash-it-enable alias osx
+        bash-it-enable completion brew
+        bash-it-enable plugin carrybag-osx
+        bash-it-enable plugin osx
+        ;;
+    *)
+        bash-it-enable plugin carrybag-linux
+        ;;
+esac
 
 if $UPDATE; then verb='updated'; else verb='installed'; fi
 echo

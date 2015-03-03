@@ -1,13 +1,12 @@
-#!/usr/bin/env bash
-# vim configuation delivered by CarryBag
+# Carrybag library functions to configure vim
 
-set -e
+cblib_vim=1
 
 export VIMRC=~/.vimrc
 export VIM_DIR=~/.vim
 export VIM_BUNDLE="$VIM_DIR/bundle"
 
-_install_vim_bundle () {
+install_vim_bundle () {
 
     local repo="$*"
     local clone
@@ -21,11 +20,13 @@ _install_vim_bundle () {
         git submodule add "$repo" "$clone"
 
     cp -r "$clone" "$VIM_BUNDLE/"
+
+    return 0
 }
 
-_install_pathogen () {
+install_pathogen () {
 
-    _install_vim_bundle https://github.com/tpope/vim-pathogen.git
+    install_vim_bundle https://github.com/tpope/vim-pathogen.git
 
     mkdir -p "$VIM_DIR/autoload" "$VIM_BUNDLE" &&
         cp "3rdparty/vim-pathogen/autoload/pathogen.vim" "$VIM_DIR/autoload/"
@@ -37,11 +38,12 @@ _install_pathogen () {
 "
 execute pathogen#infect()
 PATHOGEN
+    return 0
 }
 
-_install_solarized () {
+install_solarized () {
 
-    _install_vim_bundle https://github.com/altercation/vim-colors-solarized.git
+    install_vim_bundle https://github.com/altercation/vim-colors-solarized.git
 
     cat <<SOLARIZED >> "$VIMRC"
 
@@ -53,11 +55,12 @@ set background=dark
 set t_Co=256
 colorscheme solarized
 SOLARIZED
+    return 0
 }
 
-_install_nerdtree () {
+install_nerdtree () {
 
-    _install_vim_bundle https://github.com/scrooloose/nerdtree.git
+    install_vim_bundle https://github.com/scrooloose/nerdtree.git
 
     cat <<NERDTREE >> "$VIMRC"
 
@@ -70,11 +73,12 @@ autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 NERDTREE
+    return 0
 }
 
-_install_ctrlp () {
+install_ctrlp () {
 
-    _install_vim_bundle https://github.com/kien/ctrlp.vim.git
+    install_vim_bundle https://github.com/kien/ctrlp.vim.git
 
     cat <<CTRLP >> "$VIMRC"
 
@@ -83,9 +87,10 @@ _install_ctrlp () {
 "
 "nmap <leader>p :CtrlP<cr>
 CTRLP
+    return 0
 }
 
-_install_powerline_fonts_osx () {
+install_powerline_fonts_osx () {
 
     ## TODO: System Preferences > Security & Privacy > Privacy > Accessibility
     ##       for the Terminal app
@@ -123,41 +128,43 @@ INSTALLPOWERLINEFONT
     done < <(find 3rdparty/fonts -name "*.otf" -print0)
 
     echo -e "${echo_green}Edit the OSX Terminal preferences to change to a Powerline font.$echo_normal"
+    return 0
 }
 
-_install_powerline_fonts_linux () {
+install_powerline_fonts_linux () {
 
-    local _dir='/usr/share/fonts/opentype'
-    local _file
+    local dir='/usr/share/fonts/opentype'
+    local file
 
     echo -e "${echo_cyan}Installing Powerline fonts:$echo_normal"
 
-    [ -e "$_dir" ] || sudo mkdir -p "$_dir"
+    [ -e "$dir" ] || sudo mkdir -p "$dir"
 
     while IFS= read -d $'\0' -r font; do
-        _file="$(basename "$(echo "$font" | tr ' ' '_')")"
+        file="$(basename "$(echo "$font" | tr ' ' '_')")"
         echo -e "\t${echo_green}$(basename -s .otf "$font")$echo_normal"
-        sudo cp "$font" "$_dir/$_file"
+        sudo cp "$font" "$dir/$file"
     done < <(find 3rdparty/fonts -name "*.otf" -print0)
 
     sudo fc-cache -f
 
     echo -e "${echo_green}Edit the Terminal profile to change to a Powerline font.$echo_normal"
+    return 0
 }
 
-_install_vimairline () {
+install_vimairline () {
 
-    _install_vim_bundle https://github.com/bling/vim-airline.git
+    install_vim_bundle https://github.com/bling/vim-airline.git
 
     if ! $QUIET; then
         echo -ne "${echo_yellow}Want to install Powerline fonts to use with Airline? [y/N] ${echo_normal}"
         read -n 1 reply
         case "$reply" in
             Y|y)
-                _install_vim_bundle https://github.com/powerline/fonts.git
+                install_vim_bundle https://github.com/powerline/fonts.git
                 case "$OSTYPE" in
-                    darwin*)    _install_powerline_fonts_osx ;;
-                    *)          _install_powerline_fonts_linux ;;
+                    darwin*)    install_powerline_fonts_osx ;;
+                    *)          install_powerline_fonts_linux ;;
                 esac
                 ;;
         esac
@@ -172,11 +179,12 @@ let g:airline_powerline_fonts = 1           " use powerline fonts if available
 let g:airline#extensions#tabline#enabled = 1    " enable tabline to show buffers
 let g:airline#extensions#tabline#fnamemod = ':t'" just show filename for buffer
 AIRLINE
+    return 0
 }
 
-_install_syntastic () {
+install_syntastic () {
 
-    _install_vim_bundle https://github.com/scrooloose/syntastic.git
+    install_vim_bundle https://github.com/scrooloose/syntastic.git
 
     cat <<SYNTASTIC >> "$VIMRC"
 
@@ -202,24 +210,26 @@ let g:syntastic_filetype_map = {
     \ "bash": "sh",
     \ "plist": "xml" }
 SYNTASTIC
+    return 0
 }
 
-_install_fugitive () {
+install_fugitive () {
 
-    _install_vim_bundle https://github.com/tpope/vim-fugitive.git
+    install_vim_bundle https://github.com/tpope/vim-fugitive.git
+    return 0
 }
 
-_install_syntax_highlighters () {
+install_syntax_highlighters () {
 
-    _install_vim_bundle https://github.com/tpope/vim-markdown.git
-    _install_vim_bundle https://github.com/tpope/vim-git.git
-    _install_vim_bundle https://github.com/jelera/vim-javascript-syntax.git
-    _install_vim_bundle https://github.com/othree/javascript-libraries-syntax.vim.git
-    _install_vim_bundle https://github.com/othree/html5.vim.git
-    _install_vim_bundle https://github.com/hail2u/vim-css3-syntax.git
-    _install_vim_bundle https://github.com/elzr/vim-json.git
-    _install_vim_bundle https://github.com/StanAngeloff/php.vim.git
-    _install_vim_bundle https://github.com/vim-perl/vim-perl.git
+    install_vim_bundle https://github.com/tpope/vim-markdown.git
+    install_vim_bundle https://github.com/tpope/vim-git.git
+    install_vim_bundle https://github.com/jelera/vim-javascript-syntax.git
+    install_vim_bundle https://github.com/othree/javascript-libraries-syntax.vim.git
+    install_vim_bundle https://github.com/othree/html5.vim.git
+    install_vim_bundle https://github.com/hail2u/vim-css3-syntax.git
+    install_vim_bundle https://github.com/elzr/vim-json.git
+    install_vim_bundle https://github.com/StanAngeloff/php.vim.git
+    install_vim_bundle https://github.com/vim-perl/vim-perl.git
 
     cat <<SYNTAX >> "$VIMRC"
 
@@ -229,9 +239,10 @@ _install_syntax_highlighters () {
 autocmd BufReadPre *.js let b:javascript_lib_use_jquery = 1
 autocmd BufReadPre *.js let b:javascript_lib_use_angularjs = 0
 SYNTAX
+    return 0
 }
 
-_build_carrybag_vim_config () {
+build_carrybag_vim_config () {
 
     ## Back up any existing vim files
     for file in "$VIMRC" "$VIM_DIR"; do
@@ -246,20 +257,21 @@ _build_carrybag_vim_config () {
     mkdir -p "$VIM_DIR/backup"
 
     ## Install pathogen for vim pacakge management
-    _install_pathogen
+    install_pathogen
     echo -e "${echo_cyan}Pathogen installed to manage addons to vim${echo_normal}"
 
     ## Install vim packages
-    _install_solarized
+    install_solarized
     echo -e "${echo_cyan}Solarize color theme added to vim${echo_normal}"
-    _install_vimairline
+    install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
-    _install_ctrlp
+    install_ctrlp
     echo -e "${echo_cyan}CtrlP added to vim${echo_normal}"
-    _install_syntastic
+    install_syntastic
     echo -e "${echo_cyan}Syntastic added to vim${echo_normal}"
-    _install_fugitive
+    install_fugitive
     echo -e "${echo_cyan}Fugitive added to vim${echo_normal}"
-    _install_syntax_highlighters
+    install_syntax_highlighters
     echo -e "${echo_cyan}Syntax highlighters added to vim${echo_normal}"
+    return 0
 }

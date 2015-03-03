@@ -1,9 +1,8 @@
-#!/usr/bin/env bash
-# git configration delivered by CarryBag
+# CarryBag library functions for git configration
 
-set -e
+_cblib_git=1
 
-_update_git_user_name () {
+update_git_user_name () {
 
     if ! $QUIET; then
 
@@ -27,9 +26,11 @@ _update_git_user_name () {
 
         git config --global user.name "$fullname"
     fi
+
+    return 0
 }
 
-_update_git_user_email() {
+update_git_user_email() {
 
     if ! $QUIET; then
 
@@ -47,9 +48,11 @@ _update_git_user_email() {
         # TODO: Validate email address
         git config --global user.email "$email"
     fi
+
+    return 0
 }
 
-_update_git_platform_mods () {
+update_git_platform_mods () {
 
     case "$OSTYPE" in
         darwin*)
@@ -68,9 +71,11 @@ _update_git_platform_mods () {
             git config --global difftool.meld.cmd 'meld $LOCAL $REMOTE'
             ;;
     esac
+
+    return 0
 }
 
-_build_carrybag_git_config () {
+build_carrybag_git_config () {
 
     local gitconfig=~/.gitconfig
 
@@ -92,15 +97,17 @@ _build_carrybag_git_config () {
         cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"
     fi
 
-    _update_git_user_name
-    _update_git_user_email
-    _update_git_platform_mods
+    update_git_user_name
+    update_git_user_email
+    update_git_platform_mods
 
     echo -e "${echo_cyan}CarryBag modifications have been applied to $gitconfig${echo_normal}"
     #git config --list
+
+    return 0
 }
 
-_build_carrybag_git_ignore () {
+build_carrybag_git_ignore () {
 
     local gitignore=~/.gitignore
 
@@ -111,4 +118,6 @@ _build_carrybag_git_ignore () {
 
     ## Global ignore file
     git config --global core.excludesfile "$HOME/.gitignore"
+
+    return 0
 }

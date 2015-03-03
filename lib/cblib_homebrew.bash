@@ -1,35 +1,40 @@
-#!/usr/bin/env bash
-# homebrew configuation delivered by CarryBag
+# CarryBag library functions for the homebrew package manager
 
-set -e
+_cblib_homebrew=1
 
-_install_homebrew () {
+install_homebrew () {
 
     ruby -e "$(curl -fsSL https://raw.github.com/mxcl/homebrew/go/install)"
+    return 0
 }
 
-_install_homebrew_package () {
+install_homebrew_package () {
 
     local command=$1
     local pname=${1:-$command}
+
     command -v "$command" >/dev/null || brew install "$pname"
+    return 0
 }
 
-_update_homebrew_packages () {
+update_homebrew_packages () {
+
     brew update     # get homebrew up-to-date
     brew upgrade    # apply any updates
     brew cleanup    # clean up the crud
+    return 0
 }
 
-_build_carrybag_homebrew_config () {
+build_carrybag_homebrew_config () {
 
     command -v brew >/dev/null || {
         echo -e "${echo_cyan}Installing homebrew.${echo_normal}"
-        _install_homebrew
+        install_homebrew
     }
 
     echo -e "${echo_cyan}Installing homebrew packages.${echo_normal}"
     brew install vim    # force install a more up to date vim
     brew install ctags  # force install exuberant-ctags
-    _install_homebrew_package shellcheck
+    install_homebrew_package shellcheck
+    return 0
 }

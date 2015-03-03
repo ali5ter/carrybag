@@ -1,33 +1,35 @@
-#!/usr/bin/env bash
-# node.js configuation delivered by CarryBag
+# CarryBag library functions for nodejs and npm
 
-set -e
+_cblib_node=1
 
-_build_carrybag_node_config () {
+build_carrybag_node_config () {
 
     case "$OSTYPE" in
-        darwin*)    _build_carrybag_node_configuration_osx ;;
-        *)          _build_carrybag_node_configuration_linux ;;
+        darwin*)    build_carrybag_node_configuration_osx ;;
+        *)          build_carrybag_node_configuration_linux ;;
     esac
+    return 0
 }
 
-_install_node_using_brew () {
+install_node_using_brew () {
 
     ## @see https://gist.github.com/DanHerbert/9520689
     brew install node --without-npm
     echo prefix=~/.node >> ~/.npmrc
     curl -L https://www.npmjs.org/install.sh | sh
+    return 0
 }
 
-_install_node_using_apt () {
+install_node_using_apt () {
 
     curl -sL https://deb.nodesource.com/setup | sudo bash -
     sudo apt-get install -y nodejs
     sudo apt-get install -y build-essential
     # npm completion >> ~/.bashrc
+    return 0
 }
 
-_uninstall_node () {
+uninstall_node () {
 
     case "$OSTYPE" in
         darwin*)
@@ -51,74 +53,84 @@ _uninstall_node () {
             sudo apt-get -y remove nodejs npm
             ;;
     esac
+    return 0
 }
 
-_install_node_module () {
+install_node_module () {
 
     local command=$1
     local pname=${2:-$command}
+
     command -v "$command" >/dev/null || sudo npm install -g "$pname"
+    return 0
 }
 
-_update_node_modules () {
+update_node_modules () {
+
     sudo npm update -g
+    return 0
 }
 
-_install_carrybag_node_packages () {
+install_carrybag_node_packages () {
 
-    _install_node_module jshint
-    _install_node_module uglifyjs uglify-js
+    install_node_module jshint
+    install_node_module uglifyjs uglify-js
     ## Unable to build these on ubuntu 14.04 currently
     [[ $OSTYPE == darwin* ]] && {
-        _install_node_module wscat
-        _install_node_module node-inspector
+        install_node_module wscat
+        install_node_module node-inspector
     }
-    _install_node_module nodemon
-    _install_node_module http-server
-    #_install_node_module yo
-    #_install_node_module grunt grunt-cli
+    install_node_module nodemon
+    install_node_module http-server
+    #install_node_module yo
+    #install_node_module grunt grunt-cli
+    return 0
 }
 
-_build_carrybag_node_configuration_osx () {
+build_carrybag_node_configuration_osx () {
 
     if command -v node >/dev/null; then
         if ! $QUIET; then
             echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
             read -n 1 reply
             case "$reply" in
-                Y|y) echo; _uninstall_node && _install_node_using_brew ;;
+                Y|y) echo; uninstall_node && install_node_using_brew ;;
             esac
         fi
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
-        _install_node_using_brew
+        install_node_using_brew
     fi
 
-    _add_to_bash_runcom "export PATH=\"\$HOME/.node/bin:\$PATH\"\\
+    add_to_bash_runcom "export PATH=\"\$HOME/.node/bin:\$PATH\"\\
 export NODE_PATH=\"/usr/local/lib/node_modules:\$NODE_PATH\""
 
     export PATH="$HOME/.node/bin:$PATH"
     export NODE_PATH="/usr/local/lib/node_modules:$NODE_PATH"
 
     echo -e "${echo_cyan}Installing node packages.${echo_normal}"
-    _install_carrybag_node_packages
+    install_carrybag_node_packages
+
+    return 0
 }
 
-_build_carrybag_node_configuration_linux () {
+build_carrybag_node_configuration_linux () {
 
     if command -v node >/dev/null; then
         if ! $QUIET; then
             echo -ne "${echo_yellow}Want a clean install of node and npm? [y/N] ${echo_normal}"
             read -n 1 reply
             case "$reply" in
-                Y|y)    echo; _uninstall_node && _install_node_using_apt ;;
+                Y|y)    echo; uninstall_node && install_node_using_apt ;;
             esac
         fi
     else
         echo -e "${echo_cyan}Installing node and npm.${echo_normal}"
-        _install_node_using_apt
+        install_node_using_apt
     fi
 
     echo -e "${echo_cyan}Installing node packages.${echo_normal}"
-    _install_carrybag_node_packages
+    install_carrybag_node_packages
+
+    return 0
 }
