@@ -58,3 +58,6 @@
 [submodule "3rdparty/vim-git"]
 	path = 3rdparty/vim-git
 	url = https://github.com/tpope/vim-git.git
+[submodule "3rdparty/tcomment_vim"]
+	path = 3rdparty/tcomment_vim
+	url = https://github.com/tomtom/tcomment_vim.git

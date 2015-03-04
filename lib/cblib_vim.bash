@@ -37,6 +37,7 @@ install_pathogen () {
 " Pathogen
 "
 execute pathogen#infect()
+Helptags
 PATHOGEN
     return 0
 }
@@ -55,6 +56,12 @@ set background=dark
 set t_Co=256
 colorscheme solarized
 SOLARIZED
+    return 0
+}
+
+install_tcomment () {
+
+    install_vim_bundle https://github.com/tomtom/tcomment_vim.git
     return 0
 }
 
@@ -263,6 +270,8 @@ build_carrybag_vim_config () {
     ## Install vim packages
     install_solarized
     echo -e "${echo_cyan}Solarize color theme added to vim${echo_normal}"
+    install_tcomment
+    echo -e "${echo_cyan}Tcomment added to vim${echo_normal}"
     install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
     install_ctrlp

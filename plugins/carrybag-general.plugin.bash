@@ -72,6 +72,15 @@ ftext () {
     find . -print0 | xargs -0 grep -i -C 2 --color=always "$@" 2>/dev/null
 }
 
+mktmpdir () {
+
+    about 'create and return the name of a temp directory'
+    example '$ MY_TMP_DIR="\$(mktmpdir)"'
+    group 'carrybag-find-tools'
+
+    mktemp -d 2>/dev/null || mktemp -d -t ''
+}
+
 ## Help tools
 
 bman () {
