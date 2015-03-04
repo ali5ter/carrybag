@@ -17,7 +17,7 @@ Usage: install.sh [options]
 
 Options:
 -i, --interactive   Interactive install.
--q, --quieti        No questions. Just use the defaults.
+-q, --quiet         No questions. Just use the defaults.
 -u, --update        Only moves aliases, completions, plugins and themes into place.
 "
     echo -e "$content"
@@ -34,7 +34,7 @@ else
 fi
 
 ## Parse options
-while [[ $# > 0 ]]; do
+while [[ $# -gt 0 ]]; do
     option="$1"
     case $option in
         -i|--interactive)   QUIET=false; shift ;;
