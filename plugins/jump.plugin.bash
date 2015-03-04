@@ -1,6 +1,8 @@
 cite about-plugin
 about-plugin 'utility to navigate to bookmarked directories'
 
+_cblib_jump=1
+
 ## Working directory
 JUMP=~/.jump
 

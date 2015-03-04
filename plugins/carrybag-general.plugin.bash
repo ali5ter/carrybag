@@ -1,6 +1,8 @@
 cite about-plugin
 about-plugin 'CarryBag general tools'
 
+_cblib_general=1
+
 ## CarryBag package tools
 
 cb_bootstrap () {
@@ -9,6 +11,7 @@ cb_bootstrap () {
     group 'carrybag-admin-tools'
 
     eval "$CB_BASE/tools/install.sh --update --quiet"
+    return 0
 }
 
 cb_housekeeping () {
@@ -18,20 +21,23 @@ cb_housekeeping () {
 
     case "$OSTYPE" in
         darwin*)
-            source "$BASH_IT/plugins/available/carrybag-osx.plugin.bash" && \
-                system_maintenance
-            source "$CB_BASE/lib/homebrew.bash" && _update_homebrew_packages
+            [ -z "$_cblib_osx" ] && source carrybag-osx.plugin.bash
+            system_maintenance
+            [ -z "$_cblib_homebrew" ] && source homebrew.bash
+            update_homebrew_packages
             ;;
         *)
-            source "$BASH_IT/plugins/available/carrybag-linux.plugin.bash" && \
-                system_maintenance
-            source "$CB_BASE/lib/apt.bash" && _update_apt_packages
+            [ -z "$_cblib_linux" ] && source carrybag-linux.plugin.bash
+            system_maintenance
+            [ -z "$_cblib_apt" ] && source apt.bash
+            update_apt_packages
             ;;
     esac
 
-    source "$CB_BASE/lib/node.bash" && _update_node_modules
-
+    [ -z "$_cblib_node" ] && source node.bash
+    update_node_modules
     echo -e "${echo_green}You might want to run ${echo_white}bootstrap${echo_green} to include any updates${echo_normal}"
+    return 0
 }
 
 cb_3rdparty_update () {
@@ -48,6 +54,7 @@ cb_3rdparty_update () {
     done
     shopt -s dotglob
     cd "$_pwd"
+    return 0
 }
 
 ## Find tools
@@ -75,7 +82,7 @@ ftext () {
 mktmpdir () {
 
     about 'create and return the name of a temp directory'
-    example '$ MY_TMP_DIR="\$(mktmpdir)"'
+    example '$ MY_TMP_DIR="$(mktmpdir)"'
     group 'carrybag-find-tools'
 
     mktemp -d 2>/dev/null || mktemp -d -t ''
@@ -314,10 +321,6 @@ ftree () {
         sed -e 's/:$//' -e 's/[^-][^\/]*\//--/g' -e 's/^/ /' -e 's/-/|/'
 }
 
-#
-# @usage pbar [current] [total] [length] ... ascii progress bar
-#
-
 pbar () {
 
     about 'textual progress bar'
@@ -342,4 +345,83 @@ pbar () {
     head -c $((length-completed)) /dev/zero | tr '\0' '-'
     echo -n ']'
     head -c $((length-completed+1)) /dev/zero | tr '\0' '\b'
+}
+
+graph () {
+
+    about 'textual graph with average line as wide as the number of data points'
+    param '1: Number defining the height of the graph'
+    param '2:n Numbers defining the data points'
+    example '$ graph 10 2.2 2 2.2 2.23 2.4 3.1 4.5 5.8 7 8.9'
+    group 'carrybag-ui-tools'
+    ## @see Taken from http://bashscripts.org/forum/viewtopic.php?f=7&t=1141
+
+    height=$1; shift;
+
+    echo "$@" | awk -v height="$height" 'BEGIN { }
+    ## convert big numbers to short kilo/mega/giga etc numbers
+    function pow1k(bignum) {
+        metric=1;
+        num=bignum;
+
+        # devide by 1000 until we have got a small enough number
+        while (num>=1000) { metric++; num/=1000; }
+        num=int(num);
+
+        # get SI prefix (kilo, mega, giga, tera, peta, exa, zotta, yotta)
+        si=substr(" KMGTPEZY", metric, 1);
+
+        # get a division remainder to total our number of characters to a maximum of 4
+        division=substr(bignum, length(num)+1, 3-length(num));
+
+        # right align the output
+        str=sprintf("%s%c%s", num, si, division);
+        return(sprintf("% 4s", str));
+    }
+    {
+        # get smallest, largest and total of all numbers
+        min=max=tot=$1;
+        for (x=2; x<=NF; x++) { tot+=$x; if ($x>max) max=$x; if ($x<min) min=$x; }
+
+        # the difference between largest and smallest number is out working area
+        diff=max-min;
+        if (diff==0) diff=1;                                # all numbers are the same?!
+        # some fancy math to get the average of all numbers
+        avg=(tot/NF);
+        avgfull=int(((avg-min)*height/diff));               # average full
+        avghalf=int(((avg-min)*height/diff)%1+0.5);         # average half
+
+        # fill arrays bars
+        for (x=1; x<=NF; x++) {
+            v=$x-min;                                       # our value
+            i=0;array[x]="";                                # blank the array
+            full=int((v*height/diff));                      # how many full?
+            ttrd=int((v*height/diff)%1+0.333);              # 2/3rd full?
+            otrd=int((v*height/diff)%1+0.666);              # 1/3rd full?
+            while (i<full)   { array[x]=array[x]"O"; i++; } # fill all fulls
+            if    (ttrd>0)   { array[x]=array[x]"o"; i++; } # fill 2/3rd
+            else if (otrd>0) { array[x]=array[x]"."; i++; } # or 1/3rd
+
+            # average line or blank
+            while (i<height) {                              # fill to the top
+                if (i==avgfull)                             # with average line
+                    if (avghalf>0) array[x]=array[x]"-";
+                    else array[x]=array[x]"_";
+                else array[x]=array[x]" ";                  # or mostly blanks
+                i++;
+            }
+        }
+
+        # display output
+        for (y=height; y>0; y--) {
+            line=""; num="    ";                            # blank line and number
+            if (y==avgfull+1) { num=pow1k(int(avg)); }      # show average number
+            if (y==height)    { num=pow1k(max); }           # show maximum number
+            if (y==1)         { num=pow1k(min); }           # show minimum number
+
+            for (x=1; x<=NF; x++)                           # do for all data values
+                line=line""substr(array[x],y,1);            # create line from arrays
+            printf(" %s | %s | %s\n", num, line, num);      # display 1 line
+        }
+    }'
 }

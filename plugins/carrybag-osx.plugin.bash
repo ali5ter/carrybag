@@ -1,6 +1,8 @@
 cite about-plugin
 about-plugin 'CarryBag OSX specific config and functions'
 
+_cblib_osx=1
+
 ## Colors
 export CLICOLOR=1
 #alias ls='CLICOLOR_FORCE=1 ls -G'
@@ -97,4 +99,6 @@ system_maintenance () {
 
     # @see http://www.macgasm.net/2013/01/18/good-morning-your-mac-keeps-a-log-of-all-your-downloads/
     sqlite3 ~/Library/Preferences/com.apple.LaunchServices.QuarantineEventsV* 'delete from LSQuarantineEvent'
+
+    return 0
 }

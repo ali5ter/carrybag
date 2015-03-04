@@ -1,6 +1,8 @@
 cite about-plugin
 about-plugin 'Carrybag ctag tools'
 
+_cblib_ctags=1
+
 ctags --version | grep Exuberant >/dev/null || \
     echo -e "${echo_yellow}Please install Exuberant Ctags.${echo_normal}"
 
@@ -19,4 +21,6 @@ gctags () {
         git ls-files | ctags --tag-relative -L - -f"$tags"
         mv "$tags" "$dir/tags"
     }
+
+    return 0
 }

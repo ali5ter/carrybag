@@ -1,12 +1,14 @@
 cite about-plugin
 about-plugin 'CarryBag color tools'
 
+_cblib_color=1
+
 hex2rgb () {
 
     about 'convert hex color to rgb'
     param '1: hex color'
     example '$ hex2rgb ffcc22'
-    group 'carrybag color tools'
+    group 'carrybag-color-tools'
 
     local hex=$(echo "$1" | tr '[:lower:]' '[:upper:]')
     local r=$(echo "ibase=16; $(echo "$hex" | cut -c -2)" | bc -l)
@@ -20,7 +22,7 @@ rgb2hex () {
     about 'convert rgb color to hex'
     param '1: rbg color'
     example '$ rgb2hex 255 204 34'
-    group 'carrybag color tools'
+    group 'carrybag-color-tools'
 
     local hex=$(python -c "print '#%02x%02x%02x' % (${1:-0}, ${2:-0}, ${3:-0})")
     echo -n "$hex" | pbcopy
@@ -32,7 +34,7 @@ rgb2hsl () {
     about 'convert rgb color to hsl'
     param '1: rbg color'
     example '$ rgb2hex 255 204 34'
-    group 'carrybag color tools'
+    group 'carrybag-color-tools'
 
     local r=$(echo "$1/255" | bc -l)
     local g=$(echo "$2/255" | bc -l)

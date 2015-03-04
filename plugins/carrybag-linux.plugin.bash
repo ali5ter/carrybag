@@ -1,6 +1,8 @@
 cite about-plugin
 about-plugin 'CarryBag Linux specific config and functions'
 
+_cblib_linux=1
+
 ## Return if non-interactive shell
 case $- in
     *i*)    ;;
@@ -40,4 +42,5 @@ system_maintenance () {
     group 'linux'
 
     sudo apt-get autoremove -y
+    return 0
 }
