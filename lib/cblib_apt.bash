@@ -27,8 +27,9 @@ build_carrybag_apt_config () {
 
     echo -e "${echo_cyan}Installing apt packages.${echo_normal}"
     sudo apt-get install -y vim # force install of up to date version
-    _install_apt_package curl
-    _install_apt_package build-essential gcc
-    _install_apt_package meld
+    install_apt_package curl
+    install_apt_package build-essential gcc
+    install_apt_package meld
+    install_apt_package exuberant-ctags ctags
     return 0
 }
