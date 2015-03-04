@@ -61,3 +61,9 @@
 [submodule "3rdparty/tcomment_vim"]
 	path = 3rdparty/tcomment_vim
 	url = https://github.com/tomtom/tcomment_vim.git
+[submodule "3rdparty/nerdtree"]
+	path = 3rdparty/nerdtree
+	url = https://github.com/scrooloose/nerdtree.git
+[submodule "3rdparty/tagbar"]
+	path = 3rdparty/tagbar
+	url = https://github.com/majutsushi/tagbar.git

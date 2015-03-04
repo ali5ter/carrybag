@@ -76,10 +76,27 @@ install_nerdtree () {
 "
 let NERDTreeShowHidden=1
 let NERDTreeShowBookmarks=1
+map <leader>n :NERDTreeToggle<cr>
+" Automatically open NERDTree when vim starts up if no files specified
 autocmd StdinReadPre * let s:std_in=1
 autocmd VimEnter * if argc() == 0 && !exists("s:std_in") | NERDTree | endif
+" Close vim if the only window left open is a NERDTree
 autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif
 NERDTREE
+    return 0
+}
+
+install_tagbar () {
+
+    install_vim_bundle https://github.com/majutsushi/tagbar.git
+
+    cat <<TAGBAR >> "$VIMRC"
+
+"
+" Tagbar
+"
+nmap <leader>t :TagbarToggle<CR>
+TAGBAR
     return 0
 }
 
@@ -274,6 +291,10 @@ build_carrybag_vim_config () {
     echo -e "${echo_cyan}Tcomment added to vim${echo_normal}"
     install_vimairline
     echo -e "${echo_cyan}Airline added to vim${echo_normal}"
+    install_nerdtree
+    echo -e "${echo_cyan}NERDTree added to vim${echo_normal}"
+    install_tagbar
+    echo -e "${echo_cyan}Tagbar added to vim${echo_normal}"
     install_ctrlp
     echo -e "${echo_cyan}CtrlP added to vim${echo_normal}"
     install_syntastic
