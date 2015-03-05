@@ -23,19 +23,20 @@ cb_housekeeping () {
         darwin*)
             [ -z "$_cblib_osx" ] && source carrybag-osx.plugin.bash
             system_maintenance
-            [ -z "$_cblib_homebrew" ] && source homebrew.bash
+            [ -z "$_cblib_homebrew" ] && source cblib_homebrew.bash
             update_homebrew_packages
             ;;
         *)
             [ -z "$_cblib_linux" ] && source carrybag-linux.plugin.bash
             system_maintenance
-            [ -z "$_cblib_apt" ] && source apt.bash
+            [ -z "$_cblib_apt" ] && source cblib_apt.bash
             update_apt_packages
             ;;
     esac
 
-    [ -z "$_cblib_node" ] && source node.bash
+    [ -z "$_cblib_node" ] && source cblib_node.bash
     update_node_modules
+
     echo -e "${echo_green}You might want to run ${echo_white}bootstrap${echo_green} to include any updates${echo_normal}"
     return 0
 }
