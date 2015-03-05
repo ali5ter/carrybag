@@ -9,6 +9,12 @@ JUMP=~/.jump
 ## Directory bookmark store
 JUMP_BOOKMARKS=~/.jump/bookmarks
 
+## Convenience aliases
+alias j='jump'
+alias 'j+'='jump --add'
+alias 'j-'='jump --delete'
+alias jl='jump --list'
+
 ## Prepopulate jump bookmarks
 if [ -f "$JUMP_BOOKMARKS" ]; then
     grep carrybag "$JUMP_BOOKMARKS" >/dev/null || \
