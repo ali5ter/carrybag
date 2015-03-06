@@ -1,4 +1,4 @@
-#!/usr/bin/env bash
+#set +x!/usr/bin/env bash
 # Install CarryBag
 
 set -e
@@ -45,7 +45,7 @@ while [[ $# -gt 0 ]]; do
 done
 
 ## Fetch 3rd party packages
-if ! $QUIET; then
+$QUIET || {
     echo -ne "\033[0;33mWant to fetch the 3rd party packagese? [y/N] \033[0m"
     read -n 1 reply
     case "$reply" in
@@ -53,17 +53,17 @@ if ! $QUIET; then
             echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
             git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
     esac
-fi
+}
 
 ## Load convenience functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
 
 ## Move Bash-it into place
-if ! $UPDATE; then
+$UPDATE || {
     [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
     cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
     echo -e "${echo_cyan}Installing clean Bash-it environment${echo_normal}"
-fi
+}
 
 ## CarryBag includes
 source "$CB_BASE/lib/cblib_bashit.bash"
@@ -79,7 +79,8 @@ source "$CB_BASE/lib/cblib_ruby.bash"
 source "$CB_BASE/lib/cblib_vim.bash"
 
 ## CarryBag configurations
-if ! $UPDATE; then
+$UPDATE || {
+    ## Mandatory
     build_carrybag_bash_runcom
     build_carrybag_git_config
     build_carrybag_git_ignore
@@ -90,7 +91,19 @@ if ! $UPDATE; then
     build_carrybag_node_config
     build_carrybag_vim_config
     add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
-fi
+    ## Optional
+    $QUIET || {
+        echo -ne "${echo_yellow}Install nativescript? [y|N]${echo_normal} "
+        read -n 1 reply
+        case "$reply" in
+            Y|y)
+                echo
+                source "$CB_BASE/lib/cblib_nativescript.bash"
+                build_carrybag_nativescript_configuration
+                ;;
+        esac
+    }
+}
 
 ## Preload Bash-it & CarryBag addons
 preload_carrybag_addons
