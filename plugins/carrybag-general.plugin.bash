@@ -120,7 +120,7 @@ kproc () {
     example '$ kproc http*'
     group 'carrybag-process-tools'
 
-    fproc "$@" | awk '{print $2}' | xargs kill -9
+    fproc "$@" | awk '{print $1}' | xargs kill -9
 }
 
 rproc () {
