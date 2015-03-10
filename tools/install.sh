@@ -1,4 +1,4 @@
-#set +x!/usr/bin/env bash
+#!/usr/bin/env bash
 # Install CarryBag
 
 set -e
@@ -71,7 +71,10 @@ source "$CB_BASE/lib/cblib_appearance.bash"
 source "$CB_BASE/lib/cblib_runcom.bash"
 source "$CB_BASE/lib/cblib_git.bash"
 case "$OSTYPE" in
-    darwin*)   source "$CB_BASE/lib/cblib_homebrew.bash" ;;
+    darwin*)
+        source "$CB_BASE/lib/cblib_homebrew.bash"
+        source "$CB_BASE/lib/cblib_cask.bash"
+        ;;
     *)         source "$CB_BASE/lib/cblib_apt.bash" ;;
 esac
 source "$CB_BASE/lib/cblib_node.bash"
@@ -85,7 +88,10 @@ $UPDATE || {
     build_carrybag_git_config
     build_carrybag_git_ignore
     case "$OSTYPE" in
-        darwin*)   build_carrybag_homebrew_config ;;
+        darwin*)
+            build_carrybag_homebrew_config
+            build_carrybag_cask_config
+            ;;
         *)         build_carrybag_apt_config ;;
     esac
     build_carrybag_node_config
@@ -99,7 +105,7 @@ $UPDATE || {
             Y|y)
                 echo
                 source "$CB_BASE/lib/cblib_nativescript.bash"
-                build_carrybag_nativescript_configuration
+                build_carrybag_nativescript_config
                 ;;
         esac
     }

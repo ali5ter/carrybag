@@ -11,7 +11,7 @@ install_homebrew () {
 install_homebrew_package () {
 
     local command=$1
-    local pname=${1:-$command}
+    local pname=${2:-$command}
 
     command -v "$command" >/dev/null || brew install "$pname"
     return 0
@@ -19,9 +19,9 @@ install_homebrew_package () {
 
 update_homebrew_packages () {
 
-    brew update     # get homebrew up-to-date
-    brew upgrade    # apply any updates
-    brew cleanup    # clean up the crud
+    brew update && \
+    brew upgrade && \
+    brew cleanup
     return 0
 }
 
@@ -33,7 +33,11 @@ build_carrybag_homebrew_config () {
     }
 
     echo -e "${echo_cyan}Installing homebrew packages.${echo_normal}"
-    brew install vim    # force install a more up to date vim
+
+    brew install bash   # force install of an up to date bash shell
+    [ "$SHELL" == "/usr/local/bin/bash" ] || chsh -s /usr/local/bin/bash
+
+    brew install vim    # force install of an up to date vim
     brew install ctags  # force install exuberant-ctags
     install_homebrew_package shellcheck
     return 0

@@ -25,6 +25,8 @@ cb_housekeeping () {
             system_maintenance
             [ -z "$_cblib_homebrew" ] && source cblib_homebrew.bash
             update_homebrew_packages
+            [ -z "$_cblib_cask" ] && source cblib_cask.bash
+            update_cask
             ;;
         *)
             [ -z "$_cblib_linux" ] && source carrybag-linux.plugin.bash
