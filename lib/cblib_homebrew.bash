@@ -35,7 +35,10 @@ build_carrybag_homebrew_config () {
     echo -e "${echo_cyan}Installing homebrew packages.${echo_normal}"
 
     brew install bash   # force install of an up to date bash shell
-    [ "$SHELL" == "/usr/local/bin/bash" ] || chsh -s /usr/local/bin/bash
+    echo "$SHELL" | grep "/usr/local/bin/bash" || {
+        echo "/usr/local/bin/bash" | sudo tee -a /etc/shells > /dev/null
+        chsh -s /usr/local/bin/bash
+    }
 
     brew install vim    # force install of an up to date vim
     brew install ctags  # force install exuberant-ctags
