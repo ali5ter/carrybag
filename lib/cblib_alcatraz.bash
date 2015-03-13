@@ -32,5 +32,8 @@ build_carrybag_alcatraz_config () {
     ##  Solarized Dark
     ##  Solarized Light
 
+    ## Templates intalled throught the Alcatraz GUI
+    ##  Swift Templates
+
     return 0
 }
