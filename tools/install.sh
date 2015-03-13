@@ -44,16 +44,26 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+## Load askuser utility and provide prompt definitions file
+cite () { return 0; };          # Hack to get around undefined metadata calls
+about-plugin () { return 0; }   # "
+about () { return 0; }          # "
+group () { return 0; }          # "
+source "$CB_BASE/plugins/askuser.plugin.bash"
+cp "$CB_BASE/templates/askuser.template" "$ASKUSER_AVAIL/carrybag.txt"
+
+_prefix="$ASKUSER_PREFIX"; _postfix="$ASKUSER_POSTFIX"
+ASKUSER_PREFIX="\033[0;33m"; ASKUSER_POSTFIX="\033[0m"
+
 ## Fetch 3rd party packages
-$QUIET || {
-    echo -ne "\033[0;33mWant to fetch the 3rd party packagese? [y/N] \033[0m"
-    read -n 1 reply
-    case "$reply" in
-        Y|y)
-            echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
-            git submodule update --init --recursive ## updated to the commit recorded by the submodule reference
-    esac
+askuser cb_3rdparty $($QUIET && echo '--quiet' || echo '--interactive')
+[ "$ASKUSER_REPLY" == 'y' ] && {
+    echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
+    ## updated to the commit recorded by the submodule reference
+    git submodule update --init --recursive
 }
+
+ASKUSER_PREFIX="$_prefix"; ASKUSER_POSTFIX="_postfix"
 
 ## Load convenience functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
@@ -131,6 +141,7 @@ bash-it-enable completion defaults
 bash-it-enable completion git
 bash-it-enable completion jump
 bash-it-enable completion ssh
+bash-it-enable plugin askuser
 bash-it-enable plugin base
 bash-it-enable plugin carrybag-general
 bash-it-enable plugin carrybag-ctags

@@ -1,0 +1,3 @@
+# AskUser prompt definitions for CarryBag installation
+
+cb_3rdparty:YESNO:Do you want to fetch the 3rdparty submodules?:n
