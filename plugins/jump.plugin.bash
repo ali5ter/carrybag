@@ -4,10 +4,10 @@ about-plugin 'utility to navigate to bookmarked directories'
 _cblib_jump=1
 
 ## Working directory
-JUMP=~/.jump
+export JUMP=~/.jump
 
 ## Directory bookmark store
-JUMP_BOOKMARKS=~/.jump/bookmarks
+export JUMP_BOOKMARKS=~/.jump/bookmarks
 
 ## Convenience aliases
 alias j='jump'
