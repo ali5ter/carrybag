@@ -53,6 +53,7 @@ auex3:FREEFORM:What is your user name?:
 
 ASKUSERDEFAULTS
 }
+[ -d "$ASKUSER_ACTIVE" ] || mkdir -p "$ASKUSER_ACTIVE"
 
 _askuser_help () {
     local _help="
@@ -210,7 +211,8 @@ _askuser_all_prompts () {
 _askuser_field_for_key () {
 
     if [ "$(cat "$ASKUSER_PROMPTS" | egrep -c "^$1:")" -gt '1' ]; then
-        echo -e "${echo_red}askuser: Multiple prompts found for key '$1'${echo_normal}"
+        echo -e "${echo_red}askuser: Multiple prompt definitions found for key \
+'$1'${echo_normal}"
         return 1
     else
         cat "$ASKUSER_PROMPTS" | egrep "^$1:" | cut -d':' -f"$2"
