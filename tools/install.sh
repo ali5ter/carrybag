@@ -44,57 +44,59 @@ while [[ $# -gt 0 ]]; do
     esac
 done
 
+## Add plugin and lib dirs to path and tell bash to use path to search for
+## files to source
+export PATH="$CB_BASE/lib:$CB_BASE/plugins:$PATH"
+shopt -s sourcepath
+
 ## Load askuser utility and provide prompt definitions file
 cite () { return 0; };          # Hack to get around undefined metadata calls
 about-plugin () { return 0; }   # "
 about () { return 0; }          # "
 group () { return 0; }          # "
-source "$CB_BASE/plugins/askuser.plugin.bash"
+source askuser.plugin.bash
 cp "$CB_BASE/templates/askuser.template" "$ASKUSER_AVAIL/carrybag.txt"
 
-_prefix="$ASKUSER_PREFIX"; _postfix="$ASKUSER_POSTFIX"
-ASKUSER_PREFIX="\033[0;33m"; ASKUSER_POSTFIX="\033[0m"
-
 ## Fetch 3rd party packages
-askuser cb_3rdparty $($QUIET && echo '--quiet' || echo '--interactive')
+askuser cb_3rdparty "$($QUIET && echo '--quiet' || echo '--interactive')"
 [ "$ASKUSER_REPLY" == 'y' ] && {
     echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
     ## updated to the commit recorded by the submodule reference
     git submodule update --init --recursive
 }
 
-ASKUSER_PREFIX="$_prefix"; ASKUSER_POSTFIX="_postfix"
-
-## Load convenience functions for color
+## Load bash-it functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
 
 ## Move Bash-it into place
 $UPDATE || {
+    ## TODO: Ask first
     [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
     cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
     echo -e "${echo_cyan}Installing clean Bash-it environment${echo_normal}"
 }
 
 ## CarryBag includes
-source "$CB_BASE/lib/cblib_bashit.bash"
-source "$CB_BASE/lib/cblib_appearance.bash"
-source "$CB_BASE/lib/cblib_runcom.bash"
-source "$CB_BASE/lib/cblib_git.bash"
+source cblib_bashit.bash
+source cblib_appearance.bash
+source cblib_runcom.bash
+source cblib_git.bash
 case "$OSTYPE" in
     darwin*)
-        source "$CB_BASE/lib/cblib_homebrew.bash"
-        source "$CB_BASE/lib/cblib_cask.bash"
+        source cblib_homebrew.bash
+        source cblib_cask.bash
         ;;
-    *)         source "$CB_BASE/lib/cblib_apt.bash" ;;
+    *)         source cblib_apt.bash ;;
 esac
-source "$CB_BASE/lib/cblib_node.bash"
-source "$CB_BASE/lib/cblib_ruby.bash"
-source "$CB_BASE/lib/cblib_vim.bash"
+source cblib_node.bash
+source cblib_ruby.bash
+source cblib_vim.bash
 
 ## CarryBag configurations
 $UPDATE || {
     ## Mandatory
     build_carrybag_bash_runcom
+    build_carryback_apperance
     build_carrybag_git_config
     build_carrybag_git_ignore
     case "$OSTYPE" in
@@ -114,7 +116,7 @@ $UPDATE || {
         case "$reply" in
             Y|y)
                 echo
-                source "$CB_BASE/lib/cblib_nativescript.bash"
+                source cblib_nativescript.bash
                 build_carrybag_nativescript_config
                 ;;
         esac

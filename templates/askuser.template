@@ -1,3 +1,4 @@
 # AskUser prompt definitions for CarryBag installation
 
-cb_3rdparty:YESNO:Do you want to fetch the 3rdparty submodules?:n
+cb_3rdparty:YESNO:Do you want to fetch the 3rdparty submodules?:y
+cb_solarizedosx:YESNO:Do you want to install Solarized Dark as your default OSX Terminal settings profile?:y
