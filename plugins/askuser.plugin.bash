@@ -13,10 +13,10 @@ export ASKUSER_ACTIVE="$ASKUSER/active"
 export ASKUSER_AVAIL="$ASKUSER/available"
 
 ## Prompt prefix
-export ASKUSER_PREFIX="${echo_yellow}"
+export ASKUSER_PREFIX="\033[0;33m"
 
 ## Prompt postfix
-export ASKUSER_POSTFIX="${echo_normal}"
+export ASKUSER_POSTFIX="\033[0m"
 
 ## Quiet mode off by default. Prompts are shown and user response expected. If
 ## false, the default is used.
@@ -200,7 +200,7 @@ _askuser_all_prompts () {
             while read -r def; do
                 key="$(echo "$def" | cut -d':' -f1)"
                 prompt=$(_askuser_display_prompt_for_key "$key")
-                echo -e "\t${echo_green}$key -> $prompt${echo_normal}"
+                echo -e "\t${echo_green}$key${echo_normal} -> $prompt${echo_normal}"
             done <<< "$(cat "$file" | egrep -v '^$' | egrep -v '^#')"
         done
     else
@@ -231,47 +231,53 @@ _askuser_default_for_key () {
     echo "$default"
 }
 
+_askuser_display_prompt_for_key () {
+
+    local key="$1"
+    local prompt="$ASKUSER_PREFIX"
+
+    prompt="${prompt}$(_askuser_prompt_for_key "$key") "
+    prompt="${prompt}[$(_askuser_default_for_key "$key")]: "
+    prompt="${prompt}$ASKUSER_POSTFIX"
+    echo -ne "$prompt"
+}
+
 _askuser_validate_value_for_key () {
 
     local key="$1"; shift
     local value="$*"
 
-    case "$(_askuser_type_for_key "$key")" in
-        YESNO) [[ "$value" == 'n' || "$value" == 'y' ]] || return 1 ;;
-    esac
+     if [[ -z "$reply" || "$reply" == "$default" ]]; then
+        ## When the user enters no value or the same value as the default,
+        ## then consider this valid and set ASKUSER_REPLY
+        ASKUSER_REPLY="$default"
+    else
+        ## When the user enters aa value different from the default, validate
+        ## it, store this as the new default abd set ASKUSER_REPLY
+        case "$(_askuser_type_for_key "$key")" in
+            YESNO) [[ "$value" == 'n' || "$value" == 'y' ]] || {
+                echo "Please answer y (for yes) or n (for no)."
+                return 1
+            }
+            ## TODO: CHOICE validation
+        esac
+        askuser "$key" set_to "$reply"
+        ASKUSER_REPLY="$reply"
+    fi
     return 0
-}
-
-_askuser_display_prompt_for_key () {
-
-    local prompt="$ASKUSER_PREFIX"
-
-    prompt="${prompt}$(_askuser_prompt_for_key "$1") "
-    prompt="${prompt}[$(_askuser_default_for_key "$1")]: "
-    prompt="${prompt}$ASKUSER_POSTFIX"
-    echo -ne "$prompt"
 }
 
 _askuser_process_prompt_for_key () {
 
     local key=$1
-    local default="$(_askuser_default_for_key "$1")"
-    ASKUSER_REPLY="$default"
 
     _askuser_display_prompt_for_key "$key"
     read reply
-    if [[ -z "$reply" || "$reply" == "$default" ]]; then
-        ## When the user enters no value or the same value as the default,
-        ## then the default action is executed
-        [ -z "$ASKUSER_CMD" ] || eval "$ASKUSER_CMD"
-    else
-        ## When the user enters aa value different from the default, validate
-        ## it and store this as the new default
-        _askuser_validate_value_for_key "$key" "$reply" && {
-            askuser "$key" set_to "$reply"
-            ASKUSER_REPLY="$reply"
-        }
-    fi
+    ## <rant> which bash until loop worked like an until loop
+    until _askuser_validate_value_for_key "$key" "$reply"; do
+        _askuser_display_prompt_for_key "$key"
+        read reply
+    done
     return 0
 }
 
