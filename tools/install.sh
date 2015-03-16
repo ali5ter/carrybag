@@ -55,10 +55,12 @@ about-plugin () { return 0; }   # "
 about () { return 0; }          # "
 group () { return 0; }          # "
 source askuser.plugin.bash
+## Load the askuser carrybag install prompts and defaults
 cp "$CB_BASE/templates/askuser.template" "$ASKUSER_AVAIL/carrybag.txt"
+ASKUSER_QUIET="$QUIET"          # Pass through quiet mode flag
 
 ## Fetch 3rd party packages
-askuser cb_3rdparty "$($QUIET && echo '--quiet' || echo '--interactive')"
+askuser cb_3rdparty
 [ "$ASKUSER_REPLY" == 'y' ] && {
     echo -e "\n\033[0;36mFetching/updating 3rd party packages.\033[0m"
     ## updated to the commit recorded by the submodule reference
@@ -67,14 +69,6 @@ askuser cb_3rdparty "$($QUIET && echo '--quiet' || echo '--interactive')"
 
 ## Load bash-it functions for color
 source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
-
-## Move Bash-it into place
-$UPDATE || {
-    ## TODO: Ask first
-    [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
-    cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
-    echo -e "${echo_cyan}Installing clean Bash-it environment${echo_normal}"
-}
 
 ## CarryBag includes
 source cblib_bashit.bash
@@ -92,10 +86,23 @@ source cblib_node.bash
 source cblib_ruby.bash
 source cblib_vim.bash
 
-## CarryBag configurations
+## Update shell with CarryBag configuration
 $UPDATE || {
-    ## Mandatory
-    build_carrybag_bash_runcom
+set -x
+    askuser cb_bash-it
+    [ "$ASKUSER_REPLY" == 'y' ] && {
+        echo -e "${echo_cyan}Installing clean Bash-it environment${echo_normal}"
+        build_carrybag_bash-it_config
+    }
+
+    askuser cb_runcom
+    [ "$ASKUSER_REPLY" == 'y' ] && {
+        echo -e "${echo_cyan}Installing clean Bash runcom file based on the \
+one provide by Bash-it${echo_normal}"
+        build_carrybag_bash_runcom
+    }
+set +x
+
     build_carryback_apperance
     build_carrybag_git_config
     build_carrybag_git_ignore

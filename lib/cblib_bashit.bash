@@ -46,3 +46,8 @@ bash-it-enable () {
 
     return 0
 }
+
+build_carrybag_bash-it_config () {
+    [ -d "$BASH_IT" ] && rm -fR "$BASH_IT"
+    cp -r "$CB_BASE/3rdparty/bash-it" "$BASH_IT"
+}

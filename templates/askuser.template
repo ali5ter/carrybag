@@ -1,4 +1,6 @@
 # AskUser prompt definitions for CarryBag installation
 
 cb_3rdparty:YESNO:Do you want to fetch the 3rdparty submodules?:y
+cb_bash-it:YESNO:Do you want to install a clean Bash-it environment?:y
+cb_runcom:YESNO:Do you want to apply CarryBag modification to the Bash-it provided runcom?:y
 cb_solarizedosx:YESNO:Do you want to install Solarized Dark as your default OSX Terminal settings profile?:y
