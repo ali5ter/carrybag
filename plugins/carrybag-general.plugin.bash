@@ -79,7 +79,7 @@ ftext () {
     example '$ ffile var i=30'
     group 'carrybag-find-tools'
 
-    find . -print0 | xargs -0 grep -i -C 2 --color=always "$@" 2>/dev/null
+    find . -print0 | xargs -0 grep -i -n -C 2 --color=always "$@" 2>/dev/null
 }
 
 mktmpdir () {
