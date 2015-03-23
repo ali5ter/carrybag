@@ -18,6 +18,12 @@ export ASKUSER_PREFIX="\033[0;33m"
 ## Prompt postfix
 export ASKUSER_POSTFIX="\033[0m"
 
+## Prompt choice prefix
+export ASKUSER_CHOICE_PREFIX="$ASKUSER_PREFIX\t"
+
+## Prompt choice postfix
+export ASKUSER_CHOICE_POSTFIX="$ASKUSER_POSTFIX"
+
 ## Quiet mode off by default. Prompts are shown and user response expected. If
 ## false, the default is used.
 export ASKUSER_QUIET=false
@@ -28,29 +34,52 @@ export ASKUSER_REPLY=''
 ## Convenience aliases
 alias au='askuser'
 
-## Prepopulate available prompts
+## Set up working directory and pre-populate available prompts
+[ -d "$ASKUSER_ACTIVE" ] || mkdir -p "$ASKUSER_ACTIVE"
 [ -d "$ASKUSER_AVAIL" ] || {
     mkdir -p "$ASKUSER_AVAIL"
     cat <<ASKUSERDEFAULTS >> "$ASKUSER_AVAIL/askuser_test.txt"
-# AskUser utility: Example available prompts file
+# AskUser utility: Example prompt definitions file
 
-#   This is a sample question that expects a y (yes) or n (no) answer.
 #
-auex1:YESNO:Can peanut butter live without jelly?:n
-
-#   A simple question that expects a freeform answer.
+#   You can define simple questions that expect a y (yes) or n (no) answer.
+#   The following prompt definition defaults to the answer yes
 #
-auex2:FREEFORM:Please confirm the name of the capitol of England:London
+auex1:YESNO:Is yellow the color of the liqueur Galliano?:y
 
-#   Another simple question that expects a freeform answer.
-#   Notice there is no initial default here. This will result in no default
-#   being displayed to the user after the prompt. A default can be supplied
-#   dynamically for this prompt using the --default option
-#   Example:
-#   askuser dynamic --default \$USER --command "ls /Users/\\\$ASKUSER_REPLY"
 #
-auex3:FREEFORM:What is your user name?:
+#   Or a question with a free-form answer like this...
+#
+auex2:FREEFORM:External network IP address:10.0.1.100
 
+#
+#   Or like this...
+#
+auex4:FREEFORM:Your full time occupation is:Datafication Ideologist
+
+#
+#   If you want to use the ':' character, then escape it first, like this...
+#
+auex5:FREEFORM:What is the endpoint URL?:http\://192.186.1.101\:8001
+
+#
+#   If you want the user to select from a choice of answers, you create a
+#   definition like the following:
+#
+auex6:CHOICE:In what body organs would you find Alveoli?:Ears|*Lungs|Kidneys
+
+#
+#   Of course you can also leave the default answer empty...
+#
+auex7:FREEFORM:What is your user name?:
+
+#
+#   There may be times where you want to generate the default answer at runtime.
+#   To do this, leave the default answer blank and supply the answer using the
+#   --default option, like this...
+#
+#   askuser auex7 --default "\$USER"
+#
 ASKUSERDEFAULTS
 }
 [ -d "$ASKUSER_ACTIVE" ] || mkdir -p "$ASKUSER_ACTIVE"
@@ -70,23 +99,23 @@ An example file is provided in this directory for you to copy and create prompt
 defintions for your own scripts. Each entry in the txt file is indexed by a key
 and used as described below.
 
-You can also pass a command which will be invoked for the default value. This is
-useful when you want to use this utility in quiet (or non-interactive) mode.
-Quite mode, as set by the boolean environment variable ASKUSER_QUIET. By default
-this is set to false so the prompt is shown to the user but can also be set per
-invocation.
+Quite mode, as set by the boolean environment variable ASKUSER_QUIET, or though
+the ${echo_bold_white}--quiet${echo_normal} and ${echo_bold_white}--interactive\
+${echo_normal} options, prevents the prompt interaction and
+assumes the default answer. Quiet mode is set to false by default so the prompt
+is shown to the user.
 
 For situations where the default can only be derived at runtime, a command to
-generate the default value can be supplied
+generate the default value can be supplied using the ${echo_bold_white}\
+--default${echo_normal} option.
 
 The user reply to a managed user interaction is stored in the environment
 variable ASKUSER_REPLY. If quiet mode was used, this variable contains the
 default value.
 
 USAGE:
-    ${echo_bold_white}askuser ${echo_underline_white}key${echo_normal}\
-${echo_bold_white} [--command ${echo_underline_white}command${echo_normal}\
-${echo_bold_white}] [--default ${echo_underline_white}value\
+    ${echo_bold_white}askuser ${echo_underline_white}key${echo_normal} \
+${echo_bold_white}[--default ${echo_underline_white}value\
 ${echo_normal}${echo_bold_white}] [--quiet] [--interactive]${echo_normal}
         Display the prompt for ${echo_white}key${echo_normal} and provide the \
 user response in ASKUSER_REPLY
@@ -151,8 +180,9 @@ PROMPT DEFINITIONS:
     key
         the unique idenfifier for the prompt
     type
-        YESNO ... y (yes) or n (no) answer prompt
+        YESNO ...... y (yes) or n (no) answer prompt
         FREEFORM ... free from answer prompt
+        CHOICE ..... mutiple choice answer prompt
     prompt_text
         the content of the prompt
     default_answer
@@ -164,10 +194,18 @@ PROMPT DEFINITIONS:
             app_continue:YESNO:Do you want to continue?:y
         generates the following prompt:
             ${ASKUSER_PREFIX}Do you want to continue? [y]: ${ASKUSER_POSTFIX}
-        This prompt definition:
+        This free-form prompt definition:
             fullname0101:FREEFORM:What is your full name?:
         will display:
             ${ASKUSER_PREFIX}What is your full name? []: ${ASKUSER_POSTFIX}
+        This multiple choice prompt definition:
+            eyetest23:CHOICE:The dominant color is:red|*green|blue
+        will display:
+            ${ASKUSER_PREFIX}The dominant color is${ASKUSER_POSTFIX}
+            ${ASKUSER_CHOICE_PREFIX}[1] red${ASKUSER_CHOICE_POSTFIX}
+            ${ASKUSER_CHOICE_PREFIX}[2] green${ASKUSER_CHOICE_POSTFIX}
+            ${ASKUSER_CHOICE_PREFIX}[3] blue${ASKUSER_CHOICE_POSTFIX}
+            ${ASKUSER_PREFIX}[2]: ${ASKUSER_POSTFIX}
 
     The list of active prompt definitions:
 "
@@ -223,47 +261,108 @@ _askuser_prompt_for_key () { _askuser_field_for_key "$1" 3; }
 
 _askuser_type_for_key () { _askuser_field_for_key "$1" 2; }
 
-_askuser_default_for_key () {
+_askuser_defaultchoices_for_key () {
 
     local default=$(_askuser_field_for_key "$1" 4)
 
     default=${default:-$ASKUSER_DEFAULT}
+    IFS="|" read -ra values <<< "$default"
+    for (( i=0; i<${#values[@]}; i++)); do echo "$((i+1)):${values[$i]}"; done
+}
+
+_askuser_default_for_key () {
+
+    local default=$(_askuser_field_for_key "$1" 4)
+    local type=$(_askuser_type_for_key "$1")
+
+    default=${default:-$ASKUSER_DEFAULT}
+    case "$type" in
+        CHOICE)
+            default="$(_askuser_defaultchoices_for_key "$1" | \
+                grep -n '\*' | cut -d':' -f1)"
+            ;;
+    esac
     echo "$default"
 }
 
 _askuser_display_prompt_for_key () {
 
     local key="$1"
+    local type=$(_askuser_type_for_key "$1")
     local prompt="$ASKUSER_PREFIX"
 
     prompt="${prompt}$(_askuser_prompt_for_key "$key") "
+    case "$type" in
+        CHOICE)
+            prompt="${prompt}\n"
+            prompt="${prompt}$(_askuser_display_choices_for_key "$key")\n"
+            prompt="${prompt}$ASKUSER_PREFIX"
+            ;;
+    esac
     prompt="${prompt}[$(_askuser_default_for_key "$key")]: "
     prompt="${prompt}$ASKUSER_POSTFIX"
     echo -ne "$prompt"
 }
 
+_askuser_display_choices_for_key () {
+
+    local key="$1"
+    local choice=''
+
+    for value in $(_askuser_defaultchoices_for_key "$1"); do
+        choice="${choice}$ASKUSER_CHOICE_PREFIX"
+        choice="${choice}[$(echo "$value" | cut -d':' -f1)] ";
+        choice="${choice}$(echo "$value" | cut -d':' -f2 | sed -e s/\*//g)";
+        choice="${choice}${ASKUSER_CHOICE_POSTFIX}\n"
+    done
+    echo -e "$choice"
+}
+
+
 _askuser_validate_value_for_key () {
 
     local key="$1"; shift
     local value="$*"
+    local values=$(_askuser_defaultchoices_for_key "$key")
+    local type=$(_askuser_type_for_key "$key")
+    local choices=()
 
-     if [[ -z "$reply" || "$reply" == "$default" ]]; then
+    for choice in $values; do choices+=("$choice"); done
+
+    if [[ -z "$reply" || "$reply" == "$default" ]]; then
         ## When the user enters no value or the same value as the default,
         ## then consider this valid and set ASKUSER_REPLY
         ASKUSER_REPLY="$default"
     else
         ## When the user enters aa value different from the default, validate
         ## it, store this as the new default abd set ASKUSER_REPLY
-        case "$(_askuser_type_for_key "$key")" in
-            YESNO) [[ "$value" == 'n' || "$value" == 'y' ]] || {
-                echo "Please answer y (for yes) or n (for no)."
-                return 1
-            }
-            ## TODO: CHOICE validation
+        case "$type" in
+            YESNO)
+                [[ "$value" == 'n' || "$value" == 'y' ]] || {
+                    echo "Please answer y (for yes) or n (for no)."
+                    return 1
+                }
+                ;;
+            CHOICE)
+                [[ $value =~ ^[0-9]+$ && $value -ge 1 && $value -le ${#choices[@]} ]] || {
+                    echo "Please answer 1 to ${#choices[@]}."
+                    return 1
+                }
+                ;;
         esac
         askuser "$key" set_to "$reply"
         ASKUSER_REPLY="$reply"
     fi
+
+    ## Convert choice reply from index to value
+    [ "$type" == 'CHOICE' ] && {
+        value="$ASKUSER_REPLY"
+        for choice in $values; do
+            echo "$choice" | egrep "^$value:" >/dev/null && \
+                ASKUSER_REPLY=$(echo "$choice" | cut -d':' -f2 | sed -e s/\*//g)
+        done
+    }
+
     return 0
 }
 
@@ -290,17 +389,15 @@ askuser () {
     local verb=$2
     local value=$3
 
+    ## Gather up all the active prompt definitions
     ASKUSER_PROMPTS="$ASKUSER_ACTIVE/.all_prompts"
-    ASKUSER_CMD=''
-    ASKUSER_DEFAULT=''
+    _askuser_all_prompts > "$ASKUSER_PROMPTS"
 
     ## Must supply at least the key for an active prompt defintion
     [ -z "$key" ] && { _askuser_help; return 1; }
 
-    ## Fetch the prompt definition data for the key provided: All active prompt
-    ## definition files are aggregated into ASKUSER_PROMPTS. If the prompt is
+    ## Fetch the prompt definition data for the key provided. If the prompt is
     ## not found, then show the active prompt definitions found.
-    _askuser_all_prompts > "$ASKUSER_PROMPTS"
     local prompt=$(_askuser_prompt_for_key "$key")
     [ -z "$prompt" ] && {
         echo -e "${echo_red}askuser: Prompt for '$key' not found.${echo_normal} \
@@ -312,14 +409,12 @@ List of active prompts found:"
 
     if [[ -z "$verb" || $(echo "$verb" | grep -c '^\-\-') == '1' ]]; then
         ## Manage the prompt interaction in one of two ways:
-        ## 1. Perform the default action and set the reponse to the default
-        ##    with no user interaction if ASKUSER_QUIET is true, or
+        ## 1. Set the reponse to the default with no user interaction if
+        ##    ASKUSER_QUIET is true, or
         ## 2. Present the prompt to the user and manage the interaction to
-        ##    determine if the default action should run and set the response
-        ##    to the value of the users reply.
+        ##    set the response to the value of the users reply.
         while [[ $# -gt 0 ]]; do
             case $1 in
-                -c|--command)       ASKUSER_CMD=$2; shift ;;
                 -d|--default)       ASKUSER_DEFAULT=$2; shift ;;
                 -q|--quiet)         ASKUSER_QUIET=true ;;
                 -i|--interactive)   ASKUSER_QUIET=false ;;
@@ -329,7 +424,6 @@ List of active prompts found:"
         [ -z "$ASKUSER_DEFAULT" ] || default="$ASKUSER_DEFAULT"
         if $ASKUSER_QUIET; then
             export ASKUSER_REPLY="$default"
-            [ -z "$ASKUSER_CMD" ] || eval "$ASKUSER_CMD"
         else
             _askuser_process_prompt_for_key "$key" "$default"
         fi
