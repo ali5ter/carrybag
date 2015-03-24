@@ -444,7 +444,7 @@ List of active prompts found:"
             set_to)
                 local file=$(find $ASKUSER_ACTIVE/*.txt -print0 | \
                     xargs -0 grep -H "^$key:" | cut -d':' -f1)
-                sed -e s/:$default$/:$value/ "$file" > "$file.tmp" \
+                sed -E "s/(^$key:.+):$default$/\1:$value/" "$file" > "$file.tmp" \
                     && mv "$file.tmp" "$file"
                 ;;
         esac
