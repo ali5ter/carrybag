@@ -86,26 +86,28 @@ source cblib_node.bash
 source cblib_ruby.bash
 source cblib_vim.bash
 
+_prompt_for_action () {
+
+    local key=$1
+    local action=$2
+    local message=$3
+
+    askuser "$key"
+    [ "$ASKUSER_REPLY" == 'y' ] && {
+        [ -z "$message" ] || echo -e "${echo_cyan}${message}${echo_normal}"
+        eval "$action"
+    }
+}
+
 ## Update shell with CarryBag configuration
 $UPDATE || {
-set -x
-    askuser cb_bash-it
-    [ "$ASKUSER_REPLY" == 'y' ] && {
-        echo -e "${echo_cyan}Installing clean Bash-it environment${echo_normal}"
-        build_carrybag_bash-it_config
-    }
 
-    askuser cb_runcom
-    [ "$ASKUSER_REPLY" == 'y' ] && {
-        echo -e "${echo_cyan}Installing clean Bash runcom file based on the \
-one provide by Bash-it${echo_normal}"
-        build_carrybag_bash_runcom
-    }
-set +x
-
-    build_carryback_apperance
-    build_carrybag_git_config
-    build_carrybag_git_ignore
+    _prompt_for_action cb_bash-it \
+        "build_carrybag_bash-it_config; build_carrybag_bash_runcom"
+    _prompt_for_action cb_appearance \
+        "build_carryback_apperance"
+    _prompt_for_action cb_git \
+        "build_carrybag_git_config; build_carrybag_git_ignore"
     case "$OSTYPE" in
         darwin*)
             build_carrybag_homebrew_config

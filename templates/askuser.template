@@ -3,4 +3,6 @@
 cb_3rdparty:YESNO:Do you want to fetch the 3rdparty submodules?:y
 cb_bash-it:YESNO:Do you want to install a clean Bash-it environment?:y
 cb_runcom:YESNO:Do you want to apply CarryBag modification to the Bash-it provided runcom?:y
+cb_appearance:YESNO:Do you want to install the Solarized Dark color theme?:y
 cb_solarizedosx:YESNO:Do you want to install Solarized Dark as your default OSX Terminal settings profile?:y
+cb_git:YESNO:Do you want to configure git?:y
