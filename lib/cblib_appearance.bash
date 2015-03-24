@@ -12,7 +12,7 @@ build_carryback_apperance () {
     case "$OSTYPE" in
         darwin*)
             [ -z "$_cblib_askuser" ] && source askuser.plugin.bash
-            askuser cb_solarizedosx "$($QUIET && echo '--quiet' || echo '--interactive')"
+            askuser cb_solarizedosx
             [ "$ASKUSER_REPLY" == 'y' ] && install_solarized_dark_osx_terminal &&
                 echo -e "\n${echo_cyan}Solarized Dark was made your default OSX Terminal settings profile.${echo_normal}"
             ;;
