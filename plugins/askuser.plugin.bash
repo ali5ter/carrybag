@@ -421,7 +421,7 @@ List of active prompts found:"
             esac
             shift
         done
-        [ -z "$ASKUSER_DEFAULT" ] || default="$ASKUSER_DEFAULT"
+        default=$(_askuser_default_for_key "$key")
         if $ASKUSER_QUIET; then
             export ASKUSER_REPLY="$default"
         else
