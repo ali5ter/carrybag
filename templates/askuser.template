@@ -6,3 +6,12 @@ cb_runcom:YESNO:Do you want to apply CarryBag modification to the Bash-it provid
 cb_appearance:YESNO:Do you want to install the Solarized Dark color theme?:y
 cb_solarizedosx:YESNO:Do you want to install Solarized Dark as your default OSX Terminal settings profile?:y
 cb_git:YESNO:Do you want to configure git?:y
+cb_gitclean:YESNO:Do you want to install a clean git configuration?:y
+cb_gitfullname:FREEFORM:What name do you want attached to your git commits?:
+cb_gitemail:FREEFORM:What email address do you want attached to your git commits?:
+cb_brew:YESNO:Do you want to configure homebrew?:y
+cb_cask:YESNO:Do you want to configure cask?:y
+cb_apt:YESNO:Do you want to configure apt?:y
+cb_node:YESNO:Do you want to configure node?:y
+cb_vim:YESNO:Do you want to configure vim?:y
+cb_nativescript:YESNO:Do you want to install and configure naticescript?:y

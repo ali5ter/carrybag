@@ -7,7 +7,6 @@ update_git_user_name () {
     if ! $QUIET; then
 
         local fullname="$(git config --get user.name)"
-
         [ -z "$fullname" ] && {
             case "$OSTYPE" in
                 darwin*)    fullname="$(finger "$(whoami)" | awk -F: '{ print $3 }' | head -n1 | sed 's/^ //')" ;;
@@ -15,15 +14,8 @@ update_git_user_name () {
             esac
         }
 
-        while true; do
-            echo -ne "${echo_yellow}What name do you want attached to your git commits? [$fullname] ${echo_normal}"
-            read reply
-            case "$reply" in
-                '') [ -n "$fullname" ] && break ;;
-                *)  fullname="$reply"; break ;;
-            esac
-        done
-
+        askuser cb_gitfullname --default "$fullname"
+        fullname="$ASKUSER_REPLY"
         git config --global user.name "$fullname"
     fi
 
@@ -36,15 +28,8 @@ update_git_user_email() {
 
         local email="$(git config --get user.email)"
 
-        while true; do
-            echo -ne "${echo_yellow}What email address do you want attached to your git commits? [$email] ${echo_normal}"
-            read reply
-            case "$reply" in
-                '') [ -n "$email" ] && break ;;
-                *)  email="$reply"; break ;;
-            esac
-        done
-
+        askuser cb_gitemail --default "$email"
+        email="$ASKUSER_REPLY"
         # TODO: Validate email address
         git config --global user.email "$email"
     fi
@@ -82,16 +67,13 @@ build_carrybag_git_config () {
     ## Create a basic gitconfig file
     if [ -w "$gitconfig" ]; then
         if ! $QUIET; then
-            echo -ne "${echo_yellow}Want to install a clean git config file? [y/N] ${echo_normal}"
-            read -n 1 reply
-            case "$reply" in
-                Y|y)
-                    echo
-                    [ -w "$gitconfig" ] && cp "$gitconfig" "$gitconfig.bak" &&
-                        echo -e "${echo_cyan}Your $(basename "$gitconfig") has been backed up to $gitconfig.bak ${echo_normal}"
-                    cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"
-                    ;;
-            esac
+            askuser cb_gitclean
+            [ "$ASKUSER_REPLY" == 'y' ] && {
+                echo
+                [ -w "$gitconfig" ] && cp "$gitconfig" "$gitconfig.bak" &&
+                    echo -e "${echo_cyan}Your $(basename "$gitconfig") has been backed up to $gitconfig.bak ${echo_normal}"
+                cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"
+            }
         fi
     else
         cp "$CB_BASE/templates/gitconfig.template" "$gitconfig"

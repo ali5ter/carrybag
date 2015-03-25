@@ -97,38 +97,44 @@ _prompt_for_action () {
         [ -z "$message" ] || echo -e "${echo_cyan}${message}${echo_normal}"
         eval "$action"
     }
+    return 0
 }
 
 ## Update shell with CarryBag configuration
 $UPDATE || {
 
     _prompt_for_action cb_bash-it \
-        "build_carrybag_bash-it_config; build_carrybag_bash_runcom"
+        "build_carrybag_bash-it_config && build_carrybag_bash_runcom"
     _prompt_for_action cb_appearance \
         "build_carryback_apperance"
     _prompt_for_action cb_git \
-        "build_carrybag_git_config; build_carrybag_git_ignore"
+        "build_carrybag_git_config && build_carrybag_git_ignore"
+
     case "$OSTYPE" in
         darwin*)
-            build_carrybag_homebrew_config
-            build_carrybag_cask_config
+            _prompt_for_action cb_brew \
+                "build_carrybag_homebrew_config"
+            _prompt_for_action cb_cask \
+                "build_carrybag_cask_config"
             ;;
-        *)         build_carrybag_apt_config ;;
+        *)
+            _prompt_for_action cb_apt \
+                "build_carrybag_apt_config"
+            ;;
     esac
-    build_carrybag_node_config
-    build_carrybag_vim_config
+
+    _prompt_for_action cb_node \
+        "build_carrybag_node_config"
+    _prompt_for_action cb_vim \
+        "build_carrybag_vim_config"
+
     add_to_bash_runcom "export CB_BASE=\"$CB_BASE\""
-    ## Optional
+
+    ## Optional CarryBag configurations
     $QUIET || {
-        echo -ne "${echo_yellow}Install nativescript? [y|N]${echo_normal} "
-        read -n 1 reply
-        case "$reply" in
-            Y|y)
-                echo
-                source cblib_nativescript.bash
-                build_carrybag_nativescript_config
-                ;;
-        esac
+
+        _prompt_for_action cb_nativescript \
+            "echo && source cblib_nativescript.bash && build_carrybag_nativescript_config"
     }
 }
 
