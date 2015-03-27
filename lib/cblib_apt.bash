@@ -31,5 +31,9 @@ build_carrybag_apt_config () {
     install_apt_package build-essential gcc
     install_apt_package meld
     install_apt_package exuberant-ctags ctags
+
+    ## TODO: If on a ubuntu vmware VM
+    #apt-get install open-vm-tools
+
     return 0
 }
