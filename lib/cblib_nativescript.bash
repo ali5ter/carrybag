@@ -27,6 +27,7 @@ install_nativescript_osx () {
     [ -z "$cblib_android" ] && source cblib_android.bash
     build_carrybag_android_config
 
+    [ -z "$cblib_node" ] && source cblib_node.bash
     install_node_module nativescript
     # sourcep
 
