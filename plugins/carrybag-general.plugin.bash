@@ -137,6 +137,18 @@ rproc () {
 
 ## Connectivity tools
 
+ports () {
+    case "$OSTYPE" in
+        darwin*)
+            sudo lsof -i -P | grep -i "listen"
+            ;;
+        *)
+            sudo nmap -T Aggressive -A -v 127.0.0.1 -p 1-65000
+            sudo netstat --tcp --udp --listening --program
+            ;;
+    esac
+}
+
 webserv () {
 
     about 'start httpd using the current directory as the document root'
