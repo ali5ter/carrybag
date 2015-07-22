@@ -12,6 +12,14 @@ bash_runcom () {
     esac
 }
 
+current_wired_ip () {
+
+    case "$OSTYPE" in
+        darwin*)    ifconfig en0 | grep 'inet ' | cut -d' ' -f2 ;;
+        *)          ifconfig eth0 | grep 'inet addr:' | cut -d: -f2 | awk '{ print $1}' ;;
+    esac
+}
+
 add_to_bash_runcom () {
 
     local text="$*"
@@ -77,6 +85,9 @@ build_carrybag_bash_runcom () {
 
     ## Update window size vars after each command
     add_to_bash_runcom "shopt -s checkwinsize"
+
+    ## Create IP environment variable
+    add_to_bash_runcom "export IP=\'$(current_wired_ip)\'";
 
     echo -e "${echo_cyan}CarryBag modifications have been applied to $(basename "$BASHRC")${echo_normal}"
 
