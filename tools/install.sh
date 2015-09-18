@@ -74,6 +74,7 @@ source "$CB_BASE/3rdparty/bash-it/themes/colors.theme.bash"
 source cblib_bashit.bash
 source cblib_appearance.bash
 source cblib_runcom.bash
+source cblib_lldb.bash
 source cblib_git.bash
 case "$OSTYPE" in
     darwin*)
@@ -105,6 +106,8 @@ $UPDATE || {
 
     _prompt_for_action cb_bash-it \
         "build_carrybag_bash-it_config && build_carrybag_bash_runcom"
+    _prompt_for_action cb_lldb \
+        "build_carrybag_lldbinit"
     _prompt_for_action cb_appearance \
         "build_carryback_apperance"
     _prompt_for_action cb_git \

@@ -1,0 +1,30 @@
+# Init files for LLDB as delivered by Carrybag
+
+#
+# Reveal aliases
+# @see http://blog.ittybittyapps.com/blog/2013/11/07/integrating-reveal-without-modifying-your-xcode-project/
+#
+
+## Load Reveal from /Applications folder when running iOS Simulator
+command alias reveal_load_sim expr (void*)dlopen("/Applications/Reveal.app/Contents/SharedSupport/iOS-Libraries/libReveal.dylib", 0x2);
+
+## Load Reveal from app resources bundle when running on a device or iOS Simulator
+# command alias reveal_load_dev expr (void*)dlopen([(NSString*)[(NSBundle*)[NSBundle mainBundle] pathForResource:@"libReveal" ofType:@"dylib"] cStringUsingEncoding:0x4], 0x2);
+
+## Posts a notification via NSNotificationCenter to start the Reveal server
+command alias reveal_start expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStart" object:nil];
+
+## Posts a notification via NSNotificationCenter to stop the Reveal server
+command alias reveal_stop expr (void)[(NSNotificationCenter*)[NSNotificationCenter defaultCenter] postNotificationName:@"IBARevealRequestStop" object:nil];
+
+#
+# Determine the types used for all functions and methods defined by Frameworks
+# @see https://developer.apple.com/library/mac/releasenotes/DeveloperTools/RN-Xcode/Chapters/xc6_release_notes.html#//apple_ref/doc/uid/TP40001051-CH4-SW10
+# @see http://furbo.org/2015/05/11/an-import-ant-change-in-xcode/
+#
+
+## For UIKit
+command alias uikit expr @import UIKit
+
+## For Foundation
+command alias foundation expr @import Foundation
