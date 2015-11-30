@@ -192,6 +192,22 @@ sshkey () {
 
 ## File tools
 
+# @see  http://fitnr.com/showing-file-download-progress-using-wget.html
+download() {
+
+    about 'download a file from a url'
+    param '1: url'
+    example '$ download http://different.com/foo.txt'
+    group 'carrybag-file-tools'
+
+    local url="$1"
+    echo -n "    "
+    wget --progress=dot "$url" 2>&1 | grep --line-buffered "%" | \
+    sed -u -e "s,\.,,g" | awk '{printf("\b\b\b\b%4s", $2)}'
+    echo -ne "\b\b\b\b"
+    echo " DONE"
+}
+
 fstart () {
 
     about 'show first 100 lines of a given file'
