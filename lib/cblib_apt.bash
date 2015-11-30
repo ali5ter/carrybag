@@ -14,7 +14,9 @@ update_apt_packages () {
 
     sudo apt-get update -y && \
     sudo apt-get upgrade -y && \
-    sudo apt-get dist-upgrade -y
+    sudo apt-get dist-upgrade -y && \
+    sudo apt-get autoremove -y && \
+    sudo apt-get purge -y
     return 0
 }
 
@@ -25,10 +27,12 @@ build_carrybag_apt_config () {
         return 1
     }
 
+    ## NOTE: Have to assume git is installed since carrybag was probably cloned
     echo -e "${echo_cyan}Installing apt packages.${echo_normal}"
     sudo apt-get install -y vim # force install of up to date version
     install_apt_package curl
     install_apt_package build-essential gcc
+    install_apt_package htop
     install_apt_package meld
     install_apt_package exuberant-ctags ctags
 
