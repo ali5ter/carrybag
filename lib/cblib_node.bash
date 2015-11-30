@@ -85,6 +85,7 @@ install_carrybag_node_packages () {
     #install_node_module yo
     #install_node_module grunt grunt-cli
     install_node_module dt dokku-toolbelt
+    install_node_module tsc typescript
     return 0
 }
 
