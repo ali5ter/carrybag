@@ -22,7 +22,12 @@ install_node_using_brew () {
 
 install_node_using_apt () {
 
-    curl -sL https://deb.nodesource.com/setup | sudo bash -
+    ## @see https://github.com/nodesource/distributions/issues/129
+    if [ "$(lsb_release -cs)" == "wily" ]; then
+        curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+    else
+        curl -sL https://deb.nodesource.com/setup | sudo -E bash -
+    fi
     sudo apt-get install -y nodejs
     sudo apt-get install -y build-essential
     # npm completion >> ~/.bashrc
