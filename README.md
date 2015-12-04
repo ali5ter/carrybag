@@ -7,72 +7,103 @@
   ╚═════╝╚═╝  ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝   ╚═════╝ ╚═╝  ╚═╝ ╚═════╝
 ```
 # CarryBag v2
-**CarryBag** is my collection of dot files, custom functions and theme settings 
-used to create a bash shell environment I can carry from machine to machine.
+**CarryBag is my collection of dot files, custom functions and theme settings 
+used to create a bash shell environment I can carry from machine to machine.**
 
 This version uses the [Bash-it](https://github.com/revans/bash-it) framework to 
-manage the functionality of aliases, auto-completion, custom functions and themes.
+manage the availability of aliases, auto-completion, custom functions and
+themes.
 
 External packages used by CarryBag are loaded as git submodules in the 
-`3rdparty` directory to make it easier to keep things up-to-date.
+[3rdparty](3rdparty) directory.
 
-While CarryBag has been used on many versions of OSX, Unix and Linux over the 
-years, it is currently used (tried and tested) on the following operating 
-systems:
-* OSX 10.9 (Mavericks)
-* OSX 10.10 (Yosemite)
+CarryBag has been used on many versions of OSX, Unix and Linux over the 
+years. It probably works on most *NIX based system but is currently used on the
+following operating systems:
 * OSX 10.11 (El Capitan)
 * Ubuntu 14.04 LTS (Trusty Tahr)
-* Ubuntu 15.04 (Vivid Vervet)                                                   
-* Ubuntu 15.10 (Wily Werewolf)
+* Ubuntu 15.04 LTS (Vivid Vervet)
 
-## Install
-Clone this repository and run `tools/install.sh`.
+## Installation
+Clone this repository and run the installer
 
-The fist time it is run, the installation script will ask various questions. I'd 
-recommend you answer yes (pressing the y key) to these questions to achieve a 
-complete installation.
+	git clone http://gitlab.different.com/alister/carrybag.git
+	./tools/install
 
-Running the script after installing will only reset the Bash-it themes, aliases, 
-completions and plugins provided by CarryBag. This might be useful if you want 
-to revert any changes you might have made to these under `~/.bash-it`
+The fist time the installation is run, the script will provide prompts asking
+which parts of the CarryBag environment should be installed. Answering yes
+(pressing the **y** key) to all these will create a complete installation.
 
-If you want to force the installation script to ask questions then run 
-`tools/install.sh --interactive`.
+Running the script after the initial installation will only re-install the
+Bash-it themes, aliases, completions and plugins provided by CarryBag.
+
+If you want to force the installation script to provide prompts, run
+
+	./tools/install --interactive
+
+To uninstall CarryBag run
+
+	./tools/uninstall
 
 ## Managing functionality
-The `bash-it` command is used to enable and disable shell functionality. Refer
-to the [Bash-it](https://github.com/revans/bash-it) project for more 
+The **bash-it** command is used to discover, enable and disable shell
+functionality. 
+
+For example, to display the shell commands provided by the enabled Bash-it
+plugins, run
+
+	bash-it help plugins
+
+To show what plugins are enabled out of all the plugins provided, run
+
+	bash-it show plugins
+
+To make the functionality of the **carrybag-math** plugin available, enable it
+using
+
+	bash enable plugin carrybag-math
+
+Refer to the [Bash-it](https://github.com/revans/bash-it) project for more 
 information.
 
-Modifications to functionality are typically achieved by adding custom files 
-under `~/.bash-it`. Refer to the [Bash-it](https://github.com/revans/bash-it) 
-project for more information. Of course, there is nothing stopping you from 
-changing anything in the Bash runcom (`.bashrc`, `.bash_profile`) or any file 
-under `~/.bash-it`, and re-source'ing the bash shell using `sourcep`... just do 
-it at your own risk.
+## Custom functionality
+Refer to the [Bash-it](https://github.com/revans/bash-it) project for more
+information about how to add custom functions, aliases and themes.
 
-The *carrybag-general* alias and plugin creates a convenience command, 
-`housekeeping`, that performs some platform specific updates. It  attempts to 
-clean up any OS cruft and keep system and package files up to date.
+## Housekeeping
+The **carrybag-general** alias and plugin creates a convenience command that
+performs platform specific housekeeping, such as deletion of log and cache items
+and package updates and pruning. Run this periodically using
+
+	housekeeping
 
 ## Development
-If you want to persist any modifications, then you will probably need to 
-change the source code in this cloned repository. You can run a full 
-installation again to include these updates using `tools/install.sh`. Run 
-`tools/install.sh -h` to see other installation options.
+If you want to in include your custom functionality in CarryBag, then you will
+need to change the source code.
 
-The *carrybag-general* alias and plugin creates a convenience command, 
-`bootstrap`, to run the installation script in non-interactive, update mode. 
-The *carrybag-general* plugin provides a file tool called `mondir` which can be 
-used to monitor any changes you make under a directory, like this cloned 
-repository, and then run a given command. So you might find it useful to set 
-aside one terminal running `mondir 10 "bootstrap && sourcep"` in the repository 
-root directory while editing the repository source in another terminal.
+The **carrybag-general** alias and plugin provides a convenience command to run 
+the installation script in a non-interactive, update mode:
 
-The *carrybag-general* plugin also comes with a convenience function, 
-`cb_3rdparty_update`, which updates the 3rd party submodules that come with 
-CarryBag. Run this at your own risk.
+	bootstrap
+
+The **carrybag-general** plugin also provides tool to monitor any changes made 
+under a directory, like this source code, and then run a given command when any
+changes have been detected. You might find it useful to set aside one terminal
+running the following command in the repository root directory while editing the
+repository source in another terminal.
+
+	mondir 10 "bootstrap && sourcep”
+
+This will reinstall CarryBag and source the changes automatically. Increase the
+10 second wait if you are making lots of small changes.
+
+## Updating the 3rd Party dependencies
+The **carrybag-general** plugin also comes with a convenience function to update
+the 3rd party submodules that come with CarryBag.
+
+	cb_3rdparty_update
+
+Run this at your own risk!
 
 ## Contribution
 If you've stumbled upon this project and wish to contribute, please 
