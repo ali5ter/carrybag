@@ -190,6 +190,39 @@ sshkey () {
     fi
 }
 
+sshremote() {
+    about 'push a public RSA key to the remote server authorized keys file'
+    param '1: user@host'
+    example '$ sshremote user@foo.com'
+    group 'carrybag-connectivity-tools'
+    local key=$(sshkey) # force key gen if no public key created
+    local access=$1
+    local user=$(echo $access | cut -d'@' -f 1)
+    local host=$(echo $access | cut -d'@' -f 2)
+    [ -z "$access" ] && {
+        echo
+        read -erp "hostname of the remote system: " host
+        read -erp "username of the remote system: " -i "$(whoami)" user
+        access=${user}@${host}
+    }
+    echo
+    echo "Copying the public key to $access"
+    scp ~/.ssh/id_rsa.pub "$access":/tmp/id_rsa.pub
+    echo
+    echo "Adding it to $host authorizied keys"
+    ssh "$access" \
+        'sh -s' << 'END_OF_SSHREMOTE_SCRIPT'
+set -e
+mkdir -p ~/.ssh
+cat /tmp/id_rsa.pub >> ~/.ssh/authorized_keys
+chmod 600 ~/.ssh/authorized_keys
+chmod 700 ~/.ssh
+rm -fr /tmp/id_rsa.pub
+END_OF_SSHREMOTE_SCRIPT
+    echo "Complete"
+    echo
+}
+
 ## File tools
 
 # @see  http://fitnr.com/showing-file-download-progress-using-wget.html
