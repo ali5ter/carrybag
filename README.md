@@ -58,8 +58,8 @@ To show what plugins are enabled out of all the plugins provided, run
 
 	bash-it show plugins
 
-To make the functionality of the **carrybag-math** plugin available, enable it
-using
+To make the functionality of the [carrybag-math](plugins/carrybag-math.plugin.bash)
+plugin available, enable it using
 
 	bash enable plugin carrybag-math
 
@@ -71,9 +71,10 @@ Refer to the [Bash-it](https://github.com/revans/bash-it) project for more
 information about how to add custom functions, aliases and themes.
 
 ## Housekeeping
-The **carrybag-general** alias and plugin creates a convenience command that
-performs platform specific housekeeping, such as deletion of log and cache items
-and package updates and pruning. Run this periodically using
+The [carrybag-general alias](aliases/carrybag-general.aliases.bash) and
+[plugin](plugins/carrybag-general.plugin.bash) creates a convenience command
+that performs platform specific housekeeping, such as deletion of log and cache
+items and package updates and pruning. Run this periodically using
 
 	housekeeping
 
@@ -81,16 +82,18 @@ and package updates and pruning. Run this periodically using
 If you want to in include your custom functionality in CarryBag, then you will
 need to change the source code.
 
-The **carrybag-general** alias and plugin provides a convenience command to run 
-the installation script in a non-interactive, update mode:
+The [carrybag-general](plugins/carrybag-general.plugin.bash) alias and plugin
+provides a convenience command to run the installation script in a
+non-interactive, update mode:
 
 	bootstrap
 
-The **carrybag-general** plugin also provides tool to monitor any changes made 
-under a directory, like this source code, and then run a given command when any
-changes have been detected. You might find it useful to set aside one terminal
-running the following command in the repository root directory while editing the
-repository source in another terminal.
+The [carrybag-general](plugins/carrybag-general.plugin.bash) plugin also
+provides tool to monitor any changes made under a directory, like this source
+code, and then run a given command when any changes have been detected. You
+might find it useful to set aside one terminal running the following command in
+the repository root directory while editing the repository source in another
+terminal.
 
 	mondir 10 "bootstrap && sourcep”
 
@@ -98,8 +101,9 @@ This will reinstall CarryBag and source the changes automatically. Increase the
 10 second wait if you are making lots of small changes.
 
 ## Updating the 3rd Party dependencies
-The **carrybag-general** plugin also comes with a convenience function to update
-the 3rd party submodules that come with CarryBag.
+The [carrybag-general](plugins/carrybag-general.plugin.bash) plugin also comes
+with a convenience function to update the 3rd party submodules that come with
+CarryBag.
 
 	cb_3rdparty_update
 
