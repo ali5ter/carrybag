@@ -2,6 +2,27 @@
 
 _cblib_git=1
 
+update_git_version () {
+
+    ## Mar 15, 2016: Git vulnerability
+    ## Secure Git version 2.7.4 should be installed
+
+    case "$OSTYPE" in
+        darwin*)
+            ## Assumes homebrew available
+            brew update && \
+            brew upgrade git
+            ;;
+        *)
+            ## Assumes apt available
+            sudo apt-add-repository ppa:git-core/ppa && \
+            sudo apt-get update && \
+            sudo apt-get install git
+            ;;
+    esac
+
+}
+
 update_git_user_name () {
 
     if ! $QUIET; then
