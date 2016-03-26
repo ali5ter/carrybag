@@ -4,7 +4,7 @@ before_script:
 stages:
     - build
 
-master:
+testing_a_runner:
     stage: build
     script:
         - find . -name *.bash | grep -v "./3rdparty\|./v1" | xargs shellcheck
