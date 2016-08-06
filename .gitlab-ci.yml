@@ -1,0 +1,12 @@
+before_script:
+    - apt-get update -qq && apt-get install -y -qq shellcheck
+
+stages:
+    - build
+
+testing_a_runner:
+    stage: build
+    script:
+        - find . -name *.bash | grep -v "./3rdparty\|./v1" | xargs shellcheck
+    only:
+        - master

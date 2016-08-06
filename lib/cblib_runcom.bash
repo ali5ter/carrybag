@@ -4,6 +4,9 @@ _cblib_runcom=1
 
 RUNCOM_ADD_TOKEN="# CarryBag configuration"
 
+[ -w ~/.profile ] && cp ~/.profile ~/.profile.bak
+echo '. "$HOME/.bashrc"' > ~/.profile
+
 bash_runcom () {
 
     case "$OSTYPE" in
