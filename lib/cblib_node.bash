@@ -13,10 +13,7 @@ build_carrybag_node_config () {
 
 install_node_using_brew () {
 
-    ## @see https://gist.github.com/DanHerbert/9520689
-    brew install node --without-npm
-    echo prefix=~/.node >> ~/.npmrc
-    curl -L https://www.npmjs.org/install.sh | sh
+    brew install node
     return 0
 }
 
@@ -66,13 +63,13 @@ install_node_module () {
     local command=$1
     local pname=${2:-$command}
 
-    command -v "$command" >/dev/null || sudo npm install -g "$pname"
+    command -v "$command" >/dev/null || npm install -g "$pname"
     return 0
 }
 
 update_node_modules () {
 
-    sudo npm update -g
+    npm update -g
     return 0
 }
 
