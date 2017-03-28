@@ -8,6 +8,9 @@ export CLICOLOR=1
 #alias ls='CLICOLOR_FORCE=1 ls -G'
 alias more='less -R'
 
+## OSX defaults
+defaults write com.apple.gamed Disabled -bool true  ## turn off gamed
+
 ## Perl
 export PERL_MB_OPT="--install_base \"$HOME/perl5\""
 export PERL_MM_OPT="INSTALL_BASE=$HOME/perl5"
