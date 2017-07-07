@@ -19,15 +19,15 @@ install_node_using_brew () {
 
 install_node_using_apt () {
 
-    ## @see https://github.com/nodesource/distributions/issues/129
-    if [ "$(lsb_release -cs)" == "wily" ]; then
-        curl -sL https://deb.nodesource.com/setup_4.x | sudo -E bash -
+    ## Going to assume latest ubuntu version, xenial (16.04)
+    if [ "$(lsb_release -cs)" == "xenial" ]; then
+        curl -sL https://deb.nodesource.com/setup_8.x | sudo -E bash -
     else
-        curl -sL https://deb.nodesource.com/setup | sudo -E bash -
+        echo 'Upgrade to Ubuntu 16.04'
     fi
     sudo apt-get install -y nodejs
     sudo apt-get install -y build-essential
-    # npm completion >> ~/.bashrc
+    sudo npm completion >> ~/.bashrc
     return 0
 }
 
@@ -35,24 +35,13 @@ uninstall_node () {
 
     case "$OSTYPE" in
         darwin*)
-            for file in /usr/local/lib/node \
-                    /usr/local/lib/node_modules \
-                    /usr/local/include/node \
-                    /usr/local/include/node_modules \
-                    /usr/local/bin/node \
-                    /usr/local/bin/npm \
-                    /usr/local/share/man/man1/node.1 \
-                    /usr/local/lib/dtrace/node.d \
-                    ~/.node ~/.npm \
-                    ~/.npmrc; do
-                sudo rm -fR "$file"
-            done
-            brew list -1 | grep -q node && brew uninstall node
+            sudo rm -rf /usrlocal/lib/node_modules/npm
+            brew uninstall node
+            brew prune
             ;;
         *)
-            npm ls -g --depth=0 | grep @ | cut -d' ' -f2 | cut -d'@' -f1 | \
-                sudo xargs npm remove -g
-            sudo apt-get -y remove nodejs npm
+            sudo apt-get purge nodejs
+            sudo apt-get autoremove
             ;;
     esac
     return 0
@@ -69,7 +58,21 @@ install_node_module () {
 
 update_node_modules () {
 
-    npm update -g
+    ## Note that this also upgrades the node+npm environment too
+    case "$OSTYPE" in
+        darwin*)
+            brew upgrade node
+            npm install npm@latest -g
+            npm update -g
+            npm prune -g
+            ;;
+        *)
+
+            sudo npm install npm@latest -g
+            sudo npm update -g
+            sudo npm prune -g
+            ;;
+    esac
     return 0
 }
 
