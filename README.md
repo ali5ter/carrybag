@@ -20,8 +20,7 @@ External packages used by CarryBag are loaded as git submodules in the
 CarryBag has been used on many versions of OSX, Unix and Linux over the 
 years. It probably works on most *NIX based system but is currently used on the
 following operating systems:
-* OSX 10.11 (El Capitan)
-* Ubuntu 14.04 LTS (Trusty Tahr)
+* macOS 10.12 (Sierra)
 * Ubuntu 15.04 LTS (Vivid Vervet)
 
 ## Installation
